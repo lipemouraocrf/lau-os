@@ -2768,7 +2768,81 @@
       }
     }
 
-</style>
+
+
+    /* V25: notificações de chat dentro do app */
+    .lau-notification-toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+      transform: translateX(-50%) translateY(18px);
+      width: min(92vw, 380px);
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid #ffc2df;
+      color: #5a2a45;
+      border-radius: 22px;
+      padding: 13px 15px;
+      box-shadow: 0 14px 36px rgba(255, 95, 170, 0.26);
+      z-index: 1200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .lau-notification-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    .lau-notification-toast.namorado-toast {
+      border-color: #9dccff;
+      box-shadow: 0 14px 36px rgba(75, 140, 255, 0.22);
+    }
+
+    .lau-notification-toast small {
+      display: block;
+      margin-top: 4px;
+      color: #8f5b77;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-badge {
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: #ff3b8d;
+      color: #fff;
+      font-size: 0.66rem;
+      font-weight: 900;
+      line-height: 17px;
+      display: none;
+      box-shadow: 0 4px 10px rgba(255, 59, 141, 0.28);
+    }
+
+    .mobile-tabbar button {
+      position: relative;
+    }
+
+    @media (max-width: 760px) {
+      .lau-notification-toast {
+        bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+        border-radius: 18px;
+        padding: 12px 13px;
+        font-size: 0.9rem;
+      }
+    }
+
+  </style>
 </head>
 
 <body>
@@ -4956,6 +5030,9 @@
     let cacheManualLau = null;
     let cacheDiarioLau = [];
     let cacheMissoesLau = [];
+    let canalRealtimeChat = null;
+    let unreadChatCount = 0;
+    let toastChatTimer = null;
 
     function dataBR(dateValue) {
       if (!dateValue) return new Date().toLocaleString("pt-BR");
@@ -5020,6 +5097,7 @@
           if (loginScreen) loginScreen.style.display = "none";
           aplicarPermissao(usuario);
           await carregarTudoSupabase();
+          iniciarRealtimeChat();
           showMessage(`Bem-vindo de volta ao LauOS, ${usuario} 💖`);
         } else {
           localStorage.removeItem("lauraos_usuario");
@@ -5081,14 +5159,142 @@
       if (loginScreen) loginScreen.style.display = "none";
       aplicarPermissao(usuario);
       await carregarTudoSupabase();
+      iniciarRealtimeChat();
       showMessage(usuario === "Lau" ? "Área da Lau aberta e conectada 💖" : "Área do namorado aberta e conectada 💙");
     };
 
     sairLauOS = async function () {
+      if (canalRealtimeChat) {
+        try { await sb.removeChannel(canalRealtimeChat); } catch (e) {}
+        canalRealtimeChat = null;
+      }
       await sb.auth.signOut();
       localStorage.removeItem("lauraos_usuario");
+      localStorage.removeItem("lauos_chat_unread_Lau");
+      localStorage.removeItem("lauos_chat_unread_Namorado");
       location.reload();
     };
+
+    function chaveUnreadChat() {
+      return `lauos_chat_unread_${localStorage.getItem("lauraos_usuario") || "guest"}`;
+    }
+
+    function carregarUnreadChat() {
+      unreadChatCount = Number(localStorage.getItem(chaveUnreadChat()) || "0");
+      atualizarBadgeChat();
+    }
+
+    function salvarUnreadChat(valor) {
+      unreadChatCount = Math.max(0, Number(valor || 0));
+      localStorage.setItem(chaveUnreadChat(), String(unreadChatCount));
+      atualizarBadgeChat();
+    }
+
+    function chatEstaAberto() {
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        return window.lauMobilePageAtual === "chat";
+      }
+      const usuario = localStorage.getItem("lauraos_usuario");
+      const chatCard = usuario === "Namorado"
+        ? document.querySelector("#namoradoArea .chat-card")
+        : document.querySelector("#lauraArea .chat-card");
+      return !!chatCard && getComputedStyle(chatCard).display !== "none";
+    }
+
+    function limparNotificacoesChat() {
+      salvarUnreadChat(0);
+    }
+
+    function atualizarBadgeChat() {
+      document.querySelectorAll("#mobileTabbar button[data-mobile-page='chat']").forEach((btn) => {
+        let badge = btn.querySelector(".chat-badge");
+        if (!badge) {
+          badge = document.createElement("span");
+          badge.className = "chat-badge";
+          btn.appendChild(badge);
+        }
+        if (unreadChatCount > 0) {
+          badge.textContent = unreadChatCount > 9 ? "9+" : String(unreadChatCount);
+          badge.style.display = "inline-block";
+        } else {
+          badge.style.display = "none";
+        }
+      });
+    }
+
+    function tocarSomNotificacaoChat() {
+      try {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        const audioCtx = new Ctx();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(760, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(960, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.22);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch (e) {}
+    }
+
+    function mostrarToastChat(msg) {
+      const usuario = localStorage.getItem("lauraos_usuario") || "Lau";
+      let toast = document.getElementById("chatNotificationToast");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "chatNotificationToast";
+        toast.className = "lau-notification-toast";
+        toast.addEventListener("click", () => {
+          if (typeof window.abrirPaginaMobile === "function") window.abrirPaginaMobile("chat");
+          limparNotificacoesChat();
+          toast.classList.remove("show");
+        });
+        document.body.appendChild(toast);
+      }
+      toast.classList.toggle("namorado-toast", usuario === "Namorado");
+      const autorNome = msg.autor === "lau" ? "Lau 💖" : "Namorado 💙";
+      const texto = msg.mensagem || "Nova mensagem";
+      toast.innerHTML = `💬 Nova mensagem de ${escapeHtml(autorNome)}<small>${escapeHtml(texto)}</small>`;
+      toast.classList.add("show");
+      clearTimeout(toastChatTimer);
+      toastChatTimer = setTimeout(() => toast.classList.remove("show"), 4300);
+    }
+
+    function notificarNovaMensagemChat(msg) {
+      const usuario = localStorage.getItem("lauraos_usuario");
+      const veioDaLau = msg.autor === "lau";
+      const minhaMensagem = (usuario === "Lau" && veioDaLau) || (usuario === "Namorado" && !veioDaLau);
+      if (minhaMensagem) return;
+
+      if (!chatEstaAberto()) {
+        salvarUnreadChat(unreadChatCount + 1);
+        mostrarToastChat(msg);
+      }
+
+      tocarSomNotificacaoChat();
+      if (navigator.vibrate) navigator.vibrate([70, 40, 70]);
+    }
+
+    function iniciarRealtimeChat() {
+      if (canalRealtimeChat) {
+        try { sb.removeChannel(canalRealtimeChat); } catch (e) {}
+      }
+      carregarUnreadChat();
+      canalRealtimeChat = sb
+        .channel("lauos-chat-realtime")
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "lau_chat" }, async (payload) => {
+          await renderizarChat();
+          if (payload?.new) notificarNovaMensagemChat(payload.new);
+        })
+        .subscribe((status) => {
+          if (status === "SUBSCRIBED") console.log("Chat realtime conectado");
+        });
+    }
 
     // STATUS
     salvarHumorLau = async function () {
@@ -5190,6 +5396,7 @@
       const namoradoChatList = document.getElementById("namoradoChatList");
       if (lauraChatList) lauraChatList.innerHTML = html;
       if (namoradoChatList) namoradoChatList.innerHTML = html;
+      if (chatEstaAberto()) limparNotificacoesChat();
     };
 
     // FOTOS
@@ -5590,6 +5797,7 @@
             window.abrirPaginaMobile(btn.dataset.mobilePage);
           }, { passive: false });
         });
+        if (typeof atualizarBadgeChat === "function") atualizarBadgeChat();
       }
 
       function mostrarPainelCantinho(idsParaMostrar, mostrarMenu) {
@@ -5632,6 +5840,8 @@
         document.querySelectorAll("#mobileTabbar button").forEach((btn) => {
           btn.classList.toggle("active", btn.dataset.mobilePage === page);
         });
+        if (page === "chat" && typeof limparNotificacoesChat === "function") limparNotificacoesChat();
+        if (typeof atualizarBadgeChat === "function") atualizarBadgeChat();
 
         const countdown = document.getElementById("countdownArea");
         setDisplay(countdown, page === "status" || page === "resumo");
