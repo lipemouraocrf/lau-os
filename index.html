@@ -2406,7 +2406,86 @@
       }
     }
 
-  </style>
+  
+
+    /* V18: ajustes finos mobile para evitar cortes e reset de aba */
+    @media (max-width: 760px) {
+      html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden !important;
+        overscroll-behavior-x: none;
+      }
+
+      body.mobile-app-ready * {
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      body.mobile-app-ready .role-area,
+      body.mobile-app-ready .countdown-area,
+      body.mobile-app-ready .countdown-card,
+      body.mobile-app-ready .viewer-card,
+      body.mobile-app-ready .chat-card,
+      body.mobile-app-ready .lau-corner,
+      body.mobile-app-ready .namorado-corner-view,
+      body.mobile-app-ready .corner-panel,
+      body.mobile-app-ready .agenda-calendar {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+      }
+
+      body.mobile-app-ready .countdown-area,
+      body.mobile-app-ready .role-area {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+      }
+
+      body.mobile-app-ready input,
+      body.mobile-app-ready textarea,
+      body.mobile-app-ready select {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        display: block;
+      }
+
+      body.mobile-app-ready input[type="date"],
+      body.mobile-app-ready input[type="time"],
+      body.mobile-app-ready input[type="datetime-local"] {
+        -webkit-appearance: none;
+        appearance: none;
+        min-height: 46px;
+      }
+
+      body.mobile-app-ready .countdown-controls,
+      body.mobile-app-ready .agenda-actions {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+      }
+
+      body.mobile-app-ready .agenda-days {
+        grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+      }
+
+      body.mobile-app-ready .agenda-weekdays {
+        grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+      }
+
+      body.mobile-app-ready .agenda-day {
+        min-width: 0 !important;
+        width: 100% !important;
+      }
+
+      body.mobile-app-ready .mobile-tabbar button {
+        min-width: 0;
+        padding: 7px 3px;
+      }
+    }
+
+</style>
 </head>
 
 <body>
@@ -4559,6 +4638,7 @@
 
       window.abrirPaginaMobile = function (page) {
         if (!isMobile()) return;
+        const paginaAnteriorMobile = window.lauMobilePageAtual;
         window.lauMobilePageAtual = page;
         const usuario = localStorage.getItem("lauraos_usuario") || "Lau";
         ensureMobileNav(usuario);
@@ -4635,7 +4715,9 @@
           }
         }
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (paginaAnteriorMobile !== page) {
+          window.scrollTo({ top: 0, behavior: "auto" });
+        }
       };
 
       const originalAplicarPermissao = window.aplicarPermissao;
@@ -4649,22 +4731,39 @@
         }
       };
 
+      let ultimoEstadoMobile = isMobile();
+      let resizeTimerMobile = null;
+
       window.addEventListener("resize", () => {
-        const usuario = localStorage.getItem("lauraos_usuario");
-        if (usuario && isMobile()) {
-          ensureMobileNav(usuario);
-          const active = document.querySelector("#mobileTabbar button.active")?.dataset.mobilePage;
-          window.abrirPaginaMobile(active || (usuario === "Namorado" ? "resumo" : "status"));
-        }
-        if (!isMobile()) {
-          document.body.classList.remove("mobile-app-ready");
-          const nav = document.getElementById("mobileTabbar");
-          if (nav) nav.style.display = "none";
-          document.querySelectorAll('[style*="display"]').forEach((el) => {
-            if (!el.closest('.login-screen') && el.id !== 'bootScreen') el.style.display = "";
-          });
-        }
-      });
+        clearTimeout(resizeTimerMobile);
+
+        resizeTimerMobile = setTimeout(() => {
+          const usuario = localStorage.getItem("lauraos_usuario");
+          const agoraMobile = isMobile();
+
+          if (usuario && agoraMobile) {
+            const paginaAtual = window.lauMobilePageAtual
+              || document.querySelector("#mobileTabbar button.active")?.dataset.mobilePage
+              || (usuario === "Namorado" ? "resumo" : "status");
+
+            // No celular, Safari/Chrome disparam resize quando a barra de endereço aparece/some.
+            // Por isso mantemos a aba atual e não voltamos para Hoje.
+            ensureMobileNav(usuario);
+            window.abrirPaginaMobile(paginaAtual);
+          }
+
+          if (!agoraMobile && ultimoEstadoMobile) {
+            document.body.classList.remove("mobile-app-ready");
+            const nav = document.getElementById("mobileTabbar");
+            if (nav) nav.style.display = "none";
+            document.querySelectorAll('[style*="display"]').forEach((el) => {
+              if (!el.closest('.login-screen') && el.id !== 'bootScreen') el.style.display = "";
+            });
+          }
+
+          ultimoEstadoMobile = agoraMobile;
+        }, 160);
+      }, { passive: true });
     })();
   </script>
 
