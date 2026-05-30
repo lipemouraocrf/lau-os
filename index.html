@@ -2632,6 +2632,106 @@
       }
     }
 
+
+
+    /* V21: mobile mais firme + aba Fotos somente visualização */
+    .mobile-photo-viewer-card {
+      display: none;
+    }
+
+    @media (max-width: 760px) {
+      html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+        overscroll-behavior-x: none;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body.mobile-app-ready {
+        padding-bottom: calc(96px + env(safe-area-inset-bottom));
+      }
+
+      body.mobile-app-ready .role-area {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
+      }
+
+      body.mobile-app-ready .countdown-area {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+      }
+
+      body.mobile-app-ready .mobile-tabbar {
+        left: 10px !important;
+        right: 10px !important;
+        bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+        width: auto !important;
+        border: 1px solid #ffd6ea;
+        border-radius: 24px;
+        padding: 7px 8px !important;
+        gap: 3px !important;
+        box-shadow: 0 10px 30px rgba(120, 38, 82, 0.16);
+        overflow: visible;
+      }
+
+      body.mobile-app-ready.namorado-mode .mobile-tabbar {
+        border-color: #cfe7ff;
+        box-shadow: 0 10px 30px rgba(47, 128, 237, 0.16);
+      }
+
+      body.mobile-app-ready .mobile-tabbar button {
+        min-width: 0;
+        min-height: 56px;
+        padding: 7px 2px !important;
+        border-radius: 18px !important;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body.mobile-app-ready .mobile-tabbar button span {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      body.mobile-app-ready .mobile-photo-viewer-card {
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid #ffd6ea;
+        border-radius: 18px;
+        padding: 14px;
+        margin: 10px 0;
+        display: none;
+        box-shadow: none;
+        text-align: center;
+      }
+
+      body.mobile-app-ready .mobile-photo-viewer-card h3 {
+        color: #ff4fa3;
+        font-size: 1.08rem;
+        margin-bottom: 6px;
+      }
+
+      body.mobile-app-ready .mobile-photo-viewer-card p {
+        font-size: 0.86rem;
+        line-height: 1.35;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      body.mobile-app-ready .mobile-memory-frame {
+        width: min(280px, 100%);
+        margin: 0 auto 8px;
+        min-height: auto;
+      }
+
+      body.mobile-app-ready #memoryCorner .photo-gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+
 </style>
 </head>
 
@@ -3007,6 +3107,17 @@
             <button onclick="enviarMissaoNamorado()">Enviar missão para ele 💌</button>
             <div class="mission-result" id="missionResult">Nenhuma missão enviada ainda.</div>
           </div>
+        </div>
+
+
+        <div class="mobile-photo-viewer-card" id="lauMobilePhotoViewer">
+          <h3>📸 Fotos da Lau</h3>
+          <p>As fotos que você adicionou no Baú aparecem aqui passando aos poucos.</p>
+          <div class="memory-frame mobile-memory-frame">
+            <div class="memory-placeholder" id="lauMobileMemoryPlaceholder">🧚‍♀️🦊</div>
+            <img id="lauMobileMemoryPhoto" class="memory-photo hidden" alt="Foto adicionada pela Lau" />
+          </div>
+          <div class="pet-label" id="lauMobilePhotoLabel">Quando adicionar fotos no Baú, elas aparecem aqui 💖</div>
         </div>
 
         <div class="chat-card laura-chat-card">
@@ -3767,6 +3878,9 @@
       const mascotes = ["🧚‍♀️", "🦊", "🧚‍♀️🦊", "🐰", "✨"];
       const namoradoMemoryPhoto = document.getElementById("namoradoMemoryPhoto");
       const namoradoMemoryPlaceholder = document.getElementById("namoradoMemoryPlaceholder");
+      const lauMobileMemoryPhoto = document.getElementById("lauMobileMemoryPhoto");
+      const lauMobileMemoryPlaceholder = document.getElementById("lauMobileMemoryPlaceholder");
+      const lauMobilePhotoLabel = document.getElementById("lauMobilePhotoLabel");
       const mascote = randomItem(mascotes);
 
       if (memoryPhoto && memoryPlaceholder) {
@@ -3780,12 +3894,25 @@
         namoradoMemoryPlaceholder.classList.remove("hidden");
         namoradoMemoryPlaceholder.textContent = mascote;
       }
+
+      if (lauMobileMemoryPhoto && lauMobileMemoryPlaceholder) {
+        lauMobileMemoryPhoto.classList.add("hidden");
+        lauMobileMemoryPlaceholder.classList.remove("hidden");
+        lauMobileMemoryPlaceholder.textContent = mascote;
+      }
+
+      if (lauMobilePhotoLabel) {
+        lauMobilePhotoLabel.textContent = "Quando adicionar fotos no Baú, elas aparecem aqui 💖";
+      }
     }
 
     function trocarMemoria() {
       const fotos = lerFotosLau();
       const namoradoMemoryPhoto = document.getElementById("namoradoMemoryPhoto");
       const namoradoMemoryPlaceholder = document.getElementById("namoradoMemoryPlaceholder");
+      const lauMobileMemoryPhoto = document.getElementById("lauMobileMemoryPhoto");
+      const lauMobileMemoryPlaceholder = document.getElementById("lauMobileMemoryPlaceholder");
+      const lauMobilePhotoLabel = document.getElementById("lauMobilePhotoLabel");
 
       if (!fotos.length) {
         mostrarMascoteFofo();
@@ -3804,6 +3931,16 @@
         namoradoMemoryPlaceholder.classList.add("hidden");
         namoradoMemoryPhoto.classList.remove("hidden");
         namoradoMemoryPhoto.src = fotoAtual;
+      }
+
+      if (lauMobileMemoryPhoto && lauMobileMemoryPlaceholder) {
+        lauMobileMemoryPlaceholder.classList.add("hidden");
+        lauMobileMemoryPhoto.classList.remove("hidden");
+        lauMobileMemoryPhoto.src = fotoAtual;
+      }
+
+      if (lauMobilePhotoLabel) {
+        lauMobilePhotoLabel.textContent = `${fotos.length} foto${fotos.length === 1 ? "" : "s"} passando por aqui 💖`;
       }
 
       memoriaIndex++;
@@ -4829,6 +4966,7 @@
           const moodNote = document.getElementById("moodNote");
           const saveMood = lauraArea.querySelector(".save-mood-btn");
           const chatCard = lauraArea.querySelector(".chat-card");
+          const photoViewer = document.getElementById("lauMobilePhotoViewer");
           const corner = document.getElementById("lauCorner");
 
           const statusOn = page === "status";
@@ -4838,7 +4976,8 @@
           setDisplay(moodNote, statusOn);
           setDisplay(saveMood, statusOn);
           setDisplay(chatCard, page === "chat");
-          setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario" || page === "fotos");
+          setDisplay(photoViewer, page === "fotos");
+          setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario");
 
           if (page === "agenda") {
             window.lauMobileCantinhoAtual = "agendaCorner";
@@ -4850,10 +4989,8 @@
             mostrarPainelCantinho(["diaryCorner"], false);
           }
           if (page === "fotos") {
-            window.lauMobileCantinhoAtual = "memoryCorner";
-            mostrarPainelCantinho(["memoryCorner"], false);
             if (typeof atualizarContadorFotos === "function") atualizarContadorFotos();
-            if (typeof renderizarGaleriaFotosLau === "function") renderizarGaleriaFotosLau();
+            if (typeof iniciarCarrosselMemorias === "function") iniciarCarrosselMemorias(true);
           }
           if (page === "cantinho") {
             const painelAtual = window.lauMobileCantinhoAtual || "wishCorner";
