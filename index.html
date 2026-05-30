@@ -1,0 +1,3900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LauOS 💖</title>
+
+  <style>
+    :root {
+      --pink-bg: #fff0f7;
+      --pink-main: #ff8fc7;
+      --pink-dark: #ff5faa;
+      --pink-soft: #ffd6ea;
+      --white: #ffffff;
+      --text: #5a2a45;
+      --shadow: rgba(255, 105, 180, 0.25);
+      --danger: #ff6b9e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Comic Sans MS", "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, #ffe2f1, transparent 35%),
+        radial-gradient(circle at bottom right, #ffd1e8, transparent 30%),
+        linear-gradient(135deg, #fff5fa, #ffe4f2);
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background 0.5s ease;
+    }
+
+    body.jealous-mode {
+      background:
+        radial-gradient(circle at top, #ff6b9e, transparent 40%),
+        linear-gradient(135deg, #ffb3d1, #ff6f9f);
+      animation: jealousPulse 0.7s infinite alternate;
+    }
+
+    @keyframes jealousPulse {
+      from { filter: saturate(1); }
+      to { filter: saturate(1.4); }
+    }
+
+    .floating-hearts,
+    .sparkles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .heart,
+    .sparkle {
+      position: absolute;
+      animation: floatUp linear forwards;
+      opacity: 0.8;
+    }
+
+    .heart {
+      color: #ff69b4;
+      font-size: 22px;
+    }
+
+    .sparkle {
+      color: #ffd700;
+      font-size: 18px;
+      animation-name: sparkleMove;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(100vh) scale(0.8) rotate(0deg);
+        opacity: 0;
+      }
+      15% { opacity: 1; }
+      to {
+        transform: translateY(-10vh) scale(1.4) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes sparkleMove {
+      from {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+      }
+      20% { opacity: 1; }
+      to {
+        transform: translateY(-10vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    .boot-screen,
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at top left, #ffe0f0, transparent 35%),
+        linear-gradient(135deg, #fff3fa, #ffd1e8);
+      padding: 20px;
+    }
+
+    .login-screen { display: none; }
+
+    .login-choice-wrap {
+      width: min(980px, 100%);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .login-avatar {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      font-size: 2.3rem;
+      background: #fff0f7;
+      border: 2px solid #ffc2df;
+      box-shadow: 0 10px 24px rgba(255, 105, 180, 0.18);
+    }
+
+    .login-card-lau {
+      border-color: #ffc2df;
+    }
+
+    .login-card-boyfriend {
+      background: rgba(244, 250, 255, 0.9);
+      border-color: #bfdbfe;
+      box-shadow: 0 25px 70px rgba(37, 99, 235, 0.18);
+    }
+
+    .login-card-boyfriend .login-avatar {
+      background: #eaf4ff;
+      border-color: #bfdbfe;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.13);
+    }
+
+    .login-card-boyfriend h2 {
+      color: #2563eb;
+    }
+
+    .login-card-boyfriend input {
+      border-color: #bfdbfe;
+      background: #f8fbff;
+    }
+
+    .login-card-boyfriend input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.13);
+    }
+
+    .login-card-boyfriend button {
+      background: linear-gradient(135deg, #60a5fa, #2563eb);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.25);
+    }
+
+    .login-card-boyfriend small {
+      color: #3b6ea8;
+    }
+
+    .blue-hint {
+      background: #eef7ff !important;
+      border-color: #bfdbfe !important;
+      color: #1d4ed8 !important;
+    }
+
+    .blue-error {
+      color: #2563eb !important;
+    }
+
+    @media (max-width: 760px) {
+      .login-choice-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .boot-card,
+    .login-card {
+      width: min(460px, 100%);
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(18px);
+      border: 2px solid white;
+      border-radius: 30px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 25px 70px rgba(255, 105, 180, 0.25);
+      animation: appear 0.6s ease;
+    }
+
+    .boot-card h1,
+    .login-card h2 {
+      color: #ff4fa3;
+      margin-bottom: 12px;
+    }
+
+    .boot-card p,
+    .login-card p {
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .boot-bar {
+      height: 22px;
+      background: #ffe0ef;
+      border: 2px solid #ffc2df;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .boot-progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff74b8, #ffb3d1, #ff74b8);
+      animation: bootLoading 2.8s ease forwards;
+    }
+
+    @keyframes bootLoading {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
+    .login-card input {
+      width: 100%;
+      border: 2px solid #ffc2df;
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      font-size: 1rem;
+      outline: none;
+      color: #5a2a45;
+      background: #fff8fc;
+    }
+
+    .login-card input:focus,
+    textarea:focus {
+      border-color: #ff5faa;
+      box-shadow: 0 0 0 4px rgba(255, 95, 170, 0.12);
+    }
+
+    .login-card small {
+      display: block;
+      margin-top: 14px;
+      color: #ad5b86;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .login-hint {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: #fff0f7;
+      border: 2px dashed #ffc2df;
+      color: #a83c72;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .login-error {
+      margin-top: 14px;
+      color: #ff3b8d;
+      font-weight: 900;
+    }
+
+    .app {
+      position: relative;
+      z-index: 2;
+      width: min(1100px, 94%);
+      margin: 0 auto;
+      padding: 30px 0;
+    }
+
+    .window {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(18px);
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      border-radius: 28px;
+      box-shadow: 0 20px 60px var(--shadow);
+      overflow: hidden;
+      animation: appear 0.8s ease;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      background: linear-gradient(90deg, #ffc2df, #ff8fc7);
+      color: white;
+    }
+
+    .traffic {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.85;
+    }
+
+    .title {
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(160, 20, 90, 0.25);
+      text-align: center;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .time {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .logout-btn {
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.28);
+      color: white;
+      box-shadow: none;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      background: rgba(255, 255, 255, 0.42);
+      box-shadow: none;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      padding: 32px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1;
+      color: #ff4fa3;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 620px;
+    }
+
+    .opening-phrase {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: 20px;
+      background: #fff3fa;
+      border: 2px dashed #ffadd5;
+      font-weight: 700;
+      animation: softBounce 2.4s infinite;
+    }
+
+    @keyframes softBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .pet-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #fff7fb;
+      border-radius: 28px;
+      padding: 24px;
+      min-height: 260px;
+      border: 2px solid #ffd2e8;
+      box-shadow: inset 0 0 30px rgba(255, 143, 199, 0.15);
+    }
+
+    .pet {
+      font-size: 5.5rem;
+      animation: blink 3s infinite, wiggle 2s infinite ease-in-out;
+      transform-origin: bottom center;
+    }
+
+    @keyframes blink {
+      0%, 92%, 100% { filter: brightness(1); }
+      94%, 96% { filter: brightness(0.75); }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-4deg); }
+      50% { transform: rotate(4deg); }
+    }
+
+    .pet-label {
+      margin-top: 12px;
+      font-weight: 900;
+      color: #ff4fa3;
+      text-align: center;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      padding: 0 32px 28px;
+    }
+
+    .status-card {
+      background: white;
+      border-radius: 22px;
+      padding: 18px;
+      text-align: center;
+      border: 2px solid #ffd2e8;
+      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.13);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .status-card:hover {
+      transform: translateY(-6px) rotate(-1deg);
+      box-shadow: 0 14px 32px rgba(255, 105, 180, 0.22);
+    }
+
+    .status-card strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .status-card span {
+      color: #ff4fa3;
+      font-weight: 900;
+    }
+
+    .actions {
+      padding: 0 32px 32px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #ff9ccc, #ff5faa);
+      color: white;
+      font-weight: 900;
+      font-size: 1rem;
+      box-shadow: 0 10px 24px rgba(255, 95, 170, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      font-family: inherit;
+    }
+
+    button:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 16px 32px rgba(255, 95, 170, 0.4);
+      filter: brightness(1.04);
+    }
+
+    button:active { transform: scale(0.96); }
+
+    .secret-btn {
+      opacity: 0.45;
+      background: linear-gradient(135deg, #ffbadb, #ff8fc7);
+    }
+
+    .secret-btn:hover { opacity: 1; }
+
+    .message-box {
+      margin: 0 32px 32px;
+      min-height: 88px;
+      background: #fff8fc;
+      border: 2px solid #ffd2e8;
+      border-radius: 24px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ff4fa3;
+      box-shadow: inset 0 0 25px rgba(255, 143, 199, 0.12);
+      transition: all 0.3s ease;
+    }
+
+    .message-box.pop { animation: pop 0.45s ease; }
+
+    @keyframes pop {
+      0% { transform: scale(0.95); }
+      60% { transform: scale(1.04); }
+      100% { transform: scale(1); }
+    }
+
+    .miss-panel {
+      display: none;
+      margin: 0 32px 32px;
+      background: white;
+      padding: 22px;
+      border-radius: 24px;
+      border: 2px solid #ffd2e8;
+    }
+
+    .miss-panel.show {
+      display: block;
+      animation: appear 0.4s ease;
+    }
+
+    .progress {
+      height: 24px;
+      background: #ffe0ef;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 16px 0 10px;
+      border: 2px solid #ffc2df;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 45%;
+      background: linear-gradient(90deg, #ff74b8, #ffb3d1, #ff74b8);
+      border-radius: 999px;
+      animation: infiniteLoad 1.2s infinite alternate;
+    }
+
+    @keyframes infiniteLoad {
+      from { width: 35%; }
+      to { width: 100%; }
+    }
+
+    .miss-text {
+      text-align: center;
+      font-weight: 900;
+      color: #ff4fa3;
+    }
+
+    .role-area {
+      margin: 0 32px 32px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 2px solid #ffd2e8;
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 14px 35px rgba(255, 105, 180, 0.13);
+    }
+
+    .role-area.hidden { display: none; }
+
+    .role-header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .role-header h2 {
+      color: #ff4fa3;
+      margin-bottom: 8px;
+    }
+
+    .role-header p {
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .mood-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .mood-options button {
+      padding: 12px;
+      font-size: 0.9rem;
+      box-shadow: 0 8px 18px rgba(255, 95, 170, 0.18);
+    }
+
+    .mood-options button.selected-mood {
+      outline: 4px solid rgba(255, 95, 170, 0.22);
+      transform: scale(1.03);
+    }
+
+    .levels-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .level-card {
+      background: #fff8fc;
+      border: 2px solid #ffd2e8;
+      border-radius: 22px;
+      padding: 16px;
+    }
+
+    .level-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-weight: 900;
+      color: #a83c72;
+    }
+
+    .level-value {
+      color: #ff4fa3;
+      white-space: nowrap;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #ff5faa;
+      cursor: pointer;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 115px;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 2px solid #ffc2df;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #5a2a45;
+      background: white;
+      outline: none;
+    }
+
+    .save-mood-btn {
+      width: 100%;
+      margin-top: 14px;
+    }
+
+    .viewer-card {
+      background: #fff8fc;
+      border: 2px solid #ffd2e8;
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .current-mood {
+      background: white;
+      border: 2px dashed #ffadd5;
+      border-radius: 20px;
+      padding: 18px;
+      text-align: center;
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #ff4fa3;
+      margin: 14px 0;
+    }
+
+    .mood-note-view,
+    .protocol-box {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      line-height: 1.5;
+      font-weight: 700;
+      margin-bottom: 14px;
+      border: 2px solid #ffe0ef;
+    }
+
+    .protocol-box {
+      background: #fff0f7;
+      border-color: #ffc2df;
+      font-weight: 900;
+      color: #a83c72;
+    }
+
+    .readonly-levels {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .readonly-level {
+      background: white;
+      border: 2px solid #ffe0ef;
+      border-radius: 18px;
+      padding: 14px;
+      font-weight: 900;
+    }
+
+    .readonly-bar {
+      margin-top: 10px;
+      height: 14px;
+      background: #ffe0ef;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .readonly-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff74b8, #ffb3d1);
+      border-radius: 999px;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .history-item {
+      background: white;
+      border: 2px solid #ffe0ef;
+      border-radius: 18px;
+      padding: 14px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+
+
+    .countdown-area {
+      margin: 0 32px 32px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 2px solid #ffd2e8;
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 14px 35px rgba(255, 105, 180, 0.13);
+    }
+
+    .countdown-area.hidden { display: none; }
+
+    .countdown-card {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .countdown-card h2 {
+      color: #ff4fa3;
+      margin-bottom: 8px;
+    }
+
+    .countdown-card p {
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .countdown-main {
+      background: white;
+      border: 2px dashed #ffadd5;
+      border-radius: 24px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .countdown-number {
+      font-size: clamp(2.5rem, 7vw, 4.8rem);
+      line-height: 1;
+      font-weight: 900;
+      color: #ff4fa3;
+    }
+
+    .countdown-label {
+      margin-top: 8px;
+      font-weight: 900;
+      color: #a83c72;
+    }
+
+    .countdown-controls {
+      display: grid;
+      gap: 10px;
+    }
+
+    .countdown-controls input {
+      width: 100%;
+      border: 2px solid #ffc2df;
+      border-radius: 18px;
+      padding: 14px;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #5a2a45;
+      background: white;
+    }
+
+    .laura-companions {
+      position: relative;
+      margin: 18px auto 0;
+      min-height: 58px;
+      max-width: 520px;
+      background: #fff8fc;
+      border: 2px dashed #ffadd5;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      overflow: hidden;
+      padding: 10px 16px;
+    }
+
+    .fairy-walk {
+      position: absolute;
+      left: 8px;
+      font-size: 2rem;
+      animation: fairyWalk 5s ease-in-out infinite;
+    }
+
+    .fox-friend {
+      font-size: 2rem;
+      animation: foxBounce 2.2s ease-in-out infinite;
+    }
+
+    .companion-text {
+      font-weight: 900;
+      color: #ff4fa3;
+      padding-left: 42px;
+    }
+
+    @keyframes fairyWalk {
+      0%, 100% { transform: translateX(0) translateY(0) rotate(-7deg); }
+      50% { transform: translateX(120px) translateY(-8px) rotate(8deg); }
+    }
+
+    @keyframes foxBounce {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50% { transform: translateY(-8px) rotate(4deg); }
+    }
+
+    .chat-card {
+      margin-top: 18px;
+    }
+
+    .chat-card h3 {
+      color: #ff4fa3;
+      margin-bottom: 8px;
+    }
+
+    .chat-card p {
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .chat-list {
+      display: grid;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .chat-message {
+      background: white;
+      border: 2px solid #ffe0ef;
+      border-radius: 18px;
+      padding: 14px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .chat-message strong {
+      color: #ff4fa3;
+    }
+
+    body.namorado-mode {
+      background:
+        radial-gradient(circle at top left, #dff1ff, transparent 35%),
+        radial-gradient(circle at bottom right, #cde7ff, transparent 30%),
+        linear-gradient(135deg, #f4fbff, #dcefff);
+    }
+
+    body.namorado-mode .topbar {
+      background: linear-gradient(90deg, #8cc8ff, #4d9fec);
+    }
+
+    body.namorado-mode .window {
+      box-shadow: 0 20px 60px rgba(77, 159, 236, 0.22);
+    }
+
+    body.namorado-mode .hero,
+    body.namorado-mode .dashboard,
+    body.namorado-mode .actions,
+    body.namorado-mode .miss-panel {
+      display: none !important;
+    }
+
+    body.namorado-mode .role-area,
+    body.namorado-mode .countdown-area {
+      border-color: #b8dcff;
+      box-shadow: 0 14px 35px rgba(77, 159, 236, 0.14);
+    }
+
+    body.namorado-mode .role-header h2,
+    body.namorado-mode .countdown-card h2,
+    body.namorado-mode .chat-card h3,
+    body.namorado-mode .current-mood,
+    body.namorado-mode .countdown-number {
+      color: #247fd1;
+    }
+
+    body.namorado-mode button {
+      background: linear-gradient(135deg, #78bdff, #247fd1);
+      box-shadow: 0 10px 24px rgba(36, 127, 209, 0.22);
+    }
+
+    body.namorado-mode .logout-btn {
+      background: rgba(255, 255, 255, 0.28);
+      box-shadow: none;
+    }
+
+    body.namorado-mode .current-mood,
+    body.namorado-mode .countdown-main {
+      border-color: #9ed0ff;
+    }
+
+    body.namorado-mode .mood-note-view,
+    body.namorado-mode .viewer-card,
+    body.namorado-mode .readonly-level,
+    body.namorado-mode .history-item,
+    body.namorado-mode .chat-message,
+    body.namorado-mode .protocol-box {
+      border-color: #d3ebff;
+    }
+
+    body.namorado-mode .protocol-box {
+      background: #eef7ff;
+      color: #2269ab;
+    }
+
+    body.namorado-mode .readonly-bar {
+      background: #dcefff;
+    }
+
+    body.namorado-mode .readonly-fill {
+      background: linear-gradient(90deg, #4d9fec, #9ed0ff);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(90, 42, 69, 0.28);
+      backdrop-filter: blur(8px);
+      z-index: 20;
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-content {
+      width: min(560px, 100%);
+      background: white;
+      border-radius: 30px;
+      padding: 30px;
+      text-align: center;
+      border: 3px solid #ffc2df;
+      box-shadow: 0 30px 80px rgba(255, 95, 170, 0.38);
+      animation: modalIn 0.5s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.92);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-content h2 {
+      color: #ff4fa3;
+      margin-bottom: 16px;
+      font-size: 2rem;
+    }
+
+    .modal-content p {
+      line-height: 1.7;
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+    }
+
+    .photo-placeholder {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffe0ef, #ff8fc7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      border: 4px solid #fff;
+      box-shadow: 0 10px 25px rgba(255, 95, 170, 0.25);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 0 20px 28px;
+      color: #ad5b86;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .kiss-heart {
+      position: fixed;
+      font-size: 34px;
+      pointer-events: none;
+      z-index: 50;
+      animation: kissFloat 1.2s ease forwards;
+    }
+
+    @keyframes kissFloat {
+      from {
+        transform: translateY(0) scale(0.8);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-120px) scale(1.8) rotate(20deg);
+        opacity: 0;
+      }
+    }
+
+    .alert-shake { animation: shake 0.35s ease; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-5px); }
+    }
+
+    @media (max-width: 850px) {
+      .countdown-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+
+      .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 24px 24px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+        padding: 0 24px 24px;
+      }
+
+      .message-box,
+      .miss-panel,
+      .role-area {
+        margin-left: 24px;
+        margin-right: 24px;
+      }
+
+      .mood-options,
+      .levels-grid,
+      .readonly-levels {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .topbar-right {
+        justify-content: center;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1,
+      .hero p,
+      .opening-phrase {
+        text-align: center;
+      }
+    }
+  
+
+    /* V3: fotos, chat separado e contagem completa */
+    .photo-memory-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-frame {
+      width: min(260px, 90%);
+      aspect-ratio: 1 / 1;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #fff0f7, #ffd6ea);
+      border: 4px solid #fff;
+      box-shadow: 0 18px 45px rgba(255, 95, 170, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .memory-placeholder {
+      font-size: 4.8rem;
+      animation: floatCute 2.8s ease-in-out infinite;
+    }
+
+    .memory-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      animation: photoFade 0.8s ease;
+    }
+
+    .memory-photo.hidden,
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes floatCute {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    @keyframes photoFade {
+      from { opacity: 0; transform: scale(1.04); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .photo-upload-card {
+      background: #fff8fc;
+      border: 2px solid #ffd2e8;
+      border-radius: 24px;
+      padding: 20px;
+      margin-top: 18px;
+    }
+
+    .photo-upload-card h3 {
+      color: #ff4fa3;
+      margin-bottom: 8px;
+    }
+
+    .photo-upload-card p {
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .photo-upload-card input[type="file"] {
+      width: 100%;
+      background: white;
+      border: 2px dashed #ffadd5;
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 12px;
+      color: #5a2a45;
+      font-weight: 700;
+    }
+
+    .soft-secondary-btn {
+      margin-top: 10px;
+      background: linear-gradient(135deg, #ffc2df, #ff8fc7);
+      box-shadow: 0 8px 18px rgba(255, 95, 170, 0.18);
+    }
+
+    .photo-count {
+      margin-top: 12px;
+      font-weight: 900;
+      color: #ff4fa3;
+    }
+
+    .countdown-detailed {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    .countdown-unit {
+      background: rgba(255,255,255,0.78);
+      border: 2px solid rgba(255,255,255,0.75);
+      border-radius: 22px;
+      padding: 14px 8px;
+      text-align: center;
+    }
+
+    .countdown-status {
+      margin-top: 12px;
+      text-align: center;
+      font-weight: 900;
+      color: #ff4fa3;
+    }
+
+    body.namorado-mode .countdown-status {
+      color: #2675d9;
+    }
+
+    .story-chat {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 12px;
+      max-height: 360px;
+      overflow-y: auto;
+      background: linear-gradient(180deg, #fff, #fff8fc);
+      border-radius: 22px;
+      padding: 14px;
+    }
+
+    body.namorado-mode .story-chat {
+      background: linear-gradient(180deg, #ffffff, #f4f9ff);
+    }
+
+    .chat-message {
+      border-radius: 22px;
+      padding: 14px 16px;
+      max-width: 90%;
+      box-shadow: 0 8px 18px rgba(90, 42, 69, 0.08);
+    }
+
+    .chat-message.laura-msg {
+      align-self: flex-start;
+      background: #fff0f7;
+      border: 2px solid #ffd2e8;
+    }
+
+    .chat-message.namorado-msg {
+      align-self: flex-end;
+      background: #eef6ff;
+      border: 2px solid #b9dcff;
+    }
+
+    .actions {
+      display: none !important;
+    }
+
+    @media (max-width: 650px) {
+      .countdown-detailed {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+
+    /* V4: fadinhas, cursor mágico e fotos também na área do namorado */
+    .fairy-sky {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 3;
+      display: none;
+    }
+
+    body.laura-mode .fairy-sky {
+      display: block;
+    }
+
+    .flying-fairy {
+      position: absolute;
+      font-size: 2.2rem;
+      filter: drop-shadow(0 8px 14px rgba(255, 95, 170, 0.28));
+      opacity: 0.88;
+      animation: fairyFlyAcross 13s ease-in-out infinite;
+    }
+
+    .flying-fairy:nth-child(1) {
+      top: 18%;
+      left: -8%;
+      animation-duration: 15s;
+    }
+
+    .flying-fairy:nth-child(2) {
+      top: 44%;
+      left: -10%;
+      animation-delay: 2.8s;
+      animation-duration: 18s;
+      font-size: 1.9rem;
+    }
+
+    .flying-fairy:nth-child(3) {
+      top: 70%;
+      left: -12%;
+      animation-delay: 5.5s;
+      animation-duration: 16s;
+      font-size: 2rem;
+    }
+
+    @keyframes fairyFlyAcross {
+      0% { transform: translateX(-10vw) translateY(0) rotate(-8deg); opacity: 0; }
+      10% { opacity: 0.9; }
+      30% { transform: translateX(30vw) translateY(-35px) rotate(8deg); }
+      55% { transform: translateX(58vw) translateY(28px) rotate(-5deg); }
+      80% { transform: translateX(88vw) translateY(-22px) rotate(10deg); opacity: 0.9; }
+      100% { transform: translateX(112vw) translateY(0) rotate(-6deg); opacity: 0; }
+    }
+
+    #cursorFairy {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 1000;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      filter: drop-shadow(0 8px 14px rgba(255, 95, 170, 0.35));
+      display: none;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      body.laura-mode {
+        cursor: none;
+      }
+
+      body.laura-mode #cursorFairy {
+        display: block;
+      }
+    }
+
+    .namorado-memory-card {
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff, #f4f9ff);
+      border: 2px solid #d3ebff;
+    }
+
+    body.namorado-mode .namorado-memory-card h3 {
+      color: #247fd1;
+    }
+
+    .namorado-memory-card p {
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .namorado-memory-card .memory-frame {
+      margin: 0 auto 12px;
+      background: linear-gradient(135deg, #eef7ff, #dcefff);
+      box-shadow: 0 18px 45px rgba(77, 159, 236, 0.18);
+    }
+
+
+    /* V5: Mini Games da Lau */
+    .games-hub {
+      margin-top: 20px;
+      background: linear-gradient(135deg, #fff8fc, #fff0f8);
+      border: 2px solid #ffd2e8;
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: 0 14px 35px rgba(255, 105, 180, 0.12);
+    }
+
+    .games-hub h3 {
+      color: #ff4fa3;
+      margin-bottom: 8px;
+      font-size: 1.45rem;
+    }
+
+    .games-hub p {
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .game-menu {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .game-menu button {
+      padding: 12px;
+      font-size: 0.85rem;
+      border-radius: 16px;
+    }
+
+    .game-box {
+      display: none;
+      background: white;
+      border: 2px dashed #ffadd5;
+      border-radius: 22px;
+      padding: 18px;
+      animation: appear 0.35s ease;
+    }
+
+    .game-box.show {
+      display: block;
+    }
+
+    .game-box h4 {
+      color: #ff4fa3;
+      margin-bottom: 10px;
+      font-size: 1.15rem;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .game-feedback,
+    .roulette-result,
+    .garden-result,
+    .mission-result {
+      margin-top: 14px;
+      background: #fff0f7;
+      border: 2px solid #ffc2df;
+      border-radius: 18px;
+      padding: 14px;
+      font-weight: 900;
+      color: #a83c72;
+      line-height: 1.5;
+    }
+
+    .fairy-hunt-field {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fff4fb, #ffe7f3);
+      border: 2px solid #ffc2df;
+      border-radius: 22px;
+      margin-top: 12px;
+    }
+
+    .hunt-fairy {
+      position: absolute;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      font-size: 2rem;
+      animation: huntFloat 1.4s infinite alternate ease-in-out;
+    }
+
+    .hunt-fairy:hover {
+      box-shadow: none;
+      transform: scale(1.2);
+    }
+
+    @keyframes huntFloat {
+      from { transform: translateY(0) rotate(-8deg); }
+      to { transform: translateY(-12px) rotate(8deg); }
+    }
+
+    .garden-bed {
+      min-height: 110px;
+      background: linear-gradient(180deg, #fff8fc, #ffe7f3);
+      border: 2px solid #ffc2df;
+      border-radius: 22px;
+      padding: 14px;
+      font-size: 2rem;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .mission-select,
+    .mission-input {
+      width: 100%;
+      border: 2px solid #ffc2df;
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin: 8px 0;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #5a2a45;
+      background: #fff8fc;
+      outline: none;
+    }
+
+    .current-mission-card {
+      background: linear-gradient(135deg, #ffffff, #f4f9ff);
+      border: 2px solid #d3ebff;
+    }
+
+    @media (max-width: 900px) {
+      .game-menu {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .game-menu,
+      .quiz-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+
+    /* V8: Cantinho da Lau organizado */
+    .lau-corner,
+    .namorado-corner-view {
+      background: rgba(255, 255, 255, 0.78);
+      border: 2px solid #ffd2e8;
+      border-radius: 28px;
+      padding: 22px;
+      margin-top: 22px;
+      box-shadow: 0 14px 35px rgba(255, 105, 180, 0.13);
+    }
+
+    .corner-header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .corner-header h3,
+    .namorado-corner-view h3 {
+      color: #ff4fa3;
+      margin-bottom: 8px;
+    }
+
+    body.namorado-mode .namorado-corner-view h3 {
+      color: #2f80ed;
+    }
+
+    .corner-menu {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin: 16px 0 18px;
+    }
+
+    .corner-menu button {
+      padding: 11px 10px;
+      font-size: 0.88rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(255, 95, 170, 0.16);
+    }
+
+    body.namorado-mode .corner-menu button {
+      background: linear-gradient(135deg, #74b9ff, #2f80ed);
+      box-shadow: 0 8px 18px rgba(47, 128, 237, 0.18);
+    }
+
+    .corner-panel {
+      display: none;
+      background: #fff8fc;
+      border: 2px solid #ffd2e8;
+      border-radius: 22px;
+      padding: 18px;
+      animation: appear 0.3s ease;
+    }
+
+    .corner-panel.show {
+      display: block;
+    }
+
+    body.namorado-mode .corner-panel {
+      background: #f7fbff;
+      border-color: #b8d8ff;
+    }
+
+    .corner-panel h4 {
+      color: #ff4fa3;
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+    }
+
+    .corner-panel p {
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .corner-input,
+    .corner-panel textarea,
+    .corner-panel select,
+    .corner-panel input[type="date"] {
+      width: 100%;
+      border: 2px solid #ffc2df;
+      border-radius: 16px;
+      padding: 13px 14px;
+      margin: 8px 0 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #5a2a45;
+      background: white;
+      outline: none;
+    }
+
+    .corner-panel textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .corner-list {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+      font-weight: 700;
+    }
+
+    .corner-item {
+      background: white;
+      border: 2px solid #ffe0ef;
+      border-radius: 18px;
+      padding: 13px;
+      line-height: 1.45;
+    }
+
+    body.namorado-mode .corner-item {
+      border-color: #d8ebff;
+    }
+
+    .corner-item small {
+      display: block;
+      margin-top: 6px;
+      color: #ad5b86;
+    }
+
+    .color-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .color-choice {
+      min-height: 74px;
+      box-shadow: none;
+      border: 2px solid rgba(255,255,255,0.75);
+    }
+
+    .color-choice.pink { background: linear-gradient(135deg, #ff9ccc, #ff5faa); }
+    .color-choice.blue { background: linear-gradient(135deg, #8ecbff, #2f80ed); }
+    .color-choice.purple { background: linear-gradient(135deg, #c9a7ff, #8b5cf6); }
+    .color-choice.red { background: linear-gradient(135deg, #ff8a8a, #ff4d6d); }
+    .color-choice.yellow { background: linear-gradient(135deg, #ffe082, #ffb300); color: #6b3f00; }
+    .color-choice.gray { background: linear-gradient(135deg, #d7dce2, #8b95a1); }
+
+
+    /* V10: agenda da Lau */
+    .agenda-actions {
+      display: grid;
+      grid-template-columns: 1fr 0.7fr;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .agenda-calendar {
+      background: white;
+      border: 2px solid #ffe0ef;
+      border-radius: 20px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+
+    body.namorado-mode .agenda-calendar {
+      border-color: #d8ebff;
+    }
+
+    .agenda-month-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-weight: 900;
+      color: #ff4fa3;
+    }
+
+    body.namorado-mode .agenda-month-header {
+      color: #2f80ed;
+    }
+
+    .agenda-month-header button {
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      border-radius: 999px;
+    }
+
+    .agenda-weekdays,
+    .agenda-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .agenda-weekdays span {
+      text-align: center;
+      font-size: 0.78rem;
+      color: #ad5b86;
+      font-weight: 900;
+    }
+
+    .agenda-day {
+      min-height: 38px;
+      border-radius: 12px;
+      background: #fff8fc;
+      border: 1px solid #ffe0ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      position: relative;
+    }
+
+    body.namorado-mode .agenda-day {
+      background: #f7fbff;
+      border-color: #d8ebff;
+    }
+
+    .agenda-day.empty {
+      opacity: 0;
+    }
+
+    .agenda-day.today {
+      outline: 3px solid rgba(255, 95, 170, 0.22);
+    }
+
+    body.namorado-mode .agenda-day.today {
+      outline-color: rgba(47, 128, 237, 0.22);
+    }
+
+    .agenda-day.has-event::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ff4fa3;
+      position: absolute;
+      bottom: 5px;
+      right: 7px;
+    }
+
+    body.namorado-mode .agenda-day.has-event::after {
+      background: #2f80ed;
+    }
+
+    .agenda-section-title {
+      margin-top: 14px;
+      margin-bottom: 8px;
+      font-weight: 900;
+      color: #ff4fa3;
+    }
+
+    body.namorado-mode .agenda-section-title {
+      color: #2f80ed;
+    }
+
+    .agenda-item {
+      background: white;
+      border: 2px solid #ffe0ef;
+      border-radius: 18px;
+      padding: 13px;
+      line-height: 1.45;
+    }
+
+    body.namorado-mode .agenda-item {
+      border-color: #d8ebff;
+    }
+
+    @media (max-width: 700px) {
+      .agenda-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .agenda-day {
+        min-height: 32px;
+        font-size: 0.85rem;
+      }
+    }
+
+
+    @media (max-width: 850px) {
+      .corner-menu { grid-template-columns: repeat(2, 1fr); }
+      .color-choice-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .corner-menu { grid-template-columns: 1fr; }
+      .color-choice-grid { grid-template-columns: 1fr; }
+    }
+
+
+
+    .soft-secondary-btn {
+      margin-top: 8px;
+      background: linear-gradient(135deg, #ffd6ea, #ff9ccc);
+      color: #7a3158;
+      box-shadow: 0 8px 18px rgba(255, 95, 170, 0.16);
+    }
+
+    .private-diary-note {
+      background: #fff0f7;
+      border: 2px dashed #ffc2df;
+      border-radius: 16px;
+      padding: 14px;
+      color: #a83c72;
+    }
+
+    .diary-history-list {
+      max-height: 55vh;
+      overflow-y: auto;
+      display: grid;
+      gap: 12px;
+      margin: 16px 0 20px;
+      text-align: left;
+    }
+
+    .diary-history-list .history-item {
+      background: #fff8fc;
+      border: 2px solid #ffd2e8;
+      border-radius: 18px;
+      padding: 14px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="boot-screen" id="bootScreen">
+    <div class="boot-card">
+      <h1>LauOS 💖</h1>
+      <p id="bootText">Inicializando sistema...</p>
+      <div class="boot-bar">
+        <div class="boot-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-screen" id="loginScreen">
+    <div class="login-choice-wrap">
+      <div class="login-card login-card-lau">
+        <div class="login-avatar">🧚‍♀️</div>
+        <h2>Acesso da Lau</h2>
+        <p>Esse cantinho é dela. Entre com um dos apelidos que ela usa para te chamar.</p>
+        <input
+          type="password"
+          id="loginPasswordLau"
+          placeholder="senha da Lau..."
+          onkeydown="if(event.key === 'Enter') entrarPeloCartao('Lau')"
+        />
+        <button onclick="entrarPeloCartao('Lau')">Entrar como Lau 💖</button>
+        <small>
+          Dica: pensa em um apelido que você usa quando quer irritar ou mimar ele.
+        </small>
+        <div class="login-hint" id="loginHintLau">Área rosa, fofa e reservada para ela.</div>
+        <div class="login-error" id="loginErrorLau"></div>
+      </div>
+
+      <div class="login-card login-card-boyfriend">
+        <div class="login-avatar">🦊</div>
+        <h2>Acesso do Namorado</h2>
+        <p>Esse lado é seu, em azul, para acompanhar o que ela decidiu compartilhar.</p>
+        <input
+          type="password"
+          id="loginPasswordNamorado"
+          placeholder="sua senha..."
+          onkeydown="if(event.key === 'Enter') entrarPeloCartao('Namorado')"
+        />
+        <button onclick="entrarPeloCartao('Namorado')">Entrar como namorado 💙</button>
+        <small>
+          Dica: pensa em um jeito carinhoso de chamar ela, sem usar o nome completo.
+        </small>
+        <div class="login-hint blue-hint" id="loginHintNamorado">Área azul, só para visualizar e responder.</div>
+        <div class="login-error blue-error" id="loginErrorNamorado"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-hearts" id="floatingHearts"></div>
+  <div class="sparkles" id="sparkles"></div>
+
+  <div class="fairy-sky" id="fairySky">
+    <span class="flying-fairy">🧚‍♀️✨</span>
+    <span class="flying-fairy">🧚‍♀️💫</span>
+    <span class="flying-fairy">🧚‍♀️🌸</span>
+  </div>
+
+  <div id="cursorFairy">🧚‍♀️</div>
+
+  <main class="app">
+    <section class="window" id="mainWindow">
+      <header class="topbar">
+        <div class="traffic">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+
+        <div class="title">LauOS 💖 versão namorada premium</div>
+
+        <div class="topbar-right">
+          <div class="time" id="clock">--:--</div>
+          <button class="logout-btn" onclick="sairLauOS()">Sair</button>
+        </div>
+      </header>
+
+      <section class="hero" id="introHero">
+        <div>
+          <h1>Bem-vindo ao LauOS</h1>
+          <p>
+            Sistema operacional criado exclusivamente para monitorar níveis de fofura,
+            saudade, carinho, fome misteriosa e possíveis crises de ciúmes da Lau.
+          </p>
+
+          <div class="opening-phrase" id="openingPhrase">
+            Inicializando fofura...
+          </div>
+        </div>
+
+        <div class="pet-card photo-memory-card">
+          <div class="memory-frame" id="memoryFrame">
+            <div class="memory-placeholder" id="memoryPlaceholder">🧚‍♀️🦊</div>
+            <img id="memoryPhoto" class="memory-photo hidden" alt="Memória da Lau" />
+          </div>
+          <div class="pet-label" id="petLabel">Fadinha, raposinha e futuras fotos da Lau passando aqui</div>
+        </div>
+      </section>
+
+      <section class="dashboard" id="cuteDashboard">
+        <div class="status-card">
+          <strong>❤️ Amor</strong>
+          <span>100%</span>
+        </div>
+        <div class="status-card">
+          <strong>🥺 Saudade</strong>
+          <span>crítica</span>
+        </div>
+        <div class="status-card">
+          <strong>🍟 Fome</strong>
+          <span>permanente</span>
+        </div>
+        <div class="status-card">
+          <strong>😴 Sono</strong>
+          <span>instável</span>
+        </div>
+        <div class="status-card">
+          <strong>💅 Fofura</strong>
+          <span>infinita</span>
+        </div>
+      </section>
+
+      <!-- Botões fofos removidos por enquanto. Depois podemos transformar essa área em quiz/joguinho. -->
+
+
+      <section class="countdown-area hidden" id="countdownArea">
+        <div class="countdown-card">
+          <div>
+            <h2>📅 Dias pra se ver</h2>
+            <p>Uma contagem regressiva dos dois, para lembrar que falta cada vez menos.</p>
+          </div>
+
+          <div class="countdown-main countdown-detailed" id="countdownDetailed">
+            <div class="countdown-unit">
+              <div class="countdown-number" id="countdownDays">--</div>
+              <div class="countdown-label">dias</div>
+            </div>
+            <div class="countdown-unit">
+              <div class="countdown-number" id="countdownHours">--</div>
+              <div class="countdown-label">horas</div>
+            </div>
+            <div class="countdown-unit">
+              <div class="countdown-number" id="countdownMinutes">--</div>
+              <div class="countdown-label">min</div>
+            </div>
+            <div class="countdown-unit">
+              <div class="countdown-number" id="countdownSeconds">--</div>
+              <div class="countdown-label">seg</div>
+            </div>
+          </div>
+          <div class="countdown-status" id="countdownStatus">defina a data e horário do encontro</div>
+
+          <div class="countdown-controls">
+            <input type="datetime-local" id="meetDateInput" />
+            <button onclick="salvarDataEncontro()">Salvar data 💞</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="role-area hidden" id="lauraArea">
+        <div class="role-header">
+          <h2>💗 Área da Lau</h2>
+          <p>Escolha seu status do dia, ajuste os níveis e envie para o namorado.</p>
+          <div class="laura-companions">
+            <span class="fairy-walk">🧚‍♀️</span>
+            <span class="fox-friend">🦊</span>
+            <span class="companion-text">Fadinha e raposinha monitorando o humor da Lau</span>
+          </div>
+        </div>
+
+        <div class="mood-options" id="moodOptions">
+          <button onclick="selecionarHumor('🥰 Carente')">🥰 Carente</button>
+          <button onclick="selecionarHumor('😡 Brava')">😡 Brava</button>
+          <button onclick="selecionarHumor('🥺 Triste')">🥺 Triste</button>
+          <button onclick="selecionarHumor('😴 Cansada')">😴 Cansada</button>
+          <button onclick="selecionarHumor('🍫 TPM')">🍫 TPM</button>
+          <button onclick="selecionarHumor('🍟 Com fome')">🍟 Com fome</button>
+          <button onclick="selecionarHumor('🤍 Querendo carinho')">🤍 Querendo carinho</button>
+          <button onclick="selecionarHumor('💅 Plena')">💅 Plena</button>
+        </div>
+
+        <div class="levels-grid">
+          <div class="level-card">
+            <div class="level-top"><span>🥰 Fofura</span><span class="level-value" id="fofuraValue">80%</span></div>
+            <input type="range" min="0" max="100" value="80" id="fofura" oninput="atualizarValorNivel('fofura')" />
+          </div>
+
+          <div class="level-card">
+            <div class="level-top"><span>😡 Estresse</span><span class="level-value" id="estresseValue">30%</span></div>
+            <input type="range" min="0" max="100" value="30" id="estresse" oninput="atualizarValorNivel('estresse')" />
+          </div>
+
+          <div class="level-card">
+            <div class="level-top"><span>🥺 Carência</span><span class="level-value" id="carenciaValue">60%</span></div>
+            <input type="range" min="0" max="100" value="60" id="carencia" oninput="atualizarValorNivel('carencia')" />
+          </div>
+
+          <div class="level-card">
+            <div class="level-top"><span>🍟 Fome</span><span class="level-value" id="fomeValue">70%</span></div>
+            <input type="range" min="0" max="100" value="70" id="fome" oninput="atualizarValorNivel('fome')" />
+          </div>
+
+          <div class="level-card">
+            <div class="level-top"><span>😴 Sono</span><span class="level-value" id="sonoValue">45%</span></div>
+            <input type="range" min="0" max="100" value="45" id="sono" oninput="atualizarValorNivel('sono')" />
+          </div>
+
+          <div class="level-card">
+            <div class="level-top"><span>🍫 TPM/Sensibilidade</span><span class="level-value" id="sensibilidadeValue">50%</span></div>
+            <input type="range" min="0" max="100" value="50" id="sensibilidade" oninput="atualizarValorNivel('sensibilidade')" />
+          </div>
+
+          <div class="level-card">
+            <div class="level-top"><span>💖 Vontade de carinho</span><span class="level-value" id="carinhoValue">90%</span></div>
+            <input type="range" min="0" max="100" value="90" id="carinho" oninput="atualizarValorNivel('carinho')" />
+          </div>
+
+          <div class="level-card">
+            <div class="level-top"><span>🗣️ Vontade de conversar</span><span class="level-value" id="conversaValue">50%</span></div>
+            <input type="range" min="0" max="100" value="50" id="conversa" oninput="atualizarValorNivel('conversa')" />
+          </div>
+        </div>
+
+        <textarea id="moodNote" placeholder="Quer explicar melhor? Ex: hoje acordei sensível, quero carinho e comida..."></textarea>
+
+        <button class="save-mood-btn" onclick="salvarHumorLau()">
+          Enviar status para o namorado 💌
+        </button>
+
+        <div class="lau-corner" id="lauCorner">
+          <div class="corner-header">
+            <h3>🧚‍♀️ Cantinho da Lau</h3>
+            <p>Tudo separado por cantinhos, para não virar uma página gigante. Ela abre só o que quiser usar.</p>
+          </div>
+
+          <div class="corner-menu">
+            <button onclick="abrirCantinho('wishCorner')">🌟 Cofrinho</button>
+            <button onclick="abrirCantinho('diaryCorner')">📓 Diário</button>
+            <button onclick="abrirCantinho('needCorner')">🥺 Preciso</button>
+            <button onclick="abrirCantinho('colorCorner')">🎨 Humor</button>
+            <button onclick="abrirCantinho('phrasesCorner')">💬 Frases</button>
+            <button onclick="abrirCantinho('calendarCorner')">📅 Momentos</button>
+            <button onclick="abrirCantinho('agendaCorner')">🗓️ Agenda</button>
+            <button onclick="abrirCantinho('manualCorner')">📖 Manual</button>
+            <button onclick="abrirCantinho('memoryCorner')">📸 Baú</button>
+            <button onclick="abrirCantinho('quizGame')">🦊 Quiz</button>
+            <button onclick="abrirCantinho('missionGame')">🫡 Missão</button>
+          </div>
+
+          <div class="corner-panel show" id="wishCorner">
+            <h4>🌟 Cofrinho de desejos da Lau</h4>
+            <p>Guarde vontades, passeios, comidas, presentes simples ou qualquer mimo que você queira viver depois.</p>
+            <input class="corner-input" id="wishInput" placeholder="Ex: quero receber flores sem motivo" />
+            <button onclick="adicionarDesejoLau()">Guardar desejo ✨</button>
+            <div class="corner-list" id="wishList">Nenhum desejo guardado ainda.</div>
+          </div>
+
+          <div class="corner-panel" id="diaryCorner">
+            <h4>📓 Diário secreto da Lau</h4>
+            <p>Um espaço só dela. O namorado não vê esse conteúdo; aqui ela pode escrever com confiança.</p>
+            <textarea id="diaryText" placeholder="Hoje eu me senti..."></textarea>
+            <button onclick="salvarDiarioLau()">Salvar no diário 💌</button>
+            <button class="soft-secondary-btn" onclick="abrirHistoricoDiarioLau()">Ver histórico secreto 📖</button>
+            <div class="corner-list private-diary-note" id="diaryList">Histórico guardado. Toque em “Ver histórico secreto” para ler entradas antigas.</div>
+          </div>
+
+          <div class="corner-panel" id="needCorner">
+            <h4>🥺 Botão “preciso de você”</h4>
+            <p>Use quando quiser que ele entenda rápido que precisa aparecer com carinho.</p>
+            <select class="corner-input" id="needType">
+              <option value="🥺 Só quero carinho">🥺 Só quero carinho</option>
+              <option value="😢 Tô triste">😢 Tô triste</option>
+              <option value="😡 Tô brava">😡 Tô brava</option>
+              <option value="🍫 TPM crítica">🍫 TPM crítica</option>
+              <option value="🤍 Preciso de atenção">🤍 Preciso de atenção</option>
+            </select>
+            <textarea id="needText" placeholder="Quer explicar? Ex: só fica comigo um pouquinho..."></textarea>
+            <button onclick="ativarPrecisoDeVoce()">Enviar alerta para ele 🚨</button>
+            <div class="corner-list" id="needStatus">Nenhum alerta enviado ainda.</div>
+          </div>
+
+          <div class="corner-panel" id="colorCorner">
+            <h4>🎨 Humor por cor</h4>
+            <p>Escolha a cor do dia. O namorado vê e entende o clima.</p>
+            <div class="color-choice-grid">
+              <button class="color-choice pink" onclick="salvarHumorCor('Rosa', 'Carinhosa')">Rosa<br><small>carinhosa</small></button>
+              <button class="color-choice blue" onclick="salvarHumorCor('Azul', 'Quietinha')">Azul<br><small>quietinha</small></button>
+              <button class="color-choice purple" onclick="salvarHumorCor('Roxo', 'Sensível')">Roxo<br><small>sensível</small></button>
+              <button class="color-choice red" onclick="salvarHumorCor('Vermelho', 'Brava')">Vermelho<br><small>brava</small></button>
+              <button class="color-choice yellow" onclick="salvarHumorCor('Amarelo', 'Feliz')">Amarelo<br><small>feliz</small></button>
+              <button class="color-choice gray" onclick="salvarHumorCor('Cinza', 'Cansada')">Cinza<br><small>cansada</small></button>
+            </div>
+            <div class="corner-list" id="colorStatus">Nenhuma cor escolhida ainda.</div>
+          </div>
+
+          <div class="corner-panel" id="phrasesCorner">
+            <h4>💬 Frases que eu quero ouvir</h4>
+            <p>Salve frases que talvez você queira receber quando estiver sensível, carente ou quietinha.</p>
+            <input class="corner-input" id="phraseInput" placeholder="Ex: eu tô aqui com você" />
+            <button onclick="adicionarFraseLau()">Salvar frase 💖</button>
+            <div class="corner-list" id="phraseList">Nenhuma frase salva ainda.</div>
+          </div>
+
+          <div class="corner-panel" id="calendarCorner">
+            <h4>📅 Calendário de momentos</h4>
+            <p>Guarde datas importantes, planos e lembranças de vocês.</p>
+            <input class="corner-input" id="momentTitle" placeholder="Ex: nosso próximo encontro" />
+            <input class="corner-input" type="date" id="momentDate" />
+            <button onclick="adicionarMomentoLau()">Salvar momento 📅</button>
+            <div class="corner-list" id="momentList">Nenhum momento salvo ainda.</div>
+          </div>
+
+          <div class="corner-panel" id="agendaCorner">
+            <h4>🗓️ Agenda da Lau</h4>
+            <p>Organize o mês e a rotina do dia. O namorado consegue ver para acompanhar sua rotina sem confundir com o diário.</p>
+
+            <div class="agenda-section-title">Agenda do mês</div>
+            <input class="corner-input" type="date" id="agendaDate" />
+            <input class="corner-input" type="time" id="agendaTime" />
+            <input class="corner-input" id="agendaText" placeholder="Ex: faculdade, médico, trabalho, mercado..." />
+            <button onclick="adicionarAgendaLau()">Adicionar compromisso 🗓️</button>
+            <div class="agenda-calendar" id="agendaCalendarLau"></div>
+            <div class="corner-list" id="agendaListLau">Nenhum compromisso salvo ainda.</div>
+
+            <div class="agenda-section-title">Agenda do dia</div>
+            <input class="corner-input" type="date" id="dailyRoutineDate" />
+            <textarea id="dailyRoutineText" placeholder="Ex: hoje vou estudar, depois resolver umas coisas, almoçar e voltar pra casa..."></textarea>
+            <button onclick="salvarRotinaDiaLau()">Salvar rotina do dia 💌</button>
+            <div class="corner-list" id="dailyRoutineStatus">Nenhuma rotina salva para hoje.</div>
+          </div>
+
+          <div class="corner-panel" id="manualCorner">
+            <h4>📖 Manual da Lau</h4>
+            <p>Escreva instruções para ele não errar quando você estiver brava, triste, carente ou com fome.</p>
+            <textarea id="manualText" placeholder="Ex: se eu estiver quietinha, pergunta com carinho e não pressiona..."></textarea>
+            <button onclick="salvarManualLau()">Salvar manual 📖</button>
+            <div class="corner-list" id="manualView">Manual ainda não preenchido.</div>
+          </div>
+
+          <div class="corner-panel" id="memoryCorner">
+            <h4>📸 Baú de memórias</h4>
+            <p>Adicione fotos para aparecerem aos poucos na tela inicial e também na área dele.</p>
+            <input type="file" id="photoInput" accept="image/*" multiple />
+            <button onclick="salvarFotosLau()">Adicionar fotos 💖</button>
+            <button class="soft-secondary-btn" onclick="limparFotosLau()">Limpar fotos salvas</button>
+            <div class="photo-count" id="photoCount">Nenhuma foto adicionada ainda.</div>
+          </div>
+
+          <div class="corner-panel" id="quizGame">
+            <h4>🦊 Quiz sobre ele</h4>
+            <p id="quizQuestion">Carregando pergunta...</p>
+            <div class="quiz-options" id="quizOptions"></div>
+            <div class="game-feedback" id="quizFeedback">Responde uma perguntinha para desbloquear uma frase fofa.</div>
+          </div>
+
+          <div class="corner-panel" id="missionGame">
+            <h4>🫡 Missão do namorado</h4>
+            <p>Escolha uma missão para aparecer na área dele. Ele vê e marca como concluída.</p>
+            <select class="mission-select" id="missionSelect">
+              <option value="Mandar um áudio fofo agora">Mandar um áudio fofo agora</option>
+              <option value="Fazer um elogio sincero e demorado">Fazer um elogio sincero e demorado</option>
+              <option value="Comprar chocolate ou comida gostosa">Comprar chocolate ou comida gostosa</option>
+              <option value="Mandar mensagem de bom dia bem caprichada">Mandar mensagem de bom dia bem caprichada</option>
+              <option value="Planejar um encontro fofo">Planejar um encontro fofo</option>
+            </select>
+            <input class="mission-input" id="customMissionInput" placeholder="Ou escreva uma missão personalizada..." />
+            <button onclick="enviarMissaoNamorado()">Enviar missão para ele 💌</button>
+            <div class="mission-result" id="missionResult">Nenhuma missão enviada ainda.</div>
+          </div>
+        </div>
+
+        <div class="chat-card laura-chat-card">
+          <h3>💬 Chat dos dois</h3>
+          <p>Esse chat é separado do status. Pode mandar mensagem sem mudar como você está hoje.</p>
+          <div class="chat-list story-chat" id="lauraChatList">Nenhuma mensagem ainda.</div>
+          <textarea id="lauraChatText" placeholder="Ex: tô com saudade, só queria falar isso 🥺"></textarea>
+          <button onclick="enviarMensagemLau()">Enviar mensagem 💖</button>
+        </div>
+
+
+      </section>
+
+      <section class="role-area hidden" id="namoradoArea">
+        <div class="role-header">
+          <h2>🫡 Central do Namorado</h2>
+          <p>Aqui você só visualiza o que a Lau enviou. Sem editar. Sem mexer. Só interpretar com carinho.</p>
+        </div>
+
+        <div class="viewer-card namorado-memory-card">
+          <h3>📸 Fotinhas que ela colocou</h3>
+          <p>As fotos que a Lau adicionar aparecem aqui também, mudando aos poucos.</p>
+          <div class="memory-frame">
+            <div class="memory-placeholder" id="namoradoMemoryPlaceholder">🧚‍♀️🦊</div>
+            <img id="namoradoMemoryPhoto" class="memory-photo hidden" alt="Fotinha adicionada pela Lau" />
+          </div>
+          <div class="pet-label">Memórias dela passando para você ver 💙</div>
+        </div>
+
+        <div class="viewer-card">
+          <h3>Status atual da Lau:</h3>
+          <div class="current-mood" id="currentMood">Nenhum status salvo ainda.</div>
+
+          <div class="mood-note-view" id="moodNoteView">
+            Quando a Lau salvar algo, aparece aqui.
+          </div>
+
+          <div class="readonly-levels" id="readonlyLevels"></div>
+
+          <div class="protocol-box" id="protocolBox">
+            Protocolo recomendado será carregado aqui.
+          </div>
+
+          <button onclick="carregarHumorLau()">Atualizar status da Lau 🔄</button>
+        </div>
+
+        <div class="viewer-card">
+          <h3>📜 Histórico recente</h3>
+          <div class="history-list" id="historyList">
+            Nenhum histórico ainda.
+          </div>
+        </div>
+
+        <div class="viewer-card namorado-corner-view">
+          <h3>🧚‍♀️ Cantinho da Lau recebido</h3>
+          <p>As coisas que a Lau escolher compartilhar aparecem aqui. O diário secreto fica privado só para ela.</p>
+          <div class="corner-menu namorado-corner-menu">
+            <button onclick="abrirCantinhoNamorado('viewNeed')">🥺 Preciso</button>
+            <button onclick="abrirCantinhoNamorado('viewWishes')">🌟 Desejos</button>
+            <button onclick="abrirCantinhoNamorado('viewPhrases')">💬 Frases</button>
+            <button onclick="abrirCantinhoNamorado('viewMoments')">📅 Momentos</button>
+            <button onclick="abrirCantinhoNamorado('viewAgenda')">🗓️ Agenda</button>
+            <button onclick="abrirCantinhoNamorado('viewManual')">📖 Manual</button>
+            <button onclick="abrirCantinhoNamorado('viewColor')">🎨 Cor</button>
+          </div>
+          <div class="corner-panel show" id="viewNeed">Nenhum alerta enviado ainda.</div>
+          <div class="corner-panel" id="viewWishes">Nenhum desejo salvo ainda.</div>
+          <div class="corner-panel" id="viewPhrases">Nenhuma frase salva ainda.</div>
+          <div class="corner-panel" id="viewMoments">Nenhum momento salvo ainda.</div>
+          <div class="corner-panel" id="viewAgenda">Nenhuma agenda salva ainda.</div>
+          <div class="corner-panel" id="viewManual">Manual ainda não preenchido.</div>
+          <div class="corner-panel" id="viewColor">Nenhuma cor escolhida ainda.</div>
+        </div>
+
+
+        <div class="viewer-card chat-card">
+          <h3>💬 Chat dos dois</h3>
+          <p>Converse com ela sem alterar o status. Estilo recadinho/stories fofo.</p>
+          <div class="chat-list story-chat" id="namoradoChatList">Nenhuma mensagem ainda.</div>
+          <textarea id="replyText" placeholder="Ex: vi seu status, meu amor. Vou cuidar de você hoje 💙"></textarea>
+          <button onclick="enviarRespostaNamorado()">Enviar resposta 💙</button>
+        </div>
+
+
+        <div class="viewer-card current-mission-card">
+          <h3>🫡 Missão enviada pela Lau</h3>
+          <p>Quando ela mandar uma missão fofinha, aparece aqui para você cumprir.</p>
+          <div class="mission-result" id="currentMissionView">Nenhuma missão enviada ainda.</div>
+          <button onclick="concluirMissaoNamorado()">Marcar como concluída ✅</button>
+        </div>
+
+      </section>
+
+      <div class="message-box" id="messageBox">
+        Aguardando comandos fofos...
+      </div>
+
+      <div class="miss-panel" id="missPanel">
+        <strong>Carregando nível de saudade...</strong>
+        <div class="progress">
+          <div class="progress-bar"></div>
+        </div>
+        <div class="miss-text" id="missText">muita</div>
+      </div>
+
+      <footer class="footer">
+        LauOS foi desenvolvido com 70% palhaçada, 30% romantismo e 100% intenção de te fazer sorrir.
+      </footer>
+    </section>
+  </main>
+
+  <div class="modal" id="secretModal">
+    <div class="modal-content">
+      <div class="photo-placeholder">💖</div>
+      <h2>Mensagem secreta desbloqueada</h2>
+      <p>
+        Lau, esse mini sistema existe porque até uma página da internet consegue perceber
+        que você é especial.
+        <br><br>
+        Eu quis fazer algo bobo, engraçado e fofo, mas no fundo a verdade é simples:
+        você deixa meus dias mais leves, mais bonitos e muito mais felizes.
+        <br><br>
+        Então, oficialmente, o LauOS confirma:
+        <strong>você é minha pessoa favorita.</strong>
+      </p>
+
+      <button onclick="fecharSegredo()">fechar antes que eu chore</button>
+    </div>
+  </div>
+
+
+
+  <div class="modal" id="diaryHistoryModal">
+    <div class="modal-content">
+      <h2>📓 Histórico secreto da Lau</h2>
+      <p>Entradas antigas do diário. Esse cantinho é só dela.</p>
+      <div class="diary-history-list" id="diaryHistoryList">Nenhuma anotação ainda.</div>
+      <button onclick="fecharHistoricoDiarioLau()">Fechar diário secreto</button>
+    </div>
+  </div>
+
+  <script>
+    const openingPhrases = [
+      "Sistema detectou: Lau acordou linda hoje.",
+      "Aviso: nível de fofura acima do permitido por lei.",
+      "Inicializando modo namorada perfeita...",
+      "LauOS recomenda: dar carinho imediatamente.",
+      "Erro 404: defeitos da Lau não encontrados.",
+      "Atualização instalada: mais amor disponível."
+    ];
+
+    const carinhoFrases = [
+      "Ela fingiu que não gostou, mas gostou.",
+      "Carinho aplicado com sucesso.",
+      "Lau recebeu carinho e tentou disfarçar.",
+      "Sistema confirmou: carinho aceito com biquinho.",
+      "Carinho enviado. Risco de sorriso detectado.",
+      "Modo dengo ativado com sucesso."
+    ];
+
+    const elogios = [
+      "Você é linda demais.",
+      "Teu sotaque me destrói.",
+      "Loirinha perigosíssima.",
+      "Como pode existir alguém tão fofinha?",
+      "Você tem cara de problema, mas problema lindo.",
+      "A Lau é oficialmente a atualização mais bonita do sistema.",
+      "Alerta: beleza fora dos padrões normais.",
+      "Seu sorriso devia vir com aviso de perigo."
+    ];
+
+    const saudadeNiveis = [
+      "muita",
+      "muita mesmo",
+      "absurdamente",
+      "nível dramático",
+      "socorro, cadê a Lau?",
+      "saudade em estado crítico"
+    ];
+
+    const pets = ["🧚‍♀️", "🦊", "🐰", "🐱", "🐻", "🐹", "🐼", "✨"];
+
+    const levelLabels = {
+      fofura: "🥰 Fofura",
+      estresse: "😡 Estresse",
+      carencia: "🥺 Carência",
+      fome: "🍟 Fome",
+      sono: "😴 Sono",
+      sensibilidade: "🍫 TPM/Sensibilidade",
+      carinho: "💖 Vontade de carinho",
+      conversa: "🗣️ Vontade de conversar"
+    };
+
+    let humorSelecionado = "";
+    let agendaMesAtual = new Date();
+
+    const messageBox = document.getElementById("messageBox");
+    const missPanel = document.getElementById("missPanel");
+    const missText = document.getElementById("missText");
+    const mainWindow = document.getElementById("mainWindow");
+    const pet = document.getElementById("memoryPlaceholder");
+    const petLabel = document.getElementById("petLabel");
+    const memoryPhoto = document.getElementById("memoryPhoto");
+    const memoryPlaceholder = document.getElementById("memoryPlaceholder");
+
+    function randomItem(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function showMessage(text) {
+      if (!messageBox) return;
+      messageBox.textContent = text;
+      messageBox.classList.remove("pop");
+      void messageBox.offsetWidth;
+      messageBox.classList.add("pop");
+    }
+
+    function playCuteSound(type = "cute") {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      const audioCtx = new AudioContextClass();
+      const oscillator = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      oscillator.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === "alert") {
+        oscillator.frequency.setValueAtTime(420, audioCtx.currentTime);
+        oscillator.frequency.setValueAtTime(260, audioCtx.currentTime + 0.12);
+        oscillator.frequency.setValueAtTime(420, audioCtx.currentTime + 0.24);
+      } else {
+        oscillator.frequency.setValueAtTime(660, audioCtx.currentTime);
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);
+        oscillator.frequency.setValueAtTime(990, audioCtx.currentTime + 0.2);
+      }
+
+      oscillator.type = "sine";
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.35);
+
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.38);
+    }
+
+    function darBeijo() {
+      playCuteSound();
+      for (let i = 0; i < 12; i++) {
+        setTimeout(() => createKissHeart(), i * 60);
+      }
+      showMessage("Lau recebeu +10 de felicidade 💖");
+      pet.textContent = "🥰";
+      setTimeout(() => pet.textContent = randomItem(pets), 1200);
+    }
+
+    function createKissHeart() {
+      const heart = document.createElement("div");
+      heart.className = "kiss-heart";
+      heart.textContent = randomItem(["💖", "💕", "💘", "💗"]);
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.top = Math.random() * window.innerHeight + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1300);
+    }
+
+    function mandarCarinho() {
+      playCuteSound();
+      showMessage(randomItem(carinhoFrases));
+      pet.textContent = "🐰";
+    }
+
+    function elogiarLau() {
+      playCuteSound();
+      showMessage(randomItem(elogios));
+      pet.textContent = "✨";
+      setTimeout(() => pet.textContent = randomItem(pets), 1000);
+    }
+
+    function modoCiumes() {
+      document.body.classList.add("jealous-mode");
+      mainWindow.classList.add("alert-shake");
+      playCuteSound("alert");
+      showMessage("⚠️ Lau detectou outra mulher em um raio de 500 metros.");
+      setTimeout(() => mainWindow.classList.remove("alert-shake"), 400);
+      setTimeout(() => {
+        document.body.classList.remove("jealous-mode");
+        showMessage("Modo ciúmes encerrado. Mas ela ainda está observando. 👀");
+      }, 3500);
+    }
+
+    function verSaudade() {
+      playCuteSound();
+      missPanel.classList.toggle("show");
+      let index = 0;
+      const interval = setInterval(() => {
+        missText.textContent = saudadeNiveis[index % saudadeNiveis.length];
+        index++;
+      }, 700);
+      setTimeout(() => {
+        clearInterval(interval);
+        missText.textContent = "absurdamente";
+        showMessage("Resultado: saudade acima do recomendado pelo Ministério do Amor 🥺");
+      }, 3600);
+    }
+
+    function abrirSegredo() {
+      playCuteSound();
+      document.getElementById("secretModal").classList.add("show");
+      criarChuvaDeCoracoes();
+    }
+
+    function fecharSegredo() {
+      document.getElementById("secretModal").classList.remove("show");
+      showMessage("Mensagem secreta guardada no coraçãozinho do sistema 💌");
+    }
+
+    function criarChuvaDeCoracoes() {
+      for (let i = 0; i < 28; i++) {
+        setTimeout(() => createKissHeart(), i * 45);
+      }
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const hour = String(now.getHours()).padStart(2, "0");
+      const minute = String(now.getMinutes()).padStart(2, "0");
+      document.getElementById("clock").textContent = `${hour}:${minute}`;
+    }
+
+    function createFloatingHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = randomItem(["♡", "♥", "💗", "💖"]);
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+      heart.style.fontSize = 14 + Math.random() * 20 + "px";
+      document.getElementById("floatingHearts").appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
+    }
+
+    function createSparkle() {
+      const sparkle = document.createElement("div");
+      sparkle.className = "sparkle";
+      sparkle.textContent = randomItem(["✦", "✧", "★", "✨"]);
+      sparkle.style.left = Math.random() * 100 + "vw";
+      sparkle.style.animationDuration = 4 + Math.random() * 4 + "s";
+      sparkle.style.fontSize = 12 + Math.random() * 16 + "px";
+      document.getElementById("sparkles").appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 9000);
+    }
+
+    function trocarPetAutomaticamente() {
+      pet.textContent = randomItem(pets);
+    }
+
+    function iniciarBootLauOS() {
+      const bootText = document.getElementById("bootText");
+      const bootScreen = document.getElementById("bootScreen");
+      const loginScreen = document.getElementById("loginScreen");
+
+      const mensagensBoot = [
+        "Inicializando LauOS...",
+        "Carregando fofura...",
+        "Verificando nível de saudade...",
+        "Ativando modo carinho...",
+        "Sistema pronto 💖"
+      ];
+
+      let index = 0;
+      const intervalo = setInterval(() => {
+        bootText.textContent = mensagensBoot[index] || "Sistema pronto 💖";
+        index++;
+      }, 550);
+
+      setTimeout(() => {
+        clearInterval(intervalo);
+        bootScreen.style.display = "none";
+        const usuarioSalvo = localStorage.getItem("lauraos_usuario");
+        if (usuarioSalvo) {
+          loginScreen.style.display = "none";
+          aplicarPermissao(usuarioSalvo);
+          showMessage(`Bem-vindo de volta ao LauOS, ${usuarioSalvo} 💖`);
+        } else {
+          loginScreen.style.display = "flex";
+        }
+      }, 3200);
+    }
+
+    function entrarPeloCartao(tipo) {
+      const loginScreen = document.getElementById("loginScreen");
+
+      const senhasLau = ["paixão", "paixao", "chatonildo", "bravinho", "bicudo", "lipe"];
+      const senhasNamorado = ["laura", "lau", "vida", "princesa"];
+
+      const campoLau = document.getElementById("loginPasswordLau");
+      const campoNamorado = document.getElementById("loginPasswordNamorado");
+      const erroLau = document.getElementById("loginErrorLau");
+      const erroNamorado = document.getElementById("loginErrorNamorado");
+      const hintLau = document.getElementById("loginHintLau");
+      const hintNamorado = document.getElementById("loginHintNamorado");
+
+      if (erroLau) erroLau.textContent = "";
+      if (erroNamorado) erroNamorado.textContent = "";
+
+      if (tipo === "Lau") {
+        const senha = (campoLau?.value || "").trim().toLowerCase();
+
+        if (senhasLau.includes(senha)) {
+          localStorage.setItem("lauraos_usuario", "Lau");
+          loginScreen.style.display = "none";
+          aplicarPermissao("Lau");
+          showMessage("Área da Lau aberta. Pode enviar seu status com sinceridade 💖");
+          return;
+        }
+
+        if (erroLau) erroLau.textContent = "Senha errada para a área da Lau.";
+        if (hintLau) hintLau.textContent = "Dica: talvez seja um apelido fofo, dramático ou meio implicante.";
+        return;
+      }
+
+      if (tipo === "Namorado") {
+        const senha = (campoNamorado?.value || "").trim().toLowerCase();
+
+        if (senhasNamorado.includes(senha)) {
+          localStorage.setItem("lauraos_usuario", "Namorado");
+          loginScreen.style.display = "none";
+          aplicarPermissao("Namorado");
+          showMessage("Área do namorado aberta. Só visualização, sem editar 🫡");
+          return;
+        }
+
+        if (erroNamorado) erroNamorado.textContent = "Senha errada para a área do namorado.";
+        if (hintNamorado) hintNamorado.textContent = "Dica: tenta algo pequeno, carinhoso e bem de casal.";
+      }
+    }
+
+    function entrarLauOS() {
+      entrarPeloCartao("Lau");
+    }
+
+    function aplicarPermissao(usuario) {
+      const lauraArea = document.getElementById("lauraArea");
+      const namoradoArea = document.getElementById("namoradoArea");
+
+      const countdownArea = document.getElementById("countdownArea");
+      countdownArea.classList.remove("hidden");
+      carregarDataEncontro();
+      renderizarChat();
+
+      if (usuario === "Lau") {
+        document.body.classList.remove("namorado-mode");
+        document.body.classList.add("laura-mode");
+        lauraArea.classList.remove("hidden");
+        namoradoArea.classList.add("hidden");
+        petLabel.textContent = "Modo Lau: fotinhas, fadinha e raposinha cuidando do sistema";
+        atualizarContadorFotos();
+        iniciarCarrosselMemorias();
+        carregarQuiz();
+        renderizarMissaoLau();
+        renderizarCantinhoLau();
+      }
+
+      if (usuario === "Namorado") {
+        document.body.classList.remove("laura-mode");
+        document.body.classList.add("namorado-mode");
+        namoradoArea.classList.remove("hidden");
+        lauraArea.classList.add("hidden");
+        carregarHumorLau();
+        renderizarChat();
+        atualizarContadorFotos();
+        iniciarCarrosselMemorias();
+        renderizarMissaoNamorado();
+        renderizarCantinhoNamorado();
+      }
+    }
+
+    function selecionarHumor(humor) {
+      humorSelecionado = humor;
+      const botoes = document.querySelectorAll(".mood-options button");
+      botoes.forEach((botao) => {
+        botao.classList.remove("selected-mood");
+        if (botao.textContent.trim() === humor) {
+          botao.classList.add("selected-mood");
+        }
+      });
+      showMessage(`Humor selecionado: ${humor}`);
+    }
+
+    function atualizarValorNivel(id) {
+      const input = document.getElementById(id);
+      const value = document.getElementById(`${id}Value`);
+      if (input && value) value.textContent = `${input.value}%`;
+    }
+
+    function pegarNiveisLau() {
+      return {
+        fofura: Number(document.getElementById("fofura").value),
+        estresse: Number(document.getElementById("estresse").value),
+        carencia: Number(document.getElementById("carencia").value),
+        fome: Number(document.getElementById("fome").value),
+        sono: Number(document.getElementById("sono").value),
+        sensibilidade: Number(document.getElementById("sensibilidade").value),
+        carinho: Number(document.getElementById("carinho").value),
+        conversa: Number(document.getElementById("conversa").value)
+      };
+    }
+
+    function gerarProtocolo(humor, niveis) {
+      const protocolos = [];
+
+      protocolos.push(`Status principal: ${humor}.`);
+
+      if (niveis.estresse >= 70) protocolos.push("⚠️ Estresse alto: fale com calma, não provoque e não tente vencer discussão.");
+      if (niveis.carencia >= 70) protocolos.push("🥺 Carência alta: mande áudio fofo, dê atenção e não demore para responder.");
+      if (niveis.fome >= 70) protocolos.push("🍟 Fome alta: comida pode resolver 87% do problema. Prioridade máxima.");
+      if (niveis.sono >= 70) protocolos.push("😴 Sono alto: deixe descansar, não cobre resposta rápida e seja leve.");
+      if (niveis.sensibilidade >= 70) protocolos.push("🍫 Sensibilidade alta: chocolate, paciência, abraço e zero gracinha perigosa.");
+      if (niveis.carinho >= 70) protocolos.push("💖 Vontade de carinho alta: elogio sincero, mensagem demorada e dengo liberado.");
+      if (niveis.conversa >= 70) protocolos.push("🗣️ Vontade de conversar alta: puxe assunto, escute de verdade e não responda seco.");
+      if (niveis.fofura >= 80) protocolos.push("🥰 Fofura em nível crítico: elogiar imediatamente antes que o sistema derreta.");
+
+      if (protocolos.length === 1) {
+        protocolos.push("Protocolo geral: carinho, atenção e bom senso. Nunca subestime a Lau.");
+      }
+
+      return protocolos.join("\n");
+    }
+
+    function salvarHumorLau() {
+      if (!humorSelecionado) {
+        showMessage("Escolhe primeiro como você está hoje, Lau 🥺");
+        return;
+      }
+
+      const observacao = document.getElementById("moodNote").value.trim();
+      const niveis = pegarNiveisLau();
+      const statusLau = {
+        humor: humorSelecionado,
+        observacao: observacao || "Lau não explicou, então o namorado deve agir com cuidado.",
+        niveis,
+        protocolo: gerarProtocolo(humorSelecionado, niveis),
+        data: new Date().toLocaleString("pt-BR")
+      };
+
+      localStorage.setItem("lauraos_status_laura", JSON.stringify(statusLau));
+
+      const historico = JSON.parse(localStorage.getItem("lauraos_historico_laura") || "[]");
+      historico.unshift(statusLau);
+      localStorage.setItem("lauraos_historico_laura", JSON.stringify(historico.slice(0, 8)));
+
+      showMessage("Status da Lau enviado para a área do namorado 💌");
+      criarChuvaDeCoracoes();
+    }
+
+    function carregarHumorLau() {
+      const currentMood = document.getElementById("currentMood");
+      const moodNoteView = document.getElementById("moodNoteView");
+      const protocolBox = document.getElementById("protocolBox");
+      const readonlyLevels = document.getElementById("readonlyLevels");
+      const historyList = document.getElementById("historyList");
+
+      if (!currentMood || !moodNoteView || !protocolBox || !readonlyLevels || !historyList) return;
+
+      const statusSalvo = localStorage.getItem("lauraos_status_laura");
+
+      if (!statusSalvo) {
+        currentMood.textContent = "Nenhum status salvo ainda.";
+        moodNoteView.textContent = "Quando a Lau salvar algo, aparece aqui.";
+        protocolBox.textContent = "Protocolo recomendado será carregado aqui.";
+        readonlyLevels.innerHTML = "";
+        historyList.textContent = "Nenhum histórico ainda.";
+        return;
+      }
+
+      const statusLau = JSON.parse(statusSalvo);
+      currentMood.textContent = statusLau.humor;
+      moodNoteView.innerHTML = `
+        <strong>Mensagem dela:</strong><br>
+        ${escapeHtml(statusLau.observacao)}
+        <br><br>
+        <small>Atualizado em: ${statusLau.data}</small>
+      `;
+      protocolBox.innerHTML = `<strong>Protocolo recomendado:</strong><br>${escapeHtml(statusLau.protocolo).replaceAll("\n", "<br>")}`;
+      renderizarNiveisSomenteLeitura(statusLau.niveis || {});
+      renderizarHistorico();
+      renderizarChat();
+    }
+
+    function renderizarNiveisSomenteLeitura(niveis) {
+      const container = document.getElementById("readonlyLevels");
+      container.innerHTML = "";
+
+      Object.keys(levelLabels).forEach((key) => {
+        const valor = Number(niveis[key] || 0);
+        const item = document.createElement("div");
+        item.className = "readonly-level";
+        item.innerHTML = `
+          <div>${levelLabels[key]}: ${valor}%</div>
+          <div class="readonly-bar">
+            <div class="readonly-fill" style="width: ${valor}%"></div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function renderizarHistorico() {
+      const historyList = document.getElementById("historyList");
+      const historico = JSON.parse(localStorage.getItem("lauraos_historico_laura") || "[]");
+
+      if (!historico.length) {
+        historyList.textContent = "Nenhum histórico ainda.";
+        return;
+      }
+
+      historyList.innerHTML = historico.map((item) => `
+        <div class="history-item">
+          <strong>${escapeHtml(item.humor)}</strong><br>
+          <small>${escapeHtml(item.data)}</small><br>
+          ${escapeHtml(item.observacao)}
+        </div>
+      `).join("");
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+
+
+    function salvarDataEncontro() {
+      const input = document.getElementById("meetDateInput");
+      if (!input.value) {
+        showMessage("Escolhe a data e o horário de quando vocês vão se ver primeiro 📅");
+        return;
+      }
+
+      localStorage.setItem("lauraos_data_encontro", input.value);
+      calcularDiasPraSeVer();
+      showMessage("Contagem regressiva atualizada: falta cada vez menos 💞");
+    }
+
+    function carregarDataEncontro() {
+      const input = document.getElementById("meetDateInput");
+      const dataSalva = localStorage.getItem("lauraos_data_encontro");
+      if (input && dataSalva) input.value = dataSalva;
+      calcularDiasPraSeVer();
+    }
+
+    function calcularDiasPraSeVer() {
+      const diasEl = document.getElementById("countdownDays");
+      const horasEl = document.getElementById("countdownHours");
+      const minutosEl = document.getElementById("countdownMinutes");
+      const segundosEl = document.getElementById("countdownSeconds");
+      const statusEl = document.getElementById("countdownStatus");
+      const dataSalva = localStorage.getItem("lauraos_data_encontro");
+
+      if (!diasEl || !horasEl || !minutosEl || !segundosEl || !statusEl) return;
+
+      if (!dataSalva) {
+        diasEl.textContent = "--";
+        horasEl.textContent = "--";
+        minutosEl.textContent = "--";
+        segundosEl.textContent = "--";
+        statusEl.textContent = "defina a data e horário do encontro";
+        return;
+      }
+
+      const agora = new Date();
+      const encontro = new Date(dataSalva);
+      const diffMs = encontro - agora;
+
+      if (diffMs <= 0) {
+        diasEl.textContent = "00";
+        horasEl.textContent = "00";
+        minutosEl.textContent = "00";
+        segundosEl.textContent = "00";
+        statusEl.textContent = "é dia de se ver 💖";
+        return;
+      }
+
+      const totalSegundos = Math.floor(diffMs / 1000);
+      const dias = Math.floor(totalSegundos / 86400);
+      const horas = Math.floor((totalSegundos % 86400) / 3600);
+      const minutos = Math.floor((totalSegundos % 3600) / 60);
+      const segundos = totalSegundos % 60;
+
+      diasEl.textContent = String(dias).padStart(2, "0");
+      horasEl.textContent = String(horas).padStart(2, "0");
+      minutosEl.textContent = String(minutos).padStart(2, "0");
+      segundosEl.textContent = String(segundos).padStart(2, "0");
+      statusEl.textContent = "dias pra se ver, contando cada segundo 💞";
+    }
+
+    function lerFotosLau() {
+      return JSON.parse(localStorage.getItem("lauraos_fotos") || "[]");
+    }
+
+    function atualizarContadorFotos() {
+      const photoCount = document.getElementById("photoCount");
+      if (!photoCount) return;
+      const fotos = lerFotosLau();
+      photoCount.textContent = fotos.length
+        ? `${fotos.length} foto(s) adicionada(s) ao LauOS.`
+        : "Nenhuma foto adicionada ainda.";
+    }
+
+    function salvarFotosLau() {
+      const input = document.getElementById("photoInput");
+      if (!input || !input.files || !input.files.length) {
+        showMessage("Escolhe uma ou mais fotos primeiro 📸");
+        return;
+      }
+
+      const arquivos = Array.from(input.files).slice(0, 6);
+      const fotosAtuais = lerFotosLau();
+      let carregadas = 0;
+
+      arquivos.forEach((arquivo) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          fotosAtuais.push(reader.result);
+          carregadas++;
+          if (carregadas === arquivos.length) {
+            localStorage.setItem("lauraos_fotos", JSON.stringify(fotosAtuais.slice(-12)));
+            input.value = "";
+            atualizarContadorFotos();
+            iniciarCarrosselMemorias(true);
+            showMessage("Fotinhas adicionadas ao LauOS 💖");
+          }
+        };
+        reader.readAsDataURL(arquivo);
+      });
+    }
+
+    function limparFotosLau() {
+      localStorage.removeItem("lauraos_fotos");
+      atualizarContadorFotos();
+      mostrarMascoteFofo();
+      showMessage("Fotos locais removidas. Depois a gente coloca online com Supabase.");
+    }
+
+    let memoriaIndex = 0;
+    let carrosselMemoriasIniciado = false;
+
+    function mostrarMascoteFofo() {
+      const mascotes = ["🧚‍♀️", "🦊", "🧚‍♀️🦊", "🐰", "✨"];
+      const namoradoMemoryPhoto = document.getElementById("namoradoMemoryPhoto");
+      const namoradoMemoryPlaceholder = document.getElementById("namoradoMemoryPlaceholder");
+      const mascote = randomItem(mascotes);
+
+      if (memoryPhoto && memoryPlaceholder) {
+        memoryPhoto.classList.add("hidden");
+        memoryPlaceholder.classList.remove("hidden");
+        memoryPlaceholder.textContent = mascote;
+      }
+
+      if (namoradoMemoryPhoto && namoradoMemoryPlaceholder) {
+        namoradoMemoryPhoto.classList.add("hidden");
+        namoradoMemoryPlaceholder.classList.remove("hidden");
+        namoradoMemoryPlaceholder.textContent = mascote;
+      }
+    }
+
+    function trocarMemoria() {
+      const fotos = lerFotosLau();
+      const namoradoMemoryPhoto = document.getElementById("namoradoMemoryPhoto");
+      const namoradoMemoryPlaceholder = document.getElementById("namoradoMemoryPlaceholder");
+
+      if (!fotos.length) {
+        mostrarMascoteFofo();
+        return;
+      }
+
+      const fotoAtual = fotos[memoriaIndex % fotos.length];
+
+      if (memoryPhoto && memoryPlaceholder) {
+        memoryPlaceholder.classList.add("hidden");
+        memoryPhoto.classList.remove("hidden");
+        memoryPhoto.src = fotoAtual;
+      }
+
+      if (namoradoMemoryPhoto && namoradoMemoryPlaceholder) {
+        namoradoMemoryPlaceholder.classList.add("hidden");
+        namoradoMemoryPhoto.classList.remove("hidden");
+        namoradoMemoryPhoto.src = fotoAtual;
+      }
+
+      memoriaIndex++;
+    }
+
+    function iniciarCarrosselMemorias(forcarAgora = false) {
+      if (forcarAgora) trocarMemoria();
+      if (carrosselMemoriasIniciado) return;
+      carrosselMemoriasIniciado = true;
+      trocarMemoria();
+      setInterval(trocarMemoria, 5000);
+    }
+
+    function enviarMensagemChat(autor, textareaId) {
+      const campo = document.getElementById(textareaId);
+      const texto = campo.value.trim();
+
+      if (!texto) {
+        showMessage("Escreve uma mensagem antes de enviar 💬");
+        return;
+      }
+
+      const mensagens = JSON.parse(localStorage.getItem("lauraos_chat") || "[]");
+      mensagens.unshift({
+        autor,
+        texto,
+        data: new Date().toLocaleString("pt-BR")
+      });
+
+      localStorage.setItem("lauraos_chat", JSON.stringify(mensagens.slice(0, 40)));
+      campo.value = "";
+      renderizarChat();
+      showMessage(autor === "Lau" ? "Mensagem enviada para o namorado 💖" : "Resposta enviada para a Lau 💙");
+    }
+
+    function enviarMensagemLau() {
+      enviarMensagemChat("Lau", "lauraChatText");
+    }
+
+    function enviarRespostaNamorado() {
+      enviarMensagemChat("Namorado", "replyText");
+    }
+
+    function renderizarChat() {
+      const mensagens = JSON.parse(localStorage.getItem("lauraos_chat") || "[]");
+      const html = mensagens.length
+        ? mensagens.map((msg) => {
+          const classeAutor = msg.autor === "Lau" ? "laura-msg" : "namorado-msg";
+          const nome = msg.autor === "Lau" ? "Lau 💖" : "Namorado 💙";
+          return `
+            <div class="chat-message ${classeAutor}">
+              <strong>${escapeHtml(nome)}</strong><br>
+              ${escapeHtml(msg.texto)}
+              <br><small>${escapeHtml(msg.data)}</small>
+            </div>
+          `;
+        }).join("")
+        : "Nenhuma mensagem ainda.";
+
+      const lauraChatList = document.getElementById("lauraChatList");
+      const namoradoChatList = document.getElementById("namoradoChatList");
+      if (lauraChatList) lauraChatList.innerHTML = html;
+      if (namoradoChatList) namoradoChatList.innerHTML = html;
+    }
+
+
+    const quizPerguntas = [
+      {
+        pergunta: "Qual comida ele aceitaria comer quase sempre?",
+        opcoes: ["Pizza", "Lasanha", "Hambúrguer", "Sushi"],
+        certa: 1,
+        msg: "Acertou. Lasanha tem passe livre no coração dele. 🍝"
+      },
+      {
+        pergunta: "Qual é o jeito mais óbvio dele demonstrar carinho?",
+        opcoes: ["Mandando figurinha", "Abraçando e dando beijinho", "Fazendo drama", "Comprando doce"],
+        certa: 1,
+        msg: "Correto. Abraço e beijinho: protocolo oficial de carinho. 💖"
+      },
+      {
+        pergunta: "Quando ele fica com saudade, o que ele provavelmente faz?",
+        opcoes: ["Fica quieto", "Manda mensagem", "Faz ciúmes", "Some misteriosamente"],
+        certa: 1,
+        msg: "Isso mesmo. Saudade detectada: mensagem enviada. 🥺"
+      },
+      {
+        pergunta: "Qual apelido ele mais gosta de usar?",
+        opcoes: ["Amor", "Linda", "Princesa", "Neném"],
+        certa: 2,
+        msg: "Acertou. Princesa desbloqueada no LauOS. 👑"
+      },
+      {
+        pergunta: "O que ele faz quando quer irritar de brincadeira?",
+        opcoes: ["Faz piadinha na hora errada", "Para de responder", "Manda áudio cantando", "Finge que esqueceu"],
+        certa: 0,
+        msg: "Exato. Piadinha na hora errada: habilidade perigosa. 😅"
+      },
+      {
+        pergunta: "Qual emoji mais combina com ele falando com você?",
+        opcoes: ["😂", "😍", "😎", "🙄"],
+        certa: 1,
+        msg: "Acertou. Olhos apaixonados ativados. 😍"
+      },
+      {
+        pergunta: "Qual é uma coisa que ele sempre tenta fazer por você?",
+        opcoes: ["Ganhar discussão", "Cuidar", "Fazer suspense", "Ser misterioso"],
+        certa: 1,
+        msg: "Correto. Cuidar é uma das funções principais dele. 🫶"
+      },
+      {
+        pergunta: "Qual frase é mais a cara dele?",
+        opcoes: ["Calma, vida", "Fé no Mengo", "Depois eu vejo", "Confia no pai"],
+        certa: 1,
+        msg: "Acertou. Fé no Mengo e fé no amor. ❤️🖤"
+      },
+      {
+        pergunta: "Se ele fosse criar uma missão de namorado, qual seria?",
+        opcoes: ["Missão cafuné", "Missão romance perigoso", "Missão comprar chocolate", "Missão pedir desculpa"],
+        certa: 1,
+        msg: "Resposta certa. O LauOS ficou tímido, mas registrou. 😳"
+      },
+      {
+        pergunta: "O que ele mais gosta em você?",
+        opcoes: ["A risada", "O jeito bravo", "Sua preocupação e dedicação", "O cabelo"],
+        certa: 2,
+        msg: "Acertou. Ele repara no seu cuidado, sim. 💌"
+      },
+      {
+        pergunta: "Qual parte sua deixa ele mais bobo?",
+        opcoes: ["Seu sorriso", "Sua voz", "Seu olhar", "Seu jeito brava"],
+        certa: 0,
+        msg: "Correto. Sorriso dela = sistema dele travando. 🥰"
+      },
+      {
+        pergunta: "Se ele pudesse te dar um presente simples hoje, o que escolheria?",
+        opcoes: ["Chocolate", "Flores", "Pelúcia", "Carta"],
+        certa: 1,
+        msg: "Acertou. Flores sem motivo são muito LauOS. 🌷"
+      },
+      {
+        pergunta: "Quando você fica brava, o que ele provavelmente tenta fazer?",
+        opcoes: ["Explicar demais", "Ficar quieto", "Te fazer rir", "Mudar de assunto"],
+        certa: 2,
+        msg: "Isso. O plano dele é transformar brava em risada. 😂"
+      },
+      {
+        pergunta: "Qual coisa sua desmonta ele fácil?",
+        opcoes: ["Ser fofa", "Ficar brava", "Fazer chantagem emocional", "Mandar hm"],
+        certa: 0,
+        msg: "Acertou. Fofura alta demais: namorado sem defesa. 💖"
+      },
+      {
+        pergunta: "Se ele fosse um personagem no LauOS, ele seria o quê?",
+        opcoes: ["Dragão", "Raposa", "Gato", "Cavaleiro"],
+        certa: 1,
+        msg: "Correto. Raposa oficialmente cadastrada. 🦊"
+      },
+      {
+        pergunta: "Qual música combina com ele pensando em você?",
+        opcoes: ["One Time", "Perfect", "Photograph", "Another Love"],
+        certa: 0,
+        msg: "Acertou. Trilha sonora desbloqueada. 🎵"
+      },
+      {
+        pergunta: "Qual lugar ele gostaria de ir com você?",
+        opcoes: ["Paris", "Suíça", "Gramado", "Maldivas"],
+        certa: 1,
+        msg: "Correto. Viagem dos sonhos: Suíça com a Lau. 🏔️"
+      },
+      {
+        pergunta: "Qual é o maior defeito dele como namorado, versão fofinha?",
+        opcoes: ["Ser ciumento demais", "Querer atenção o tempo todo", "Fazer piada ruim", "Dormir rápido"],
+        certa: 1,
+        msg: "Acertou. Atenção requisitada em tempo integral. 🥺"
+      },
+      {
+        pergunta: "Qual é a maior qualidade dele com você?",
+        opcoes: ["Ser engraçado", "Ser melhor todos os dias", "Ser paciente sempre", "Saber pedir desculpa"],
+        certa: 1,
+        msg: "Correto. Atualização diária instalada: ser melhor. 💙"
+      },
+      {
+        pergunta: "Qual mensagem sua deixaria ele feliz na hora?",
+        opcoes: ["Tô com saudade", "Oi, tô chegando", "Sonhei com você", "Me liga"],
+        certa: 1,
+        msg: "Acertou. Essa mensagem muda o dia dele na hora. 💌"
+      },
+      {
+        pergunta: "Se você mandasse só um emoji para pedir carinho, qual seria?",
+        opcoes: ["😡", "😴", "🥺", "😂"],
+        certa: 2,
+        msg: "Exato. Esse emoji já vem com pedido de carinho embutido. 🥺"
+      },
+      {
+        pergunta: "Qual seria a senha secreta do coração dele?",
+        opcoes: ["Amor", "Lau", "Princesa", "Mengo"],
+        certa: 1,
+        msg: "Acertou. Senha aceita. Coração desbloqueado. 🔐💖"
+      },
+      {
+        pergunta: "Se ele tivesse uma barra no LauOS, qual ficaria em 100%?",
+        opcoes: ["Ciúmes", "Fome", "Sono", "Apaixonado"],
+        certa: 3,
+        msg: "Correto. Apaixonado: 100%, sem previsão de queda. 💘"
+      }
+    ];
+
+    let quizAtual = 0;
+
+    function abrirMiniGame(id) {
+      document.querySelectorAll(".game-box").forEach((box) => box.classList.remove("show"));
+      const box = document.getElementById(id);
+      if (box) box.classList.add("show");
+      if (id === "quizGame") carregarQuiz();
+      if (id === "missionGame") renderizarMissaoLau();
+    }
+
+    function carregarQuiz() {
+      const pergunta = quizPerguntas[quizAtual % quizPerguntas.length];
+      const questionEl = document.getElementById("quizQuestion");
+      const optionsEl = document.getElementById("quizOptions");
+      const feedbackEl = document.getElementById("quizFeedback");
+      if (!questionEl || !optionsEl || !feedbackEl) return;
+      questionEl.textContent = pergunta.pergunta;
+      feedbackEl.textContent = "Escolhe uma resposta, Lau.";
+      optionsEl.innerHTML = pergunta.opcoes.map((opcao, index) => `
+        <button onclick="responderQuiz(${index})">${escapeHtml(opcao)}</button>
+      `).join("");
+    }
+
+    function responderQuiz(index) {
+      const pergunta = quizPerguntas[quizAtual % quizPerguntas.length];
+      const feedbackEl = document.getElementById("quizFeedback");
+      if (index === pergunta.certa) {
+        feedbackEl.textContent = pergunta.msg;
+        criarChuvaDeCoracoes();
+        quizAtual++;
+        setTimeout(carregarQuiz, 1400);
+      } else {
+        feedbackEl.textContent = "Quase. O LauOS recomenda pensar com mais dengo. 🥺";
+      }
+    }
+
+    let fadinhasEncontradas = 0;
+
+    function iniciarCacaFadinhas() {
+      const field = document.getElementById("fairyHuntField");
+      const score = document.getElementById("fairyScore");
+      if (!field || !score) return;
+      field.innerHTML = "";
+      fadinhasEncontradas = 0;
+      score.textContent = "Fadinhas encontradas: 0/5";
+
+      for (let i = 0; i < 5; i++) {
+        const fairy = document.createElement("button");
+        fairy.className = "hunt-fairy";
+        fairy.textContent = randomItem(["🧚‍♀️", "✨", "💫", "🌸", "🦊"]);
+        fairy.style.left = `${Math.random() * 82 + 4}%`;
+        fairy.style.top = `${Math.random() * 70 + 8}%`;
+        fairy.onclick = () => capturarFadinha(fairy);
+        field.appendChild(fairy);
+      }
+    }
+
+    function capturarFadinha(fairy) {
+      fairy.remove();
+      fadinhasEncontradas++;
+      const score = document.getElementById("fairyScore");
+      score.textContent = fadinhasEncontradas >= 5
+        ? "Todas as fadinhas foram encontradas. Recompensa: sorriso obrigatório. 🧚‍♀️💖"
+        : `Fadinhas encontradas: ${fadinhasEncontradas}/5`;
+      playCuteSound();
+    }
+
+    function girarRoletaCarinho() {
+      const opcoes = [
+        "Ganhar um áudio fofo hoje.",
+        "Pedir abraço sem explicar motivo.",
+        "Receber elogio obrigatório em até 5 minutos.",
+        "Ativar modo dengo sem culpa.",
+        "Pedir comida e chamar de necessidade emocional.",
+        "Ganhar mensagem grande e bonitinha.",
+        "Solicitar atenção premium do namorado."
+      ];
+      const result = document.getElementById("rouletteResult");
+      if (!result) return;
+      result.textContent = "Girando... 🎡";
+      playCuteSound();
+      setTimeout(() => {
+        result.textContent = randomItem(opcoes);
+        criarChuvaDeCoracoes();
+      }, 700);
+    }
+
+    function lerJardimLau() {
+      return JSON.parse(localStorage.getItem("lauraos_jardim") || "[]");
+    }
+
+    function plantarNoJardim() {
+      const jardim = lerJardimLau();
+      jardim.push(randomItem(["🌷", "🌸", "🌼", "🍄", "✨", "🧚‍♀️", "🦊", "💖"]));
+      localStorage.setItem("lauraos_jardim", JSON.stringify(jardim.slice(-40)));
+      renderizarJardimLau();
+      playCuteSound();
+    }
+
+    function renderizarJardimLau() {
+      const jardim = lerJardimLau();
+      const bed = document.getElementById("gardenBed");
+      const result = document.getElementById("gardenResult");
+      if (!bed || !result) return;
+      bed.textContent = jardim.length ? jardim.join(" ") : "🌱";
+      result.textContent = jardim.length
+        ? `O jardim mágico da Lau tem ${jardim.length} coisinha(s) fofa(s).`
+        : "Seu jardim ainda está começando.";
+    }
+
+    function limparJardimLau() {
+      localStorage.removeItem("lauraos_jardim");
+      renderizarJardimLau();
+      showMessage("Jardim reiniciado 🌱");
+    }
+
+    function enviarMissaoNamorado() {
+      const select = document.getElementById("missionSelect");
+      const custom = document.getElementById("customMissionInput");
+      const texto = (custom.value.trim() || select.value).trim();
+      const missao = {
+        texto,
+        status: "pendente",
+        data: new Date().toLocaleString("pt-BR")
+      };
+      localStorage.setItem("lauraos_missao_namorado", JSON.stringify(missao));
+      custom.value = "";
+      renderizarMissaoLau();
+      renderizarMissaoNamorado();
+      showMessage("Missão enviada para o namorado 🫡💌");
+    }
+
+    function renderizarMissaoLau() {
+      const box = document.getElementById("missionResult");
+      if (!box) return;
+      const missao = JSON.parse(localStorage.getItem("lauraos_missao_namorado") || "null");
+      if (!missao) {
+        box.textContent = "Nenhuma missão enviada ainda.";
+        return;
+      }
+      box.innerHTML = `<strong>Missão atual:</strong><br>${escapeHtml(missao.texto)}<br><small>${escapeHtml(missao.data)} - ${escapeHtml(missao.status)}</small>`;
+    }
+
+    function renderizarMissaoNamorado() {
+      const box = document.getElementById("currentMissionView");
+      if (!box) return;
+      const missao = JSON.parse(localStorage.getItem("lauraos_missao_namorado") || "null");
+      if (!missao) {
+        box.textContent = "Nenhuma missão enviada ainda.";
+        return;
+      }
+      box.innerHTML = `<strong>${escapeHtml(missao.status === "concluída" ? "Missão concluída ✅" : "Missão pendente 🫡")}</strong><br>${escapeHtml(missao.texto)}<br><small>Enviada em: ${escapeHtml(missao.data)}</small>`;
+    }
+
+    function concluirMissaoNamorado() {
+      const missao = JSON.parse(localStorage.getItem("lauraos_missao_namorado") || "null");
+      if (!missao) {
+        showMessage("Não tem missão para concluir ainda 🫡");
+        return;
+      }
+      missao.status = "concluída";
+      missao.concluidaEm = new Date().toLocaleString("pt-BR");
+      localStorage.setItem("lauraos_missao_namorado", JSON.stringify(missao));
+      renderizarMissaoNamorado();
+      showMessage("Missão concluída. Agora manda prova com carinho 💙");
+    }
+
+
+    document.addEventListener("mousemove", (event) => {
+      const cursorFairy = document.getElementById("cursorFairy");
+      if (!cursorFairy || !document.body.classList.contains("laura-mode")) return;
+      cursorFairy.style.left = `${event.clientX + 10}px`;
+      cursorFairy.style.top = `${event.clientY - 8}px`;
+    });
+
+
+    // V8 FIX: funções dos botões do Cantinho da Lau
+    function abrirCantinho(id) {
+      const container = document.getElementById("lauCorner");
+      if (!container) return;
+
+      container.querySelectorAll(".corner-panel").forEach((panel) => {
+        panel.classList.remove("show");
+      });
+
+      const panel = document.getElementById(id);
+      if (panel) panel.classList.add("show");
+
+      if (id === "quizGame") carregarQuiz();
+      if (id === "missionGame") renderizarMissaoLau();
+      renderizarCantinhoLau();
+    }
+
+    function abrirCantinhoNamorado(id) {
+      const container = document.querySelector(".namorado-corner-view");
+      if (!container) return;
+
+      container.querySelectorAll(".corner-panel").forEach((panel) => {
+        panel.classList.remove("show");
+      });
+
+      const panel = document.getElementById(id);
+      if (panel) panel.classList.add("show");
+      renderizarCantinhoNamorado();
+    }
+
+    function lerListaCantinho(chave) {
+      return JSON.parse(localStorage.getItem(chave) || "[]");
+    }
+
+    function salvarListaCantinho(chave, lista) {
+      localStorage.setItem(chave, JSON.stringify(lista.slice(0, 30)));
+    }
+
+    function adicionarDesejoLau() {
+      const input = document.getElementById("wishInput");
+      const texto = input.value.trim();
+      if (!texto) {
+        showMessage("Escreve um desejo antes de guardar ✨");
+        return;
+      }
+
+      const desejos = lerListaCantinho("lauraos_wishes");
+      desejos.unshift({ texto, data: new Date().toLocaleString("pt-BR") });
+      salvarListaCantinho("lauraos_wishes", desejos);
+      input.value = "";
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      showMessage("Desejo guardado no cofrinho da Lau 🌟");
+    }
+
+    function salvarDiarioLau() {
+      const campo = document.getElementById("diaryText");
+      const texto = campo.value.trim();
+      if (!texto) {
+        showMessage("Escreve alguma coisa no diário primeiro 📓");
+        return;
+      }
+
+      diario.unshift({ texto, data: new Date().toLocaleString("pt-BR") });
+      salvarListaCantinho("lauraos_diary", diario);
+      campo.value = "";
+      renderizarCantinhoLau();
+      renderizarHistoricoDiarioModal();
+      showMessage("Anotação salva no diário secreto 💌");
+    }
+
+
+    function renderizarHistoricoDiarioModal() {
+      const lista = document.getElementById("diaryHistoryList");
+      if (!lista) return;
+
+      const diario = lerListaCantinho("lauraos_diary");
+      lista.innerHTML = montarListaHtml(diario, "Nenhuma anotação ainda.", (item) => `
+        <div class="history-item">${escapeHtml(item.texto)}<br><br><small>${escapeHtml(item.data)}</small></div>
+      `);
+    }
+
+    function abrirHistoricoDiarioLau() {
+      const usuarioSalvo = localStorage.getItem("lauraos_usuario");
+      if (usuarioSalvo !== "Lau") {
+        showMessage("Esse diário é privado da Lau 📓");
+        return;
+      }
+
+      renderizarHistoricoDiarioModal();
+      document.getElementById("diaryHistoryModal").classList.add("show");
+    }
+
+    function fecharHistoricoDiarioLau() {
+      document.getElementById("diaryHistoryModal").classList.remove("show");
+    }
+
+    function ativarPrecisoDeVoce() {
+      const tipo = document.getElementById("needType").value;
+      const texto = document.getElementById("needText").value.trim();
+      const alerta = {
+        tipo,
+        texto: texto || "A Lau não explicou muito, mas precisa de você com carinho.",
+        data: new Date().toLocaleString("pt-BR")
+      };
+
+      localStorage.setItem("lauraos_need", JSON.stringify(alerta));
+      document.getElementById("needText").value = "";
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      showMessage("Alerta enviado para a área do namorado 🥺");
+      criarChuvaDeCoracoes();
+    }
+
+    function salvarHumorCor(cor, significado) {
+      const humorCor = {
+        cor,
+        significado,
+        data: new Date().toLocaleString("pt-BR")
+      };
+
+      localStorage.setItem("lauraos_color", JSON.stringify(humorCor));
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      showMessage(`Cor do dia salva: ${cor} - ${significado} 🎨`);
+    }
+
+    function adicionarFraseLau() {
+      const input = document.getElementById("phraseInput");
+      const texto = input.value.trim();
+      if (!texto) {
+        showMessage("Escreve uma frase antes de salvar 💬");
+        return;
+      }
+
+      const frases = lerListaCantinho("lauraos_phrases");
+      frases.unshift({ texto, data: new Date().toLocaleString("pt-BR") });
+      salvarListaCantinho("lauraos_phrases", frases);
+      input.value = "";
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      showMessage("Frase salva para ele lembrar depois 💖");
+    }
+
+    function adicionarMomentoLau() {
+      const tituloInput = document.getElementById("momentTitle");
+      const dataInput = document.getElementById("momentDate");
+      const titulo = tituloInput.value.trim();
+      const data = dataInput.value;
+      if (!titulo || !data) {
+        showMessage("Coloca o nome do momento e a data primeiro 📅");
+        return;
+      }
+
+      const momentos = lerListaCantinho("lauraos_moments");
+      momentos.unshift({ titulo, data, criadoEm: new Date().toLocaleString("pt-BR") });
+      salvarListaCantinho("lauraos_moments", momentos);
+      tituloInput.value = "";
+      dataInput.value = "";
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      showMessage("Momento salvo no calendário da Lau 📅");
+    }
+
+    function salvarManualLau() {
+      const campo = document.getElementById("manualText");
+      const texto = campo.value.trim();
+      if (!texto) {
+        showMessage("Escreve uma instrução no Manual da Lau primeiro 📖");
+        return;
+      }
+
+      const manual = {
+        texto,
+        data: new Date().toLocaleString("pt-BR")
+      };
+      localStorage.setItem("lauraos_manual", JSON.stringify(manual));
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      showMessage("Manual da Lau atualizado 📖");
+    }
+
+    function montarListaHtml(lista, vazio, renderItem) {
+      if (!lista || !lista.length) return vazio;
+      return lista.map(renderItem).join("");
+    }
+
+    function renderizarCantinhoLau() {
+      const desejos = lerListaCantinho("lauraos_wishes");
+      const frases = lerListaCantinho("lauraos_phrases");
+      const momentos = lerListaCantinho("lauraos_moments");
+      const diario = lerListaCantinho("lauraos_diary");
+      const alerta = JSON.parse(localStorage.getItem("lauraos_need") || "null");
+      const cor = JSON.parse(localStorage.getItem("lauraos_color") || "null");
+      const manual = JSON.parse(localStorage.getItem("lauraos_manual") || "null");
+
+      const wishList = document.getElementById("wishList");
+      if (wishList) wishList.innerHTML = montarListaHtml(desejos, "Nenhum desejo guardado ainda.", (item) => `
+        <div class="history-item"><strong>${escapeHtml(item.texto)}</strong><br><small>${escapeHtml(item.data)}</small></div>
+      `);
+
+      const diaryList = document.getElementById("diaryList");
+      if (diaryList) diaryList.innerHTML = diario.length
+        ? `Você tem ${diario.length} anotação(ões) guardada(s). Toque em “Ver histórico secreto” para abrir.`
+        : "Nenhuma anotação ainda.";
+      renderizarHistoricoDiarioModal();
+
+      const needStatus = document.getElementById("needStatus");
+      if (needStatus) needStatus.innerHTML = alerta
+        ? `<strong>${escapeHtml(alerta.tipo)}</strong><br>${escapeHtml(alerta.texto)}<br><small>${escapeHtml(alerta.data)}</small>`
+        : "Nenhum alerta enviado ainda.";
+
+      const colorStatus = document.getElementById("colorStatus");
+      if (colorStatus) colorStatus.innerHTML = cor
+        ? `<strong>${escapeHtml(cor.cor)}:</strong> ${escapeHtml(cor.significado)}<br><small>${escapeHtml(cor.data)}</small>`
+        : "Nenhuma cor escolhida ainda.";
+
+      const phraseList = document.getElementById("phraseList");
+      if (phraseList) phraseList.innerHTML = montarListaHtml(frases, "Nenhuma frase salva ainda.", (item) => `
+        <div class="history-item">“${escapeHtml(item.texto)}”<br><small>${escapeHtml(item.data)}</small></div>
+      `);
+
+      const momentList = document.getElementById("momentList");
+      if (momentList) momentList.innerHTML = montarListaHtml(momentos, "Nenhum momento salvo ainda.", (item) => `
+        <div class="history-item"><strong>${escapeHtml(item.titulo)}</strong><br>${escapeHtml(item.data)}<br><small>Salvo em ${escapeHtml(item.criadoEm)}</small></div>
+      `);
+
+      const manualView = document.getElementById("manualView");
+      if (manualView) manualView.innerHTML = manual
+        ? `${escapeHtml(manual.texto).replaceAll("\n", "<br>")}<br><br><small>Atualizado em: ${escapeHtml(manual.data)}</small>`
+        : "Manual ainda não preenchido.";
+
+      renderizarAgendaLau();
+    }
+
+    function renderizarCantinhoNamorado() {
+      const desejos = lerListaCantinho("lauraos_wishes");
+      const frases = lerListaCantinho("lauraos_phrases");
+      const momentos = lerListaCantinho("lauraos_moments");
+      const diario = lerListaCantinho("lauraos_diary");
+      const alerta = JSON.parse(localStorage.getItem("lauraos_need") || "null");
+      const cor = JSON.parse(localStorage.getItem("lauraos_color") || "null");
+      const manual = JSON.parse(localStorage.getItem("lauraos_manual") || "null");
+
+      const viewNeed = document.getElementById("viewNeed");
+      if (viewNeed) viewNeed.innerHTML = alerta
+        ? `<h4>🥺 Preciso de você</h4><strong>${escapeHtml(alerta.tipo)}</strong><br>${escapeHtml(alerta.texto)}<br><small>${escapeHtml(alerta.data)}</small>`
+        : "Nenhum alerta enviado ainda.";
+
+      const viewWishes = document.getElementById("viewWishes");
+      if (viewWishes) viewWishes.innerHTML = montarListaHtml(desejos, "Nenhum desejo salvo ainda.", (item) => `
+        <div class="history-item"><strong>${escapeHtml(item.texto)}</strong><br><small>${escapeHtml(item.data)}</small></div>
+      `);
+
+      const viewPhrases = document.getElementById("viewPhrases");
+      if (viewPhrases) viewPhrases.innerHTML = montarListaHtml(frases, "Nenhuma frase salva ainda.", (item) => `
+        <div class="history-item">“${escapeHtml(item.texto)}”<br><small>${escapeHtml(item.data)}</small></div>
+      `);
+
+      const viewMoments = document.getElementById("viewMoments");
+      if (viewMoments) viewMoments.innerHTML = montarListaHtml(momentos, "Nenhum momento salvo ainda.", (item) => `
+        <div class="history-item"><strong>${escapeHtml(item.titulo)}</strong><br>${escapeHtml(item.data)}<br><small>Salvo em ${escapeHtml(item.criadoEm)}</small></div>
+      `);
+
+      const viewManual = document.getElementById("viewManual");
+      if (viewManual) viewManual.innerHTML = manual
+        ? `<h4>📖 Manual da Lau</h4>${escapeHtml(manual.texto).replaceAll("\n", "<br>")}<br><br><small>Atualizado em: ${escapeHtml(manual.data)}</small>`
+        : "Manual ainda não preenchido.";
+
+      const viewColor = document.getElementById("viewColor");
+      if (viewColor) viewColor.innerHTML = cor
+        ? `<h4>🎨 Humor por cor</h4><strong>${escapeHtml(cor.cor)}:</strong> ${escapeHtml(cor.significado)}<br><small>${escapeHtml(cor.data)}</small>`
+        : "Nenhuma cor escolhida ainda.";
+
+      renderizarAgendaNamorado();
+    }
+
+
+    // V10: agenda mensal e agenda do dia
+    function hojeISO() {
+      const agora = new Date();
+      const ano = agora.getFullYear();
+      const mes = String(agora.getMonth() + 1).padStart(2, "0");
+      const dia = String(agora.getDate()).padStart(2, "0");
+      return `${ano}-${mes}-${dia}`;
+    }
+
+    function formatarDataBR(dataISO) {
+      if (!dataISO) return "Sem data";
+      const partes = dataISO.split("-");
+      if (partes.length !== 3) return dataISO;
+      return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+
+    function lerAgendaLau() {
+      return JSON.parse(localStorage.getItem("lauraos_agenda_items") || "[]");
+    }
+
+    function salvarAgendaLau(lista) {
+      localStorage.setItem("lauraos_agenda_items", JSON.stringify(lista.slice(0, 120)));
+    }
+
+    function lerRotinasLau() {
+      return JSON.parse(localStorage.getItem("lauraos_daily_routines") || "{}");
+    }
+
+    function salvarRotinasLau(rotinas) {
+      localStorage.setItem("lauraos_daily_routines", JSON.stringify(rotinas));
+    }
+
+    function ordenarAgenda(lista) {
+      return [...lista].sort((a, b) => `${a.data} ${a.hora || ""}`.localeCompare(`${b.data} ${b.hora || ""}`));
+    }
+
+    function adicionarAgendaLau() {
+      const dataInput = document.getElementById("agendaDate");
+      const horaInput = document.getElementById("agendaTime");
+      const textoInput = document.getElementById("agendaText");
+
+      const data = dataInput.value;
+      const hora = horaInput.value;
+      const texto = textoInput.value.trim();
+
+      if (!data || !texto) {
+        showMessage("Coloca a data e o compromisso primeiro 🗓️");
+        return;
+      }
+
+      const agenda = lerAgendaLau();
+      agenda.unshift({
+        id: Date.now(),
+        data,
+        hora,
+        texto,
+        criadoEm: new Date().toLocaleString("pt-BR")
+      });
+      salvarAgendaLau(agenda);
+
+      textoInput.value = "";
+      horaInput.value = "";
+      renderizarAgendaLau();
+      renderizarAgendaNamorado();
+      showMessage("Compromisso salvo na agenda da Lau 🗓️");
+    }
+
+    function salvarRotinaDiaLau() {
+      const dataInput = document.getElementById("dailyRoutineDate");
+      const textoInput = document.getElementById("dailyRoutineText");
+      const data = dataInput.value || hojeISO();
+      const texto = textoInput.value.trim();
+
+      if (!texto) {
+        showMessage("Escreve a rotina do dia primeiro 💌");
+        return;
+      }
+
+      const rotinas = lerRotinasLau();
+      rotinas[data] = {
+        texto,
+        data,
+        atualizadoEm: new Date().toLocaleString("pt-BR")
+      };
+      salvarRotinasLau(rotinas);
+      textoInput.value = "";
+      renderizarAgendaLau();
+      renderizarAgendaNamorado();
+      showMessage("Agenda do dia salva para o namorado acompanhar 💖");
+    }
+
+    function mudarMesAgenda(delta) {
+      agendaMesAtual.setMonth(agendaMesAtual.getMonth() + delta);
+      renderizarAgendaLau();
+      renderizarAgendaNamorado();
+    }
+
+    function montarCalendarioAgendaHtml() {
+      const agenda = lerAgendaLau();
+      const rotinas = lerRotinasLau();
+      const ano = agendaMesAtual.getFullYear();
+      const mes = agendaMesAtual.getMonth();
+      const primeiroDia = new Date(ano, mes, 1).getDay();
+      const totalDias = new Date(ano, mes + 1, 0).getDate();
+      const nomeMes = agendaMesAtual.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+      const hoje = hojeISO();
+      const datasComEvento = new Set([
+        ...agenda.map((item) => item.data),
+        ...Object.keys(rotinas)
+      ]);
+
+      let dias = "";
+      for (let i = 0; i < primeiroDia; i++) {
+        dias += `<div class="agenda-day empty"></div>`;
+      }
+
+      for (let dia = 1; dia <= totalDias; dia++) {
+        const dataISO = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+        const classes = ["agenda-day"];
+        if (dataISO === hoje) classes.push("today");
+        if (datasComEvento.has(dataISO)) classes.push("has-event");
+        dias += `<div class="${classes.join(" ")}" title="${formatarDataBR(dataISO)}">${dia}</div>`;
+      }
+
+      return `
+        <div class="agenda-month-header">
+          <button onclick="mudarMesAgenda(-1)">‹</button>
+          <span>${escapeHtml(nomeMes)}</span>
+          <button onclick="mudarMesAgenda(1)">›</button>
+        </div>
+        <div class="agenda-weekdays">
+          <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+        </div>
+        <div class="agenda-days">${dias}</div>
+      `;
+    }
+
+    function montarListaAgendaHtml(lista, vazio) {
+      if (!lista.length) return vazio;
+      return ordenarAgenda(lista).map((item) => `
+        <div class="agenda-item">
+          <strong>${escapeHtml(formatarDataBR(item.data))}${item.hora ? ` às ${escapeHtml(item.hora)}` : ""}</strong><br>
+          ${escapeHtml(item.texto)}
+          <br><small>Salvo em ${escapeHtml(item.criadoEm)}</small>
+        </div>
+      `).join("");
+    }
+
+    function renderizarAgendaLau() {
+      const agendaDate = document.getElementById("agendaDate");
+      const dailyDate = document.getElementById("dailyRoutineDate");
+      if (agendaDate && !agendaDate.value) agendaDate.value = hojeISO();
+      if (dailyDate && !dailyDate.value) dailyDate.value = hojeISO();
+
+      const calendar = document.getElementById("agendaCalendarLau");
+      if (calendar) calendar.innerHTML = montarCalendarioAgendaHtml();
+
+      const lista = document.getElementById("agendaListLau");
+      if (lista) lista.innerHTML = montarListaAgendaHtml(lerAgendaLau(), "Nenhum compromisso salvo ainda.");
+
+      const rotinas = lerRotinasLau();
+      const rotinaHoje = rotinas[hojeISO()];
+      const rotinaBox = document.getElementById("dailyRoutineStatus");
+      if (rotinaBox) rotinaBox.innerHTML = rotinaHoje
+        ? `<div class="agenda-item"><strong>Rotina de hoje:</strong><br>${escapeHtml(rotinaHoje.texto).replaceAll("\n", "<br>")}<br><small>Atualizada em ${escapeHtml(rotinaHoje.atualizadoEm)}</small></div>`
+        : "Nenhuma rotina salva para hoje.";
+    }
+
+    function renderizarAgendaNamorado() {
+      const viewAgenda = document.getElementById("viewAgenda");
+      if (!viewAgenda) return;
+
+      const agenda = lerAgendaLau();
+      const rotinas = lerRotinasLau();
+      const hoje = hojeISO();
+      const rotinaHoje = rotinas[hoje];
+      const compromissosHoje = agenda.filter((item) => item.data === hoje);
+      const proximos = ordenarAgenda(agenda.filter((item) => item.data >= hoje)).slice(0, 12);
+
+      viewAgenda.innerHTML = `
+        <h4>🗓️ Agenda da Lau</h4>
+        <p>Calendário compartilhado para você acompanhar a rotina dela sem mexer em nada.</p>
+        <div class="agenda-calendar" id="agendaCalendarNamorado">${montarCalendarioAgendaHtml()}</div>
+        <div class="agenda-section-title">Agenda de hoje</div>
+        <div class="corner-list">
+          ${rotinaHoje ? `<div class="agenda-item"><strong>Rotina dela hoje:</strong><br>${escapeHtml(rotinaHoje.texto).replaceAll("\n", "<br>")}<br><small>Atualizada em ${escapeHtml(rotinaHoje.atualizadoEm)}</small></div>` : `<div class="agenda-item">Nenhuma rotina do dia salva ainda.</div>`}
+          ${montarListaAgendaHtml(compromissosHoje, "")}
+        </div>
+        <div class="agenda-section-title">Próximos compromissos</div>
+        <div class="corner-list">${montarListaAgendaHtml(proximos, "Nenhum compromisso futuro salvo ainda.")}</div>
+      `;
+    }
+
+    function sairLauOS() {
+      localStorage.removeItem("lauraos_usuario");
+      location.reload();
+    }
+
+    window.addEventListener("load", () => {
+      document.getElementById("openingPhrase").textContent = randomItem(openingPhrases);
+      updateClock();
+      iniciarBootLauOS();
+      setInterval(updateClock, 1000);
+      setInterval(calcularDiasPraSeVer, 1000);
+      setInterval(createFloatingHeart, 700);
+      setInterval(createSparkle, 1200);
+      iniciarCarrosselMemorias();
+    });
+  </script>
+</body>
+</html>
