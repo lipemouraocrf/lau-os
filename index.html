@@ -3259,6 +3259,8 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     const openingPhrases = [
       "Sistema detectou: Lau acordou linda hoje.",
@@ -4845,6 +4847,515 @@
     };
 
   </script>
+
+  <script>
+    // LauOS v22 - conexao Supabase
+    const SUPABASE_URL = "https://nisflofxzwmxtjctkpav.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5pc2Zsb2Z4endteHRqY3RrcGF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxMDA5MjUsImV4cCI6MjA5NTY3NjkyNX0.ySMMxjKnTpWnoPbrtuPj1RdSHQfFGq_p59909fZSPDA";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const EMAIL_LAU = "lau@lauos.com";
+    const EMAIL_NAMORADO = "lipe@lauos.com";
+
+    let cacheFotosLau = [];
+    let cacheStatusLau = [];
+    let cacheChatLau = [];
+    let cacheAgendaLau = [];
+    let cacheRotinasLau = {};
+    let cacheDesejosLau = [];
+    let cacheFrasesLau = [];
+    let cacheManualLau = null;
+    let cacheDiarioLau = [];
+    let cacheMissoesLau = [];
+
+    function dataBR(dateValue) {
+      if (!dateValue) return new Date().toLocaleString("pt-BR");
+      return new Date(dateValue).toLocaleString("pt-BR");
+    }
+
+    function normalizarRolePorEmail(email) {
+      if (email === EMAIL_LAU) return "Lau";
+      if (email === EMAIL_NAMORADO) return "Namorado";
+      return null;
+    }
+
+    async function carregarTudoSupabase() {
+      await Promise.allSettled([
+        carregarHumorLau(),
+        renderizarChat(),
+        carregarFotosSupabase(),
+        carregarAgendaSupabase(),
+        carregarCantinhoSupabase(),
+        carregarMissoesSupabase(),
+        carregarDiarioSupabase()
+      ]);
+      atualizarContadorFotos();
+      iniciarCarrosselMemorias(true);
+      renderizarAgendaLau();
+      renderizarAgendaNamorado();
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      renderizarMissaoLau();
+      renderizarMissaoNamorado();
+    }
+
+    iniciarBootLauOS = async function () {
+      const bootText = document.getElementById("bootText");
+      const bootScreen = document.getElementById("bootScreen");
+      const loginScreen = document.getElementById("loginScreen");
+      const mensagensBoot = [
+        "Inicializando LauOS online...",
+        "Conectando no Supabase...",
+        "Carregando cantinho da Lau...",
+        "Protegendo diário secreto...",
+        "Sistema pronto 💖"
+      ];
+      let index = 0;
+      const intervalo = setInterval(() => {
+        if (bootText) bootText.textContent = mensagensBoot[index] || "Sistema pronto 💖";
+        index++;
+      }, 520);
+
+      setTimeout(async () => {
+        clearInterval(intervalo);
+        if (bootScreen) bootScreen.style.display = "none";
+
+        const { data } = await sb.auth.getSession();
+        const email = data?.session?.user?.email || "";
+        const usuario = normalizarRolePorEmail(email);
+
+        if (usuario) {
+          localStorage.setItem("lauraos_usuario", usuario);
+          document.body.classList.remove("login-open");
+          if (loginScreen) loginScreen.style.display = "none";
+          aplicarPermissao(usuario);
+          await carregarTudoSupabase();
+          showMessage(`Bem-vindo de volta ao LauOS, ${usuario} 💖`);
+        } else {
+          localStorage.removeItem("lauraos_usuario");
+          document.body.classList.add("login-open");
+          if (loginScreen) loginScreen.style.display = "flex";
+        }
+      }, 2800);
+    };
+
+    entrarPeloCartao = async function (tipo) {
+      const loginScreen = document.getElementById("loginScreen");
+      const campoLau = document.getElementById("loginPasswordLau");
+      const campoNamorado = document.getElementById("loginPasswordNamorado");
+      const erroLau = document.getElementById("loginErrorLau");
+      const erroNamorado = document.getElementById("loginErrorNamorado");
+      const hintLau = document.getElementById("loginHintLau");
+      const hintNamorado = document.getElementById("loginHintNamorado");
+
+      if (erroLau) erroLau.textContent = "";
+      if (erroNamorado) erroNamorado.textContent = "";
+
+      const email = tipo === "Lau" ? EMAIL_LAU : EMAIL_NAMORADO;
+      const campo = tipo === "Lau" ? campoLau : campoNamorado;
+      const erro = tipo === "Lau" ? erroLau : erroNamorado;
+      const senha = (campo?.value || "").trim();
+
+      if (!senha) {
+        if (erro) erro.textContent = "Digite a senha primeiro.";
+        return;
+      }
+
+      const { data, error } = await sb.auth.signInWithPassword({ email, password: senha });
+      if (error || !data?.user) {
+        if (erro) erro.textContent = tipo === "Lau" ? "Senha errada para a área da Lau." : "Senha errada para a área do namorado.";
+        if (tipo === "Lau" && hintLau) hintLau.textContent = "Dica: talvez seja um apelido fofo, dramático ou meio implicante.";
+        if (tipo !== "Lau" && hintNamorado) hintNamorado.textContent = "Dica: tenta algo pequeno, carinhoso e bem de casal.";
+        return;
+      }
+
+      const usuario = normalizarRolePorEmail(data.user.email);
+      localStorage.setItem("lauraos_usuario", usuario);
+      document.body.classList.remove("login-open");
+      if (loginScreen) loginScreen.style.display = "none";
+      aplicarPermissao(usuario);
+      await carregarTudoSupabase();
+      showMessage(usuario === "Lau" ? "Área da Lau aberta e conectada 💖" : "Área do namorado aberta e conectada 💙");
+    };
+
+    sairLauOS = async function () {
+      await sb.auth.signOut();
+      localStorage.removeItem("lauraos_usuario");
+      location.reload();
+    };
+
+    // STATUS
+    salvarHumorLau = async function () {
+      if (!humorSelecionado) {
+        showMessage("Escolhe primeiro como você está hoje, Lau 🥺");
+        return;
+      }
+      const observacao = document.getElementById("moodNote").value.trim();
+      const niveis = pegarNiveisLau();
+      const statusLau = {
+        humor: humorSelecionado,
+        observacao: observacao || "Lau não explicou, então o namorado deve agir com cuidado.",
+        niveis,
+        protocolo: gerarProtocolo(humorSelecionado, niveis)
+      };
+      const { error } = await sb.from("lau_status").insert(statusLau);
+      if (error) {
+        showMessage("Não consegui salvar no Supabase. Confere as policies do status.");
+        console.error(error);
+        return;
+      }
+      document.getElementById("moodNote").value = "";
+      await carregarHumorLau();
+      showMessage("Status da Lau enviado para a área do namorado 💌");
+      criarChuvaDeCoracoes();
+    };
+
+    carregarHumorLau = async function () {
+      const currentMood = document.getElementById("currentMood");
+      const moodNoteView = document.getElementById("moodNoteView");
+      const protocolBox = document.getElementById("protocolBox");
+      const readonlyLevels = document.getElementById("readonlyLevels");
+      const historyList = document.getElementById("historyList");
+      const { data, error } = await sb.from("lau_status").select("*").order("created_at", { ascending: false }).limit(8);
+      if (error) { console.error(error); return; }
+      cacheStatusLau = data || [];
+      const statusLau = cacheStatusLau[0];
+      if (!currentMood || !moodNoteView || !protocolBox || !readonlyLevels || !historyList) return;
+      if (!statusLau) {
+        currentMood.textContent = "Nenhum status salvo ainda.";
+        moodNoteView.textContent = "Quando a Lau salvar algo, aparece aqui.";
+        protocolBox.textContent = "Protocolo recomendado será carregado aqui.";
+        readonlyLevels.innerHTML = "";
+        historyList.textContent = "Nenhum histórico ainda.";
+        return;
+      }
+      currentMood.textContent = statusLau.humor;
+      moodNoteView.innerHTML = `<strong>Mensagem dela:</strong><br>${escapeHtml(statusLau.observacao || "")}<br><br><small>Atualizado em: ${escapeHtml(dataBR(statusLau.created_at))}</small>`;
+      protocolBox.innerHTML = `<strong>Protocolo recomendado:</strong><br>${escapeHtml(statusLau.protocolo || "").replaceAll("\n", "<br>")}`;
+      renderizarNiveisSomenteLeitura(statusLau.niveis || {});
+      renderizarHistorico();
+    };
+
+    renderizarHistorico = function () {
+      const historyList = document.getElementById("historyList");
+      if (!historyList) return;
+      if (!cacheStatusLau.length) {
+        historyList.textContent = "Nenhum histórico ainda.";
+        return;
+      }
+      historyList.innerHTML = cacheStatusLau.map((item) => `
+        <div class="history-item">
+          <strong>${escapeHtml(item.humor || "Status")}</strong><br>
+          ${escapeHtml(item.observacao || "")}
+          <br><small>${escapeHtml(dataBR(item.created_at))}</small>
+        </div>
+      `).join("");
+    };
+
+    // CHAT
+    enviarMensagemChat = async function (autor, textareaId) {
+      const campo = document.getElementById(textareaId);
+      const texto = campo.value.trim();
+      if (!texto) {
+        showMessage("Escreve uma mensagem antes de enviar 💬");
+        return;
+      }
+      const autorDb = autor === "Namorado" ? "namorado" : "lau";
+      const { error } = await sb.from("lau_chat").insert({ autor: autorDb, mensagem: texto });
+      if (error) { console.error(error); showMessage("Não consegui enviar a mensagem."); return; }
+      campo.value = "";
+      await renderizarChat();
+      showMessage(autor === "Lau" ? "Mensagem enviada para o namorado 💖" : "Resposta enviada para a Lau 💙");
+    };
+
+    renderizarChat = async function () {
+      const { data, error } = await sb.from("lau_chat").select("*").order("created_at", { ascending: false }).limit(40);
+      if (error) { console.error(error); return; }
+      cacheChatLau = data || [];
+      const html = cacheChatLau.length
+        ? cacheChatLau.map((msg) => {
+          const isLau = msg.autor === "lau";
+          const classeAutor = isLau ? "laura-msg" : "namorado-msg";
+          const nome = isLau ? "Lau 💖" : "Namorado 💙";
+          return `<div class="chat-message ${classeAutor}"><strong>${escapeHtml(nome)}</strong><br>${escapeHtml(msg.mensagem)}<br><small>${escapeHtml(dataBR(msg.created_at))}</small></div>`;
+        }).join("")
+        : "Nenhuma mensagem ainda.";
+      const lauraChatList = document.getElementById("lauraChatList");
+      const namoradoChatList = document.getElementById("namoradoChatList");
+      if (lauraChatList) lauraChatList.innerHTML = html;
+      if (namoradoChatList) namoradoChatList.innerHTML = html;
+    };
+
+    // FOTOS
+    async function carregarFotosSupabase() {
+      const { data, error } = await sb.from("lau_fotos").select("*").order("created_at", { ascending: false }).limit(30);
+      if (error) { console.error(error); return; }
+      cacheFotosLau = (data || []).map((foto) => foto.url);
+    }
+
+    lerFotosLau = function () { return cacheFotosLau || []; };
+
+    salvarFotosLau = async function () {
+      const input = document.getElementById("photoInput");
+      if (!input || !input.files || !input.files.length) {
+        showMessage("Escolhe uma ou mais fotos primeiro 📸");
+        return;
+      }
+      const arquivos = Array.from(input.files).slice(0, 6);
+      for (const arquivo of arquivos) {
+        const ext = (arquivo.name.split(".").pop() || "jpg").toLowerCase();
+        const path = `lau/${Date.now()}-${Math.random().toString(16).slice(2)}.${ext}`;
+        const { error: uploadError } = await sb.storage.from("lau-fotos").upload(path, arquivo, { upsert: false });
+        if (uploadError) { console.error(uploadError); showMessage("Erro ao enviar uma foto para o Storage."); return; }
+        const { data: publicData } = sb.storage.from("lau-fotos").getPublicUrl(path);
+        const url = publicData.publicUrl;
+        const { error: dbError } = await sb.from("lau_fotos").insert({ titulo: arquivo.name, url, path });
+        if (dbError) { console.error(dbError); showMessage("Foto subiu, mas não consegui salvar no banco."); return; }
+      }
+      input.value = "";
+      await carregarFotosSupabase();
+      atualizarContadorFotos();
+      iniciarCarrosselMemorias(true);
+      showMessage("Fotinhas adicionadas ao LauOS 💖");
+    };
+
+    limparFotosLau = function () {
+      showMessage("Agora as fotos ficam online. Para apagar, depois a gente cria um botão seguro no Supabase.");
+    };
+
+    // DIARIO PRIVADO
+    async function carregarDiarioSupabase() {
+      const { data: sessionData } = await sb.auth.getSession();
+      if (sessionData?.session?.user?.email !== EMAIL_LAU) { cacheDiarioLau = []; return; }
+      const { data, error } = await sb.from("lau_diario").select("*").order("created_at", { ascending: false }).limit(50);
+      if (error) { console.error(error); return; }
+      cacheDiarioLau = data || [];
+    }
+
+    salvarDiarioLau = async function () {
+      const campo = document.getElementById("diaryText");
+      const texto = campo.value.trim();
+      if (!texto) { showMessage("Escreve alguma coisa no diário primeiro 📓"); return; }
+      const { data: sessionData } = await sb.auth.getSession();
+      const user = sessionData?.session?.user;
+      if (!user || user.email !== EMAIL_LAU) { showMessage("Esse diário é privado da Lau 📓"); return; }
+      const { error } = await sb.from("lau_diario").insert({ user_id: user.id, texto });
+      if (error) { console.error(error); showMessage("Não consegui salvar o diário."); return; }
+      campo.value = "";
+      await carregarDiarioSupabase();
+      renderizarCantinhoLau();
+      renderizarHistoricoDiarioModal();
+      showMessage("Anotação salva no diário secreto 💌");
+    };
+
+    renderizarHistoricoDiarioModal = function () {
+      const lista = document.getElementById("diaryHistoryList");
+      if (!lista) return;
+      lista.innerHTML = montarListaHtml(cacheDiarioLau, "Nenhuma anotação ainda.", (item) => `<div class="history-item">${escapeHtml(item.texto)}<br><br><small>${escapeHtml(dataBR(item.created_at))}</small></div>`);
+    };
+
+    abrirHistoricoDiarioLau = async function () {
+      const { data } = await sb.auth.getSession();
+      if (data?.session?.user?.email !== EMAIL_LAU) { showMessage("Esse diário é privado da Lau 📓"); return; }
+      await carregarDiarioSupabase();
+      renderizarHistoricoDiarioModal();
+      document.getElementById("diaryHistoryModal").classList.add("show");
+    };
+
+    // AGENDA
+    async function carregarAgendaSupabase() {
+      const { data, error } = await sb.from("lau_agenda").select("*").order("data", { ascending: true }).order("horario", { ascending: true });
+      if (error) { console.error(error); return; }
+      cacheAgendaLau = [];
+      cacheRotinasLau = {};
+      (data || []).forEach((item) => {
+        if (item.titulo === "__rotina_dia__") {
+          cacheRotinasLau[item.data] = { texto: item.rotina || "", data: item.data, atualizadoEm: dataBR(item.created_at) };
+        } else {
+          cacheAgendaLau.push({ id: item.id, data: item.data, hora: item.horario || "", texto: item.titulo, criadoEm: dataBR(item.created_at) });
+        }
+      });
+    }
+
+    lerAgendaLau = function () { return cacheAgendaLau || []; };
+    salvarAgendaLau = function (lista) { cacheAgendaLau = lista; };
+    lerRotinasLau = function () { return cacheRotinasLau || {}; };
+    salvarRotinasLau = function (rotinas) { cacheRotinasLau = rotinas; };
+
+    adicionarAgendaLau = async function () {
+      const dataInput = document.getElementById("agendaDate");
+      const horaInput = document.getElementById("agendaTime");
+      const textoInput = document.getElementById("agendaText");
+      const data = dataInput.value;
+      const hora = horaInput.value;
+      const texto = textoInput.value.trim();
+      if (!data || !texto) { showMessage("Coloca a data e o compromisso primeiro 🗓️"); return; }
+      const { error } = await sb.from("lau_agenda").insert({ data, horario: hora || null, titulo: texto });
+      if (error) { console.error(error); showMessage("Não consegui salvar a agenda."); return; }
+      textoInput.value = "";
+      horaInput.value = "";
+      await carregarAgendaSupabase();
+      renderizarAgendaLau();
+      renderizarAgendaNamorado();
+      showMessage("Compromisso salvo na agenda da Lau 🗓️");
+    };
+
+    salvarRotinaDiaLau = async function () {
+      const dataInput = document.getElementById("dailyRoutineDate");
+      const textoInput = document.getElementById("dailyRoutineText");
+      const data = dataInput.value || hojeISO();
+      const texto = textoInput.value.trim();
+      if (!texto) { showMessage("Escreve a rotina do dia primeiro 💌"); return; }
+      const { error } = await sb.from("lau_agenda").insert({ data, horario: null, titulo: "__rotina_dia__", rotina: texto });
+      if (error) { console.error(error); showMessage("Não consegui salvar a rotina."); return; }
+      textoInput.value = "";
+      await carregarAgendaSupabase();
+      renderizarAgendaLau();
+      renderizarAgendaNamorado();
+      showMessage("Agenda do dia salva para o namorado acompanhar 💖");
+    };
+
+    // CANTINHO COMPARTILHADO
+    async function carregarCantinhoSupabase() {
+      const [desejos, frases, manual] = await Promise.all([
+        sb.from("lau_desejos").select("*").order("created_at", { ascending: false }).limit(30),
+        sb.from("lau_frases").select("*").order("created_at", { ascending: false }).limit(30),
+        sb.from("lau_manual").select("*").order("created_at", { ascending: false }).limit(1)
+      ]);
+      if (!desejos.error) cacheDesejosLau = (desejos.data || []).map((i) => ({ texto: i.texto, data: dataBR(i.created_at) }));
+      if (!frases.error) cacheFrasesLau = (frases.data || []).map((i) => ({ texto: i.texto, data: dataBR(i.created_at) }));
+      if (!manual.error) {
+        const m = (manual.data || [])[0];
+        cacheManualLau = m ? { texto: m.instrucao || m.situacao || "", data: dataBR(m.created_at) } : null;
+      }
+    }
+
+    lerListaCantinho = function (chave) {
+      if (chave === "lauraos_wishes") return cacheDesejosLau;
+      if (chave === "lauraos_phrases") return cacheFrasesLau;
+      if (chave === "lauraos_diary") return cacheDiarioLau.map((i) => ({ texto: i.texto, data: dataBR(i.created_at) }));
+      return JSON.parse(localStorage.getItem(chave) || "[]");
+    };
+
+    adicionarDesejoLau = async function () {
+      const input = document.getElementById("wishInput");
+      const texto = input.value.trim();
+      if (!texto) { showMessage("Escreve um desejo antes de guardar ✨"); return; }
+      const { error } = await sb.from("lau_desejos").insert({ texto });
+      if (error) { console.error(error); showMessage("Não consegui salvar o desejo."); return; }
+      input.value = "";
+      await carregarCantinhoSupabase();
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      showMessage("Desejo guardado no cofrinho da Lau 🌟");
+    };
+
+    adicionarFraseLau = async function () {
+      const input = document.getElementById("phraseInput");
+      const texto = input.value.trim();
+      if (!texto) { showMessage("Escreve uma frase antes de salvar 💬"); return; }
+      const { error } = await sb.from("lau_frases").insert({ texto });
+      if (error) { console.error(error); showMessage("Não consegui salvar a frase."); return; }
+      input.value = "";
+      await carregarCantinhoSupabase();
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      showMessage("Frase salva para ele lembrar depois 💖");
+    };
+
+    salvarManualLau = async function () {
+      const campo = document.getElementById("manualText");
+      const texto = campo.value.trim();
+      if (!texto) { showMessage("Escreve uma instrução no Manual da Lau primeiro 📖"); return; }
+      const { error } = await sb.from("lau_manual").insert({ situacao: "Manual da Lau", instrucao: texto });
+      if (error) { console.error(error); showMessage("Não consegui salvar o manual."); return; }
+      await carregarCantinhoSupabase();
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      showMessage("Manual da Lau atualizado 📖");
+    };
+
+    const renderizarCantinhoLauOriginal = renderizarCantinhoLau;
+    renderizarCantinhoLau = function () {
+      const oldGetItem = localStorage.getItem.bind(localStorage);
+      localStorage.getItem = function (key) {
+        if (key === "lauraos_manual") return JSON.stringify(cacheManualLau);
+        return oldGetItem(key);
+      };
+      try { renderizarCantinhoLauOriginal(); } finally { localStorage.getItem = oldGetItem; }
+    };
+
+    const renderizarCantinhoNamoradoOriginal = renderizarCantinhoNamorado;
+    renderizarCantinhoNamorado = function () {
+      const oldGetItem = localStorage.getItem.bind(localStorage);
+      localStorage.getItem = function (key) {
+        if (key === "lauraos_manual") return JSON.stringify(cacheManualLau);
+        return oldGetItem(key);
+      };
+      try { renderizarCantinhoNamoradoOriginal(); } finally { localStorage.getItem = oldGetItem; }
+    };
+
+    // MISSOES
+    async function carregarMissoesSupabase() {
+      const { data, error } = await sb.from("lau_missoes").select("*").order("created_at", { ascending: false }).limit(10);
+      if (error) { console.error(error); return; }
+      cacheMissoesLau = data || [];
+    }
+
+    enviarMissaoNamorado = async function () {
+      const input = document.getElementById("missionInput");
+      const texto = input.value.trim();
+      if (!texto) { showMessage("Escreve uma missão primeiro 🫡"); return; }
+      const { error } = await sb.from("lau_missoes").insert({ texto, concluida: false });
+      if (error) { console.error(error); showMessage("Não consegui enviar a missão."); return; }
+      input.value = "";
+      await carregarMissoesSupabase();
+      renderizarMissaoLau();
+      renderizarMissaoNamorado();
+      showMessage("Missão enviada 🫡");
+    };
+
+    renderizarMissaoLau = function () {
+      const box = document.getElementById("missionLauBox");
+      if (!box) return;
+      const missao = cacheMissoesLau[0];
+      box.innerHTML = missao ? `<strong>${missao.concluida ? "Missão concluída ✅" : "Missão pendente 🫡"}</strong><br>${escapeHtml(missao.texto)}<br><small>Enviada em: ${escapeHtml(dataBR(missao.created_at))}</small>` : "Nenhuma missão enviada ainda.";
+    };
+
+    renderizarMissaoNamorado = function () {
+      const box = document.getElementById("missionBoyfriendBox");
+      if (!box) return;
+      const missao = cacheMissoesLau[0];
+      box.innerHTML = missao ? `<strong>${missao.concluida ? "Missão concluída ✅" : "Missão pendente 🫡"}</strong><br>${escapeHtml(missao.texto)}<br><small>Enviada em: ${escapeHtml(dataBR(missao.created_at))}</small>` : "Nenhuma missão enviada ainda.";
+    };
+
+    concluirMissaoNamorado = async function () {
+      const missao = cacheMissoesLau[0];
+      if (!missao) { showMessage("Nenhuma missão pendente por enquanto."); return; }
+      const { error } = await sb.from("lau_missoes").update({ concluida: true }).eq("id", missao.id);
+      if (error) { console.error(error); showMessage("Não consegui concluir a missão."); return; }
+      await carregarMissoesSupabase();
+      renderizarMissaoLau();
+      renderizarMissaoNamorado();
+      showMessage("Missão marcada como concluída ✅");
+    };
+
+    // Atualiza telas periodicamente para aparecer no outro celular sem recarregar.
+    setInterval(async () => {
+      const { data } = await sb.auth.getSession();
+      if (!data?.session) return;
+      await Promise.allSettled([carregarHumorLau(), renderizarChat(), carregarFotosSupabase(), carregarAgendaSupabase(), carregarCantinhoSupabase(), carregarMissoesSupabase()]);
+      atualizarContadorFotos();
+      renderizarAgendaLau();
+      renderizarAgendaNamorado();
+      renderizarCantinhoLau();
+      renderizarCantinhoNamorado();
+      renderizarMissaoLau();
+      renderizarMissaoNamorado();
+    }, 20000);
+
+  </script>
+
 
 
   <script>
