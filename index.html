@@ -3078,6 +3078,243 @@
       }
     }
 
+
+    /* V28: desktop mais minimalista e compacto */
+    @media (min-width: 761px) {
+      body.desktop-app-ready .desktop-tabbar {
+        left: 14px;
+        top: 14px;
+        bottom: 14px;
+        width: 178px;
+        gap: 6px;
+        padding: 12px 10px;
+        border-radius: 22px;
+        box-shadow: 0 12px 32px rgba(255, 105, 180, 0.10);
+      }
+
+      body.desktop-app-ready.namorado-mode .desktop-tabbar {
+        box-shadow: 0 12px 32px rgba(47, 128, 237, 0.09);
+      }
+
+      body.desktop-app-ready .desktop-nav-brand {
+        gap: 8px;
+        padding: 4px 6px 10px;
+        margin-bottom: 4px;
+        font-size: 0.92rem;
+      }
+
+      body.desktop-app-ready .desktop-nav-brand small {
+        font-size: 0.72rem;
+        opacity: 0.75;
+      }
+
+      body.desktop-app-ready .desktop-nav-brand img {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+      }
+
+      body.desktop-app-ready .desktop-tabbar button {
+        gap: 8px;
+        padding: 8px 9px;
+        border-radius: 14px;
+        font-size: 0.84rem;
+        min-height: 38px;
+      }
+
+      body.desktop-app-ready .desktop-tabbar button strong {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        font-size: 0.95rem;
+        border-radius: 10px;
+      }
+
+      body.desktop-app-ready .desktop-tabbar button:hover {
+        transform: translateX(2px);
+      }
+
+      body.desktop-app-ready .desktop-nav-hint {
+        display: none;
+      }
+
+      body.desktop-app-ready .app {
+        width: min(1040px, calc(100vw - 224px));
+        margin: 0 18px 0 206px;
+        padding: 12px 0 18px;
+      }
+
+      body.desktop-app-ready .window {
+        min-height: calc(100vh - 24px);
+        border-radius: 22px;
+        box-shadow: 0 14px 38px rgba(255, 105, 180, 0.10);
+      }
+
+      body.desktop-app-ready .topbar {
+        padding: 12px 16px;
+      }
+
+      body.desktop-app-ready .title {
+        font-size: 0.98rem;
+      }
+
+      body.desktop-app-ready .logout-btn {
+        padding: 7px 12px;
+        font-size: 0.78rem;
+      }
+
+      body.desktop-app-ready .countdown-area,
+      body.desktop-app-ready .role-area {
+        padding: 14px 16px;
+      }
+
+      body.desktop-app-ready .countdown-area {
+        padding-bottom: 0;
+      }
+
+      body.desktop-app-ready .countdown-card,
+      body.desktop-app-ready .viewer-card,
+      body.desktop-app-ready .chat-card,
+      body.desktop-app-ready .lau-corner,
+      body.desktop-app-ready .namorado-corner-view,
+      body.desktop-app-ready .level-card,
+      body.desktop-app-ready .corner-panel,
+      body.desktop-app-ready .current-mission-card,
+      body.desktop-app-ready .agenda-card,
+      body.desktop-app-ready .photo-card {
+        border-radius: 18px !important;
+        padding: 15px !important;
+        box-shadow: 0 8px 22px rgba(255, 105, 180, 0.08) !important;
+      }
+
+      body.desktop-app-ready.namorado-mode .viewer-card,
+      body.desktop-app-ready.namorado-mode .chat-card,
+      body.desktop-app-ready.namorado-mode .namorado-corner-view,
+      body.desktop-app-ready.namorado-mode .current-mission-card {
+        box-shadow: 0 8px 22px rgba(47, 128, 237, 0.08) !important;
+      }
+
+      body.desktop-app-ready h1,
+      body.desktop-app-ready h2 {
+        font-size: clamp(1.35rem, 2vw, 2rem);
+      }
+
+      body.desktop-app-ready h3 {
+        font-size: 1.25rem;
+      }
+
+      body.desktop-app-ready h4 {
+        font-size: 1.02rem;
+      }
+
+      body.desktop-app-ready p,
+      body.desktop-app-ready .corner-panel p,
+      body.desktop-app-ready .viewer-card p,
+      body.desktop-app-ready .chat-card p {
+        font-size: 0.9rem;
+        line-height: 1.42;
+      }
+
+      body.desktop-app-ready .desktop-content-grid {
+        gap: 12px;
+      }
+
+      body.desktop-app-ready .role-header {
+        margin-bottom: 12px;
+      }
+
+      body.desktop-app-ready .role-header p,
+      body.desktop-app-ready .corner-header p {
+        display: none;
+      }
+
+      body.desktop-app-ready .mood-options {
+        gap: 8px;
+      }
+
+      body.desktop-app-ready .mood-options button,
+      body.desktop-app-ready button {
+        padding: 10px 12px;
+        border-radius: 14px;
+        font-size: 0.88rem;
+      }
+
+      body.desktop-app-ready .corner-menu {
+        grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+        gap: 8px;
+        margin: 10px 0 12px;
+      }
+
+      body.desktop-app-ready .corner-menu button {
+        padding: 9px 8px;
+        min-height: 38px;
+        border-radius: 13px;
+        font-size: 0.8rem;
+        box-shadow: none;
+      }
+
+      body.desktop-app-ready .corner-panel {
+        margin-top: 8px;
+      }
+
+      body.desktop-app-ready .corner-input,
+      body.desktop-app-ready .corner-panel textarea,
+      body.desktop-app-ready .corner-panel select,
+      body.desktop-app-ready .corner-panel input[type="date"],
+      body.desktop-app-ready .corner-panel input[type="datetime-local"],
+      body.desktop-app-ready input,
+      body.desktop-app-ready textarea,
+      body.desktop-app-ready select {
+        padding: 10px 11px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+      }
+
+      body.desktop-app-ready textarea,
+      body.desktop-app-ready .corner-panel textarea {
+        min-height: 72px;
+      }
+
+      body.desktop-app-ready .corner-list {
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      body.desktop-app-ready .corner-item {
+        border-radius: 14px;
+        padding: 10px 12px;
+        font-size: 0.86rem;
+      }
+
+      body.desktop-app-ready .agenda-calendar {
+        max-width: 620px;
+      }
+
+      body.desktop-app-ready .calendar-day,
+      body.desktop-app-ready .weekday {
+        min-height: 36px;
+        font-size: 0.84rem;
+      }
+
+      body.desktop-app-ready .countdown-values {
+        gap: 10px;
+      }
+
+      body.desktop-app-ready .countdown-box {
+        padding: 12px 10px;
+        border-radius: 16px;
+      }
+
+      body.desktop-app-ready .photo-gallery {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+      }
+
+      body.desktop-app-ready .memory-frame {
+        min-height: 250px;
+      }
+    }
+
 </style>
 </head>
 
@@ -3315,7 +3552,7 @@
         <div class="lau-corner" id="lauCorner">
           <div class="corner-header">
             <h3>🧚‍♀️ Cantinho da Lau</h3>
-            <p>Tudo separado por cantinhos, para não virar uma página gigante. Ela abre só o que quiser usar.</p>
+            <p>Escolha uma área para abrir.</p>
           </div>
 
           <div class="corner-menu">
@@ -6279,7 +6516,7 @@
             </button>
           `).join("")}
           <div class="desktop-nav-hint">
-            ${usuario === "Namorado" ? "Painel limpo para acompanhar a Lau sem bagunça." : "Tudo separado por abas, igual um appzinho."}
+            ${usuario === "Namorado" ? "Painel limpo para acompanhar a Lau sem bagunça." : ""}
           </div>
         `;
 
