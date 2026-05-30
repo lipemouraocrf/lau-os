@@ -2317,6 +2317,42 @@
       background: #fff;
     }
 
+    /* V24: excluir fotos individualmente */
+    .photo-item {
+      position: relative;
+      min-width: 0;
+    }
+
+    .photo-delete-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 28px;
+      height: 28px;
+      min-height: 28px;
+      padding: 0;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.92);
+      color: #ff4fa3;
+      border: 1px solid rgba(255, 79, 163, 0.25);
+      box-shadow: 0 6px 16px rgba(90, 42, 69, 0.18);
+      font-size: 0.95rem;
+      line-height: 1;
+      z-index: 2;
+    }
+
+    .photo-delete-btn:hover {
+      transform: scale(1.05);
+      background: #fff;
+    }
+
+    body.namorado-mode .photo-delete-btn {
+      display: none;
+    }
+
     @media (max-width: 760px) {
       html, body {
         width: 100%;
@@ -4826,17 +4862,25 @@
     });
 
 
-    // V17: galeria de fotos dentro do Baú da Lau
+    // V17/V24: galeria de fotos dentro do Baú da Lau, com exclusão individual
     function renderizarGaleriaFotosLau() {
       const galeria = document.getElementById("photoGalleryLau");
       if (!galeria) return;
-      const fotos = lerFotosLau();
-      if (!fotos.length) {
+
+      const fotosComDados = Array.isArray(cacheFotosLau) && cacheFotosLau.length && typeof cacheFotosLau[0] === "object"
+        ? cacheFotosLau
+        : lerFotosLau().map((url, index) => ({ id: `local-${index}`, url }));
+
+      if (!fotosComDados.length) {
         galeria.textContent = "As fotos adicionadas vão aparecer aqui.";
         return;
       }
-      galeria.innerHTML = fotos.map((foto, index) => `
-        <img src="${foto}" alt="Foto ${index + 1} adicionada pela Lau" />
+
+      galeria.innerHTML = fotosComDados.map((foto, index) => `
+        <div class="photo-item">
+          <img src="${escapeHtml(foto.url || foto)}" alt="Foto ${index + 1} adicionada pela Lau" />
+          ${foto.id && !String(foto.id).startsWith("local-") ? `<button class="photo-delete-btn" type="button" onclick="excluirFotoLau(${foto.id})" aria-label="Excluir foto">×</button>` : ""}
+        </div>
       `).join("");
     }
 
@@ -5152,10 +5196,12 @@
     async function carregarFotosSupabase() {
       const { data, error } = await sb.from("lau_fotos").select("*").order("created_at", { ascending: false }).limit(30);
       if (error) { console.error(error); return; }
-      cacheFotosLau = (data || []).map((foto) => foto.url);
+      cacheFotosLau = data || [];
     }
 
-    lerFotosLau = function () { return cacheFotosLau || []; };
+    lerFotosLau = function () {
+      return (cacheFotosLau || []).map((foto) => typeof foto === "string" ? foto : foto.url).filter(Boolean);
+    };
 
     salvarFotosLau = async function () {
       const input = document.getElementById("photoInput");
@@ -5181,8 +5227,70 @@
       showMessage("Fotinhas adicionadas ao LauOS 💖");
     };
 
-    limparFotosLau = function () {
-      showMessage("Agora as fotos ficam online. Para apagar, depois a gente cria um botão seguro no Supabase.");
+    excluirFotoLau = async function (fotoId) {
+      const foto = (cacheFotosLau || []).find((item) => String(item.id) === String(fotoId));
+      if (!foto) {
+        showMessage("Não encontrei essa foto para excluir.");
+        return;
+      }
+
+      const confirmar = confirm("Excluir essa foto do LauOS?");
+      if (!confirmar) return;
+
+      if (foto.path) {
+        const { error: storageError } = await sb.storage.from("lau-fotos").remove([foto.path]);
+        if (storageError) {
+          console.error(storageError);
+          showMessage("Não consegui apagar o arquivo da foto no Storage.");
+          return;
+        }
+      }
+
+      const { error: dbError } = await sb.from("lau_fotos").delete().eq("id", foto.id);
+      if (dbError) {
+        console.error(dbError);
+        showMessage("Não consegui apagar o registro da foto no banco.");
+        return;
+      }
+
+      await carregarFotosSupabase();
+      atualizarContadorFotos();
+      iniciarCarrosselMemorias(true);
+      showMessage("Foto removida do LauOS 🧹");
+    };
+
+    limparFotosLau = async function () {
+      const fotos = cacheFotosLau || [];
+      if (!fotos.length) {
+        showMessage("Não tem fotos para limpar.");
+        return;
+      }
+
+      const confirmar = confirm("Apagar todas as fotos adicionadas pela Lau?");
+      if (!confirmar) return;
+
+      const paths = fotos.map((foto) => foto.path).filter(Boolean);
+      if (paths.length) {
+        const { error: storageError } = await sb.storage.from("lau-fotos").remove(paths);
+        if (storageError) {
+          console.error(storageError);
+          showMessage("Não consegui apagar todas as fotos do Storage.");
+          return;
+        }
+      }
+
+      const ids = fotos.map((foto) => foto.id).filter(Boolean);
+      const { error: dbError } = await sb.from("lau_fotos").delete().in("id", ids);
+      if (dbError) {
+        console.error(dbError);
+        showMessage("Não consegui limpar os registros das fotos no banco.");
+        return;
+      }
+
+      await carregarFotosSupabase();
+      atualizarContadorFotos();
+      iniciarCarrosselMemorias(true);
+      showMessage("Fotos removidas do LauOS 🧹");
     };
 
     // DIARIO PRIVADO
