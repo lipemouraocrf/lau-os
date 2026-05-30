@@ -7106,9 +7106,32 @@
   }
 
   function montarDateTimeLocal(data, hora, rotina) {
+    // O campo datetime-local não tem fuso. Aqui mostramos sempre a data/hora digitada
+    // como horário de Brasília, sem converter para o fuso do celular/computador.
     if (rotina && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(rotina)) return rotina.slice(0, 16);
     if (data && hora) return `${data}T${hora.slice(0,5)}`;
     return '';
+  }
+
+  function normalizarEncontroBrasilia(valor) {
+    const bruto = String(valor || '').trim();
+    if (!bruto) return { inputValue: '', isoBrasilia: '', data: '', horario: '' };
+
+    // Aceita valores antigos do datetime-local e valores novos com offset -03:00.
+    const inputValue = bruto.slice(0, 16);
+    const [data = '', horaCompleta = '00:00'] = inputValue.split('T');
+    const horario = (horaCompleta || '00:00').slice(0, 5);
+
+    // Salva como instante real em Brasília. Assim Espanha, Brasil e PC calculam igual.
+    const isoBrasilia = `${data}T${horario}:00-03:00`;
+    return { inputValue, isoBrasilia, data, horario };
+  }
+
+  function criarDateEncontroBrasilia(valor) {
+    if (!valor) return null;
+    const normalizado = normalizarEncontroBrasilia(valor);
+    const date = new Date(normalizado.isoBrasilia);
+    return Number.isNaN(date.getTime()) ? null : date;
   }
 
   const carregarAgendaSupabaseV32 = window.carregarAgendaSupabase || carregarAgendaSupabase;
@@ -7140,7 +7163,7 @@
   window.carregarDataEncontro = carregarDataEncontro = function () {
     const input = document.getElementById('meetDateInput');
     const data = cacheDataEncontroSupabase || localStorage.getItem('lauraos_data_encontro') || '';
-    if (input && data) input.value = data;
+    if (input && data) input.value = normalizarEncontroBrasilia(data).inputValue;
     calcularDiasPraSeVer();
   };
 
@@ -7151,19 +7174,19 @@
       return;
     }
 
-    const valor = input.value;
-    const [data, horaCompleta = '00:00'] = valor.split('T');
-    const horario = horaCompleta.slice(0, 5);
+    const normalizado = normalizarEncontroBrasilia(input.value);
+    const { inputValue, isoBrasilia, data, horario } = normalizado;
 
-    localStorage.setItem('lauraos_data_encontro', valor);
-    cacheDataEncontroSupabase = valor;
+    localStorage.setItem('lauraos_data_encontro', isoBrasilia);
+    cacheDataEncontroSupabase = isoBrasilia;
+    input.value = inputValue;
     calcularDiasPraSeVer();
 
     const { error } = await sb.from('lau_agenda').insert({
       data,
       horario,
       titulo: '__data_encontro__',
-      rotina: valor
+      rotina: isoBrasilia
     });
 
     if (error) {
@@ -7195,13 +7218,14 @@
     }
 
     const agora = new Date();
-    const encontro = new Date(dataSalva);
-    const diffMs = encontro - agora;
+    const encontro = criarDateEncontroBrasilia(dataSalva);
 
-    if (Number.isNaN(encontro.getTime())) {
+    if (!encontro) {
       statusEl.textContent = 'data do encontro inválida';
       return;
     }
+
+    const diffMs = encontro.getTime() - agora.getTime();
 
     if (diffMs <= 0) {
       diasEl.textContent = '00';
