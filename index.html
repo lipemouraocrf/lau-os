@@ -3683,6 +3683,15 @@
       }
     }
 
+
+    /* V32: no celular, Diario e Agenda saem do menu Mais porque ja estao na barra inferior */
+    @media (max-width: 760px) {
+      body.mobile-app-ready #lauCorner .corner-menu button[onclick*="diaryCorner"],
+      body.mobile-app-ready #lauCorner .corner-menu button[onclick*="agendaCorner"] {
+        display: none !important;
+      }
+    }
+
 </style>
 </head>
 
