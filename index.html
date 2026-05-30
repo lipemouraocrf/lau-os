@@ -7430,5 +7430,467 @@
 })();
 </script>
 
+
+
+<style>
+/* V35: agenda clicável + rotina múltipla + sincronização automática */
+.agenda-day.clickable-day {
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.agenda-day.clickable-day:hover {
+  transform: translateY(-1px);
+  background: #fff0f7;
+  border-color: #ffc2df;
+}
+body.namorado-mode .agenda-day.clickable-day:hover {
+  background: #eef7ff;
+  border-color: #9ed0ff;
+}
+.agenda-day.selected-day {
+  background: linear-gradient(135deg, #ff9ccc, #ff5faa) !important;
+  color: #fff;
+  border-color: transparent !important;
+  box-shadow: 0 8px 18px rgba(255, 95, 170, 0.18);
+}
+body.namorado-mode .agenda-day.selected-day {
+  background: linear-gradient(135deg, #8fc8ff, #2f80ed) !important;
+  box-shadow: 0 8px 18px rgba(47, 128, 237, 0.16);
+}
+.agenda-day-details {
+  margin-top: 12px;
+  background: rgba(255,255,255,.86);
+  border: 2px solid #ffe0ef;
+  border-radius: 18px;
+  padding: 13px;
+}
+body.namorado-mode .agenda-day-details {
+  border-color: #d8ebff;
+  background: #fff;
+}
+.agenda-day-details h5 {
+  color: #ff4fa3;
+  font-size: .98rem;
+  margin-bottom: 8px;
+}
+body.namorado-mode .agenda-day-details h5 { color: #2f80ed; }
+.agenda-routine-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+.agenda-routine-list .agenda-item strong { color: #ff4fa3; }
+body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
+.sync-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .72rem;
+  font-weight: 800;
+  opacity: .75;
+  margin-top: 6px;
+}
+.sync-dot::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #55c779;
+  display: inline-block;
+}
+@media (max-width: 760px) {
+  body.mobile-app-ready .agenda-day-details {
+    border-radius: 15px;
+    padding: 11px;
+  }
+  body.mobile-app-ready .agenda-day.clickable-day:hover { transform: none; }
+}
+</style>
+
+<script>
+/* V35: agenda por dia, múltiplas rotinas e atualização automática para iPhone/PWA */
+(function () {
+  let agendaDiaSelecionadoLau = null;
+  let agendaDiaSelecionadoNamorado = null;
+  let encontroSincronizadoBrasilia = null;
+  let syncEmAndamento = false;
+
+  function dataHojeISOv35() {
+    if (typeof hojeISO === 'function') return hojeISO();
+    const agora = new Date();
+    return `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
+  }
+
+  function rotinaArray(dataISO) {
+    const valor = (cacheRotinasLau || {})[dataISO];
+    if (!valor) return [];
+    return Array.isArray(valor) ? valor : [valor];
+  }
+
+  function compromissoArray(dataISO) {
+    return (cacheAgendaLau || []).filter((item) => item.data === dataISO);
+  }
+
+  function resumoDiaHtml(dataISO, titulo = 'Agenda do dia') {
+    const compromissos = compromissoArray(dataISO);
+    const rotinas = rotinaArray(dataISO);
+    const temConteudo = compromissos.length || rotinas.length;
+
+    if (!temConteudo) {
+      return `
+        <div class="agenda-day-details">
+          <h5>${escapeHtml(titulo)} — ${escapeHtml(formatarDataBR(dataISO))}</h5>
+          <div class="agenda-item">Nada salvo para esse dia ainda.</div>
+        </div>
+      `;
+    }
+
+    const compromissosHtml = compromissos.length ? `
+      <div class="agenda-section-title">Compromissos</div>
+      <div class="agenda-routine-list">
+        ${compromissos.map((item) => `
+          <div class="agenda-item">
+            <strong>${item.hora ? escapeHtml(item.hora) + ' — ' : ''}${escapeHtml(item.texto || '')}</strong><br>
+            <small>${escapeHtml(item.criadoEm || '')}</small>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
+
+    const rotinasHtml = rotinas.length ? `
+      <div class="agenda-section-title">Rotina do dia</div>
+      <div class="agenda-routine-list">
+        ${rotinas.map((item, idx) => `
+          <div class="agenda-item">
+            <strong>Parte ${idx + 1}</strong><br>
+            ${escapeHtml(item.texto || '').replaceAll('\n', '<br>')}<br>
+            <small>${escapeHtml(item.atualizadoEm || item.data || '')}</small>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
+
+    return `
+      <div class="agenda-day-details">
+        <h5>${escapeHtml(titulo)} — ${escapeHtml(formatarDataBR(dataISO))}</h5>
+        ${compromissosHtml}
+        ${rotinasHtml}
+      </div>
+    `;
+  }
+
+  function setAgendaSelecionada(tipo, dataISO) {
+    if (tipo === 'namorado') agendaDiaSelecionadoNamorado = dataISO;
+    else agendaDiaSelecionadoLau = dataISO;
+    renderizarAgendaLau();
+    renderizarAgendaNamorado();
+  }
+  window.selecionarDiaAgendaLau = (dataISO) => setAgendaSelecionada('lau', dataISO);
+  window.selecionarDiaAgendaNamorado = (dataISO) => setAgendaSelecionada('namorado', dataISO);
+
+  function montarCalendario(tipo) {
+    const agenda = cacheAgendaLau || [];
+    const rotinas = cacheRotinasLau || {};
+    const ano = agendaMesAtual.getFullYear();
+    const mes = agendaMesAtual.getMonth();
+    const primeiroDia = new Date(ano, mes, 1).getDay();
+    const totalDias = new Date(ano, mes + 1, 0).getDate();
+    const nomeMes = agendaMesAtual.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+    const hoje = dataHojeISOv35();
+    const selecionado = tipo === 'namorado' ? agendaDiaSelecionadoNamorado : agendaDiaSelecionadoLau;
+    const fn = tipo === 'namorado' ? 'selecionarDiaAgendaNamorado' : 'selecionarDiaAgendaLau';
+    const datasComEvento = new Set([
+      ...agenda.map((item) => item.data),
+      ...Object.keys(rotinas)
+    ]);
+
+    let dias = '';
+    for (let i = 0; i < primeiroDia; i++) dias += '<div class="agenda-day empty"></div>';
+
+    for (let dia = 1; dia <= totalDias; dia++) {
+      const dataISO = `${ano}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+      const classes = ['agenda-day', 'clickable-day'];
+      if (dataISO === hoje) classes.push('today');
+      if (datasComEvento.has(dataISO)) classes.push('has-event');
+      if (dataISO === selecionado) classes.push('selected-day');
+      dias += `<div class="${classes.join(' ')}" role="button" tabindex="0" onclick="${fn}('${dataISO}')" onkeydown="if(event.key==='Enter') ${fn}('${dataISO}')" title="${escapeHtml(formatarDataBR(dataISO))}">${dia}</div>`;
+    }
+
+    return `
+      <div class="agenda-month-header">
+        <button onclick="mudarMesAgenda(-1)">‹</button>
+        <span>${escapeHtml(nomeMes)}</span>
+        <button onclick="mudarMesAgenda(1)">›</button>
+      </div>
+      <div class="agenda-weekdays">
+        <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+      </div>
+      <div class="agenda-days">${dias}</div>
+      <div class="sync-dot">sincronizando automaticamente</div>
+    `;
+  }
+
+  window.montarCalendarioAgendaHtml = montarCalendarioAgendaHtml = function () {
+    return montarCalendario('lau');
+  };
+
+  function normalizarAgendaItem(item) {
+    return { id: item.id, data: item.data, hora: item.horario || '', texto: item.titulo, criadoEm: dataBR(item.created_at) };
+  }
+
+  function montarDateTimeLocalV35(data, hora, rotina) {
+    if (rotina && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(rotina)) return rotina.slice(0, 16);
+    if (data && hora) return `${data}T${hora.slice(0, 5)}`;
+    return '';
+  }
+
+  function normalizarEncontroBrasiliaV35(valor) {
+    const bruto = String(valor || '').trim();
+    if (!bruto) return { inputValue: '', isoBrasilia: '', data: '', horario: '' };
+    const inputValue = bruto.slice(0, 16);
+    const [data = '', horaCompleta = '00:00'] = inputValue.split('T');
+    const horario = (horaCompleta || '00:00').slice(0, 5);
+    return { inputValue, isoBrasilia: `${data}T${horario}:00-03:00`, data, horario };
+  }
+
+  function dateEncontroBrasiliaV35(valor) {
+    if (!valor) return null;
+    const normalizado = normalizarEncontroBrasiliaV35(valor);
+    const date = new Date(normalizado.isoBrasilia);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  window.carregarAgendaSupabase = carregarAgendaSupabase = async function () {
+    const { data, error } = await sb.from('lau_agenda').select('*').order('created_at', { ascending: false }).limit(300);
+    if (error) { console.error(error); return; }
+
+    cacheAgendaLau = [];
+    cacheRotinasLau = {};
+    encontroSincronizadoBrasilia = null;
+
+    (data || []).forEach((item) => {
+      if (item.titulo === '__data_encontro__') {
+        if (!encontroSincronizadoBrasilia) encontroSincronizadoBrasilia = montarDateTimeLocalV35(item.data, item.horario, item.rotina);
+        return;
+      }
+      if (item.titulo === '__rotina_dia__') {
+        if (!cacheRotinasLau[item.data]) cacheRotinasLau[item.data] = [];
+        cacheRotinasLau[item.data].push({ id: item.id, texto: item.rotina || '', data: item.data, atualizadoEm: dataBR(item.created_at) });
+        return;
+      }
+      cacheAgendaLau.push(normalizarAgendaItem(item));
+    });
+
+    Object.keys(cacheRotinasLau).forEach((dataISO) => {
+      cacheRotinasLau[dataISO].sort((a, b) => String(b.id || 0).localeCompare(String(a.id || 0)));
+    });
+
+    if (!agendaDiaSelecionadoLau) agendaDiaSelecionadoLau = dataHojeISOv35();
+    if (!agendaDiaSelecionadoNamorado) agendaDiaSelecionadoNamorado = dataHojeISOv35();
+    carregarDataEncontro();
+  };
+
+  window.carregarDataEncontro = carregarDataEncontro = function () {
+    const input = document.getElementById('meetDateInput');
+    const data = encontroSincronizadoBrasilia || localStorage.getItem('lauraos_data_encontro') || '';
+    if (input && data) input.value = normalizarEncontroBrasiliaV35(data).inputValue;
+    calcularDiasPraSeVer();
+  };
+
+  window.salvarDataEncontro = salvarDataEncontro = async function () {
+    const input = document.getElementById('meetDateInput');
+    if (!input || !input.value) {
+      showMessage('Escolhe a data e o horário de quando vocês vão se ver primeiro 📅');
+      return;
+    }
+    const normalizado = normalizarEncontroBrasiliaV35(input.value);
+    localStorage.setItem('lauraos_data_encontro', normalizado.isoBrasilia);
+    encontroSincronizadoBrasilia = normalizado.isoBrasilia;
+    input.value = normalizado.inputValue;
+    calcularDiasPraSeVer();
+    const { error } = await sb.from('lau_agenda').insert({
+      data: normalizado.data,
+      horario: normalizado.horario,
+      titulo: '__data_encontro__',
+      rotina: normalizado.isoBrasilia
+    });
+    if (error) { console.error(error); showMessage('Salvei neste aparelho, mas não consegui sincronizar. Confira a permissão da agenda no Supabase.'); return; }
+    showMessage('Contagem sincronizada em horário de Brasília 💞');
+  };
+
+  window.calcularDiasPraSeVer = calcularDiasPraSeVer = function () {
+    const diasEl = document.getElementById('countdownDays');
+    const horasEl = document.getElementById('countdownHours');
+    const minutosEl = document.getElementById('countdownMinutes');
+    const segundosEl = document.getElementById('countdownSeconds');
+    const statusEl = document.getElementById('countdownStatus');
+    const dataSalva = encontroSincronizadoBrasilia || localStorage.getItem('lauraos_data_encontro');
+    if (!diasEl || !horasEl || !minutosEl || !segundosEl || !statusEl) return;
+    if (!dataSalva) {
+      diasEl.textContent = '--'; horasEl.textContent = '--'; minutosEl.textContent = '--'; segundosEl.textContent = '--';
+      statusEl.textContent = 'defina a data e horário do encontro';
+      return;
+    }
+    const encontro = dateEncontroBrasiliaV35(dataSalva);
+    if (!encontro) { statusEl.textContent = 'data do encontro inválida'; return; }
+    const diffMs = encontro.getTime() - Date.now();
+    if (diffMs <= 0) {
+      diasEl.textContent = '00'; horasEl.textContent = '00'; minutosEl.textContent = '00'; segundosEl.textContent = '00';
+      statusEl.textContent = 'é dia de se ver 💖';
+      return;
+    }
+    const totalSegundos = Math.floor(diffMs / 1000);
+    const dias = Math.floor(totalSegundos / 86400);
+    const horas = Math.floor((totalSegundos % 86400) / 3600);
+    const minutos = Math.floor((totalSegundos % 3600) / 60);
+    const segundos = totalSegundos % 60;
+    diasEl.textContent = String(dias).padStart(2, '0');
+    horasEl.textContent = String(horas).padStart(2, '0');
+    minutosEl.textContent = String(minutos).padStart(2, '0');
+    segundosEl.textContent = String(segundos).padStart(2, '0');
+    statusEl.textContent = 'horário de Brasília, sincronizado para os dois 💞';
+  };
+
+  window.salvarRotinaDiaLau = salvarRotinaDiaLau = async function () {
+    const dataInput = document.getElementById('dailyRoutineDate');
+    const textoInput = document.getElementById('dailyRoutineText');
+    const data = dataInput?.value || dataHojeISOv35();
+    const texto = (textoInput?.value || '').trim();
+    if (!texto) { showMessage('Escreve a rotina do dia primeiro 💌'); return; }
+    const { error } = await sb.from('lau_agenda').insert({ data, horario: null, titulo: '__rotina_dia__', rotina: texto });
+    if (error) { console.error(error); showMessage('Não consegui salvar a rotina.'); return; }
+    if (textoInput) textoInput.value = '';
+    agendaDiaSelecionadoLau = data;
+    agendaDiaSelecionadoNamorado = data;
+    await carregarAgendaSupabase();
+    renderizarAgendaLau();
+    renderizarAgendaNamorado();
+    showMessage('Parte da rotina adicionada ao histórico do dia 💖');
+  };
+
+  window.renderizarAgendaLau = renderizarAgendaLau = function () {
+    const agendaDate = document.getElementById('agendaDate');
+    const dailyDate = document.getElementById('dailyRoutineDate');
+    const hoje = dataHojeISOv35();
+    if (agendaDate && !agendaDate.value) agendaDate.value = hoje;
+    if (dailyDate && !dailyDate.value) dailyDate.value = hoje;
+    if (!agendaDiaSelecionadoLau) agendaDiaSelecionadoLau = dailyDate?.value || hoje;
+
+    const calendar = document.getElementById('agendaCalendarLau');
+    if (calendar) calendar.innerHTML = montarCalendario('lau');
+
+    const lista = document.getElementById('agendaListLau');
+    if (lista) lista.innerHTML = montarListaAgendaHtml(lerAgendaLau(), 'Nenhum compromisso salvo ainda.');
+
+    const rotinaBox = document.getElementById('dailyRoutineStatus');
+    if (rotinaBox) {
+      const rotinaHoje = rotinaArray(hoje);
+      rotinaBox.innerHTML = rotinaHoje.length
+        ? `<div class="agenda-section-title">Histórico de hoje</div><div class="agenda-routine-list">${rotinaHoje.map((item, idx) => `<div class="agenda-item"><strong>Parte ${idx + 1}</strong><br>${escapeHtml(item.texto || '').replaceAll('\n','<br>')}<br><small>${escapeHtml(item.atualizadoEm || '')}</small></div>`).join('')}</div>`
+        : 'Nenhuma rotina salva para hoje.';
+    }
+
+    const detalheExistente = document.getElementById('agendaSelectedDayLau');
+    const detalhesHtml = `<div id="agendaSelectedDayLau">${resumoDiaHtml(agendaDiaSelecionadoLau || hoje, 'Dia selecionado')}</div>`;
+    if (calendar) {
+      if (detalheExistente) detalheExistente.outerHTML = detalhesHtml;
+      else calendar.insertAdjacentHTML('afterend', detalhesHtml);
+    }
+  };
+
+  window.renderizarAgendaNamorado = renderizarAgendaNamorado = function () {
+    const viewAgenda = document.getElementById('viewAgenda');
+    if (!viewAgenda) return;
+    const hoje = dataHojeISOv35();
+    if (!agendaDiaSelecionadoNamorado) agendaDiaSelecionadoNamorado = hoje;
+    const agenda = lerAgendaLau();
+    const compromissosHoje = agenda.filter((item) => item.data === hoje);
+    const proximos = ordenarAgenda(agenda.filter((item) => item.data >= hoje)).slice(0, 12);
+    const rotinaHoje = rotinaArray(hoje);
+
+    viewAgenda.innerHTML = `
+      <h4>🗓️ Agenda da Lau</h4>
+      <p>Toque em qualquer dia do calendário para ver compromissos e rotina.</p>
+      <div class="agenda-calendar" id="agendaCalendarNamorado">${montarCalendario('namorado')}</div>
+      <div id="agendaSelectedDayNamorado">${resumoDiaHtml(agendaDiaSelecionadoNamorado || hoje, 'Dia selecionado')}</div>
+      <div class="agenda-section-title">Agenda de hoje</div>
+      <div class="corner-list">
+        ${rotinaHoje.length ? rotinaHoje.map((item, idx) => `<div class="agenda-item"><strong>Rotina de hoje — Parte ${idx + 1}:</strong><br>${escapeHtml(item.texto || '').replaceAll('\n','<br>')}<br><small>${escapeHtml(item.atualizadoEm || '')}</small></div>`).join('') : `<div class="agenda-item">Nenhuma rotina do dia salva ainda.</div>`}
+        ${montarListaAgendaHtml(compromissosHoje, '')}
+      </div>
+      <div class="agenda-section-title">Próximos compromissos</div>
+      <div class="corner-list">${montarListaAgendaHtml(proximos, 'Nenhum compromisso futuro salvo ainda.')}</div>
+    `;
+  };
+
+  window.adicionarAgendaLau = adicionarAgendaLau = async function () {
+    const dataInput = document.getElementById('agendaDate');
+    const horaInput = document.getElementById('agendaTime');
+    const textoInput = document.getElementById('agendaText');
+    const data = dataInput?.value;
+    const hora = horaInput?.value;
+    const texto = (textoInput?.value || '').trim();
+    if (!data || !texto) { showMessage('Coloca a data e o compromisso primeiro 🗓️'); return; }
+    const { error } = await sb.from('lau_agenda').insert({ data, horario: hora || null, titulo: texto });
+    if (error) { console.error(error); showMessage('Não consegui salvar a agenda.'); return; }
+    if (textoInput) textoInput.value = '';
+    if (horaInput) horaInput.value = '';
+    agendaDiaSelecionadoLau = data;
+    agendaDiaSelecionadoNamorado = data;
+    await carregarAgendaSupabase();
+    renderizarAgendaLau();
+    renderizarAgendaNamorado();
+    showMessage('Compromisso salvo na agenda da Lau 🗓️');
+  };
+
+  async function sincronizarLauOSSilencioso() {
+    if (syncEmAndamento) return;
+    syncEmAndamento = true;
+    try {
+      const { data } = await sb.auth.getSession();
+      if (!data?.session) return;
+      await Promise.allSettled([
+        typeof carregarAgendaSupabase === 'function' ? carregarAgendaSupabase() : null,
+        typeof carregarHumorLau === 'function' ? carregarHumorLau() : null,
+        typeof renderizarChat === 'function' ? renderizarChat() : null,
+        typeof carregarFotosSupabase === 'function' ? carregarFotosSupabase() : null,
+        typeof carregarCantinhoSupabase === 'function' ? carregarCantinhoSupabase() : null,
+        typeof carregarMissoesSupabase === 'function' ? carregarMissoesSupabase() : null
+      ]);
+      calcularDiasPraSeVer();
+      renderizarAgendaLau();
+      renderizarAgendaNamorado();
+      if (typeof renderizarCantinhoLau === 'function') renderizarCantinhoLau();
+      if (typeof renderizarCantinhoNamorado === 'function') renderizarCantinhoNamorado();
+      if (typeof renderizarMissaoLau === 'function') renderizarMissaoLau();
+      if (typeof renderizarMissaoNamorado === 'function') renderizarMissaoNamorado();
+      if (typeof atualizarContadorFotos === 'function') atualizarContadorFotos();
+    } catch (err) {
+      console.warn('Sincronização automática falhou:', err);
+    } finally {
+      syncEmAndamento = false;
+    }
+  }
+
+  window.sincronizarLauOS = sincronizarLauOSSilencioso;
+  setInterval(sincronizarLauOSSilencioso, 25000);
+  window.addEventListener('focus', sincronizarLauOSSilencioso);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) sincronizarLauOSSilencioso();
+  });
+  window.addEventListener('online', sincronizarLauOSSilencioso);
+
+  const aplicarPermissaoAnteriorV35 = window.aplicarPermissao || aplicarPermissao;
+  window.aplicarPermissao = aplicarPermissao = function (usuario) {
+    aplicarPermissaoAnteriorV35(usuario);
+    setTimeout(() => {
+      if (!agendaDiaSelecionadoLau) agendaDiaSelecionadoLau = dataHojeISOv35();
+      if (!agendaDiaSelecionadoNamorado) agendaDiaSelecionadoNamorado = dataHojeISOv35();
+      sincronizarLauOSSilencioso();
+    }, 300);
+  };
+})();
+</script>
+
 </body>
 </html>
