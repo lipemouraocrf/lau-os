@@ -2852,7 +2852,233 @@
       }
     }
 
-  </style>
+  
+
+    /* V27: desktop também em formato de app com abas laterais */
+    .desktop-tabbar {
+      display: none;
+    }
+
+    @media (min-width: 761px) {
+      body.desktop-app-ready {
+        background: #fff8fc;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      body.desktop-app-ready.namorado-mode {
+        background: #f6fbff;
+      }
+
+      body.desktop-app-ready .floating-hearts,
+      body.desktop-app-ready .sparkles,
+      body.desktop-app-ready .fairy-sky,
+      body.desktop-app-ready #cursorFairy,
+      body.desktop-app-ready #introHero,
+      body.desktop-app-ready #cuteDashboard,
+      body.desktop-app-ready .message-box,
+      body.desktop-app-ready .miss-panel,
+      body.desktop-app-ready .footer {
+        display: none !important;
+      }
+
+      body.desktop-app-ready .desktop-tabbar {
+        position: fixed;
+        left: 18px;
+        top: 18px;
+        bottom: 18px;
+        width: 220px;
+        z-index: 150;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 18px 14px;
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(18px);
+        border: 2px solid #ffd6ea;
+        border-radius: 28px;
+        box-shadow: 0 20px 55px rgba(255, 105, 180, 0.16);
+      }
+
+      body.desktop-app-ready.namorado-mode .desktop-tabbar {
+        border-color: #cfe7ff;
+        box-shadow: 0 20px 55px rgba(47, 128, 237, 0.13);
+      }
+
+      .desktop-nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 8px 14px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #ffe0ef;
+        color: #ff4fa3;
+        font-weight: 900;
+      }
+
+      body.namorado-mode .desktop-nav-brand {
+        color: #2f80ed;
+        border-bottom-color: #d8ecff;
+      }
+
+      .desktop-nav-brand img {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        object-fit: cover;
+        box-shadow: 0 8px 18px rgba(255, 95, 170, 0.2);
+      }
+
+      .desktop-tabbar button {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 12px 13px;
+        border-radius: 18px;
+        background: transparent;
+        color: #9f4776;
+        box-shadow: none;
+        font-size: 0.96rem;
+        text-align: left;
+      }
+
+      body.namorado-mode .desktop-tabbar button {
+        color: #2f6fb4;
+      }
+
+      .desktop-tabbar button strong {
+        width: 28px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        background: rgba(255, 231, 243, 0.75);
+      }
+
+      body.namorado-mode .desktop-tabbar button strong {
+        background: rgba(234, 244, 255, 0.9);
+      }
+
+      .desktop-tabbar button:hover {
+        transform: translateX(3px);
+        background: rgba(255, 231, 243, 0.62);
+      }
+
+      body.namorado-mode .desktop-tabbar button:hover {
+        background: rgba(234, 244, 255, 0.85);
+      }
+
+      .desktop-tabbar button.active {
+        background: linear-gradient(135deg, #ff9ccc, #ff5faa);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(255, 95, 170, 0.24);
+      }
+
+      body.namorado-mode .desktop-tabbar button.active {
+        background: linear-gradient(135deg, #8fc8ff, #2f80ed);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(47, 128, 237, 0.22);
+      }
+
+      .desktop-nav-hint {
+        margin-top: auto;
+        padding: 12px;
+        border-radius: 18px;
+        background: #fff3fa;
+        color: #9f4776;
+        font-size: 0.78rem;
+        line-height: 1.35;
+        font-weight: 700;
+      }
+
+      body.namorado-mode .desktop-nav-hint {
+        background: #eaf4ff;
+        color: #2f6fb4;
+      }
+
+      body.desktop-app-ready .app {
+        width: min(1120px, calc(100vw - 276px));
+        margin: 0 24px 0 258px;
+        padding: 18px 0 28px;
+      }
+
+      body.desktop-app-ready .window {
+        min-height: calc(100vh - 36px);
+        border-radius: 30px;
+        overflow: hidden;
+        background: rgba(255,255,255,0.78);
+      }
+
+      body.desktop-app-ready.namorado-mode .window {
+        background: rgba(246,251,255,0.92);
+        border-color: #cfe7ff;
+      }
+
+      body.desktop-app-ready .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      body.desktop-app-ready .countdown-area,
+      body.desktop-app-ready .role-area {
+        margin: 0;
+        padding: 24px;
+      }
+
+      body.desktop-app-ready .countdown-area {
+        padding-bottom: 0;
+      }
+
+      body.desktop-app-ready .countdown-card,
+      body.desktop-app-ready .viewer-card,
+      body.desktop-app-ready .chat-card,
+      body.desktop-app-ready .lau-corner,
+      body.desktop-app-ready .namorado-corner-view,
+      body.desktop-app-ready .level-card,
+      body.desktop-app-ready .corner-panel,
+      body.desktop-app-ready .current-mission-card {
+        box-shadow: 0 12px 34px rgba(255, 105, 180, 0.10);
+        border-radius: 24px;
+      }
+
+      body.desktop-app-ready.namorado-mode .viewer-card,
+      body.desktop-app-ready.namorado-mode .chat-card,
+      body.desktop-app-ready.namorado-mode .namorado-corner-view,
+      body.desktop-app-ready.namorado-mode .current-mission-card {
+        box-shadow: 0 12px 34px rgba(47, 128, 237, 0.09);
+      }
+
+      body.desktop-app-ready .role-header {
+        margin-top: 0;
+      }
+
+      body.desktop-app-ready .desktop-content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      body.desktop-app-ready .photo-gallery {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      body.desktop-app-ready .memory-frame {
+        min-height: 330px;
+      }
+
+      body.desktop-app-ready .agenda-calendar {
+        max-width: 760px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+</style>
 </head>
 
 <body>
@@ -5985,6 +6211,241 @@
 
           ultimoEstadoMobile = agoraMobile;
         }, 160);
+      }, { passive: true });
+    })();
+  </script>
+
+
+
+  <script>
+    /* V27: navegação desktop em formato de app */
+    (function () {
+      const isDesktop = () => window.matchMedia("(min-width: 761px)").matches;
+
+      function setDisplay(el, show, display = "block") {
+        if (!el) return;
+        el.style.display = show ? display : "none";
+      }
+
+      function tabsDoUsuario(usuario) {
+        if (usuario === "Namorado") {
+          return [
+            ["resumo", "💙", "Resumo"],
+            ["fotos", "📸", "Fotos"],
+            ["agenda", "🗓️", "Agenda"],
+            ["chat", "💬", "Chat"],
+            ["cantinho", "🧚", "Lau"],
+            ["missao", "🫡", "Missão"]
+          ];
+        }
+        return [
+          ["status", "💗", "Hoje"],
+          ["agenda", "🗓️", "Agenda"],
+          ["fotos", "📸", "Fotos"],
+          ["chat", "💬", "Chat"],
+          ["diario", "📓", "Diário"],
+          ["cantinho", "🧚", "Mais"]
+        ];
+      }
+
+      function ensureDesktopNav(usuario) {
+        if (!isDesktop()) return;
+        document.body.classList.add("desktop-app-ready");
+
+        let nav = document.getElementById("desktopTabbar");
+        if (!nav) {
+          nav = document.createElement("nav");
+          nav.id = "desktopTabbar";
+          nav.className = "desktop-tabbar";
+          document.body.appendChild(nav);
+        }
+
+        const tabs = tabsDoUsuario(usuario);
+        const assinatura = usuario + ":" + tabs.map((t) => t[0]).join("|");
+        if (nav.dataset.signature === assinatura && nav.children.length) return;
+
+        nav.dataset.signature = assinatura;
+        nav.innerHTML = `
+          <div class="desktop-nav-brand">
+            <img src="/icons/icon-192.png" alt="LauOS" />
+            <div>
+              <div>LauOS</div>
+              <small>${usuario === "Namorado" ? "modo namorado" : "cantinho da Lau"}</small>
+            </div>
+          </div>
+          ${tabs.map(([page, icon, label]) => `
+            <button type="button" data-desktop-page="${page}">
+              <strong>${icon}</strong><span>${label}</span>
+            </button>
+          `).join("")}
+          <div class="desktop-nav-hint">
+            ${usuario === "Namorado" ? "Painel limpo para acompanhar a Lau sem bagunça." : "Tudo separado por abas, igual um appzinho."}
+          </div>
+        `;
+
+        nav.querySelectorAll("button[data-desktop-page]").forEach((btn) => {
+          btn.addEventListener("click", (event) => {
+            event.preventDefault();
+            window.abrirPaginaDesktop(btn.dataset.desktopPage);
+          });
+        });
+        if (typeof atualizarBadgeChat === "function") atualizarBadgeChat();
+      }
+
+      function mostrarPainelCantinhoDesktop(idsParaMostrar, mostrarMenu) {
+        const corner = document.getElementById("lauCorner");
+        if (!corner) return;
+        setDisplay(corner, true);
+        const header = corner.querySelector(".corner-header");
+        const menu = corner.querySelector(".corner-menu");
+        setDisplay(header, mostrarMenu);
+        setDisplay(menu, mostrarMenu, "grid");
+        corner.querySelectorAll(".corner-panel").forEach((panel) => {
+          const deveMostrar = idsParaMostrar.includes(panel.id);
+          setDisplay(panel, deveMostrar);
+          panel.classList.toggle("show", deveMostrar);
+        });
+        if (idsParaMostrar.includes("memoryCorner") && typeof renderizarGaleriaFotosLau === "function") renderizarGaleriaFotosLau();
+      }
+
+      function mostrarPainelNamoradoDesktop(idsParaMostrar, mostrarMenu) {
+        const corner = document.querySelector(".namorado-corner-view");
+        if (!corner) return;
+        setDisplay(corner, true);
+        const menu = corner.querySelector(".corner-menu");
+        setDisplay(menu, mostrarMenu, "grid");
+        corner.querySelectorAll(".corner-panel").forEach((panel) => {
+          const deveMostrar = idsParaMostrar.includes(panel.id);
+          setDisplay(panel, deveMostrar);
+          panel.classList.toggle("show", deveMostrar);
+        });
+        if (idsParaMostrar.includes("memoryCorner") && typeof renderizarGaleriaFotosLau === "function") renderizarGaleriaFotosLau();
+      }
+
+      window.abrirPaginaDesktop = function (page) {
+        if (!isDesktop()) return;
+        const usuario = localStorage.getItem("lauraos_usuario") || "Lau";
+        window.lauDesktopPageAtual = page;
+        ensureDesktopNav(usuario);
+
+        document.querySelectorAll("#desktopTabbar button[data-desktop-page]").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.desktopPage === page);
+        });
+        if (page === "chat" && typeof limparNotificacoesChat === "function") limparNotificacoesChat();
+        if (typeof atualizarBadgeChat === "function") atualizarBadgeChat();
+
+        const countdown = document.getElementById("countdownArea");
+        setDisplay(countdown, page === "status" || page === "resumo");
+
+        const lauraArea = document.getElementById("lauraArea");
+        const namoradoArea = document.getElementById("namoradoArea");
+        setDisplay(lauraArea, usuario === "Lau");
+        setDisplay(namoradoArea, usuario === "Namorado");
+
+        if (usuario === "Lau" && lauraArea) {
+          const roleHeader = lauraArea.querySelector(".role-header");
+          const moodOptions = document.getElementById("moodOptions");
+          const levelsGrid = lauraArea.querySelector(".levels-grid");
+          const moodNote = document.getElementById("moodNote");
+          const saveMood = lauraArea.querySelector(".save-mood-btn");
+          const chatCard = lauraArea.querySelector(".chat-card");
+          const photoViewer = document.getElementById("lauMobilePhotoViewer");
+          const corner = document.getElementById("lauCorner");
+
+          const statusOn = page === "status";
+          setDisplay(roleHeader, statusOn);
+          setDisplay(moodOptions, statusOn, "grid");
+          setDisplay(levelsGrid, statusOn, "grid");
+          setDisplay(moodNote, statusOn);
+          setDisplay(saveMood, statusOn);
+          setDisplay(chatCard, page === "chat");
+          setDisplay(photoViewer, page === "fotos");
+          setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario");
+
+          if (page === "agenda") {
+            window.lauDesktopCantinhoAtual = "agendaCorner";
+            mostrarPainelCantinhoDesktop(["agendaCorner"], false);
+            if (typeof renderizarAgendaLau === "function") renderizarAgendaLau();
+          }
+          if (page === "diario") {
+            window.lauDesktopCantinhoAtual = "diaryCorner";
+            mostrarPainelCantinhoDesktop(["diaryCorner"], false);
+          }
+          if (page === "fotos") {
+            if (typeof atualizarContadorFotos === "function") atualizarContadorFotos();
+            if (typeof iniciarCarrosselMemorias === "function") iniciarCarrosselMemorias(true);
+          }
+          if (page === "cantinho") {
+            const painelAtual = window.lauDesktopCantinhoAtual || window.lauMobileCantinhoAtual || "wishCorner";
+            mostrarPainelCantinhoDesktop([painelAtual], true);
+          }
+        }
+
+        if (usuario === "Namorado" && namoradoArea) {
+          const roleHeader = namoradoArea.querySelector(".role-header");
+          const cards = Array.from(namoradoArea.querySelectorAll(":scope > .viewer-card"));
+          const memoryCard = namoradoArea.querySelector(".namorado-memory-card");
+          const statusCard = cards.find((card) => card.querySelector("#currentMood"));
+          const historyCard = cards.find((card) => card.querySelector("#historyList"));
+          const cornerView = namoradoArea.querySelector(".namorado-corner-view");
+          const chatCard = namoradoArea.querySelector(".chat-card");
+          const missionCard = namoradoArea.querySelector(".current-mission-card");
+
+          setDisplay(roleHeader, page === "resumo");
+          setDisplay(memoryCard, page === "fotos");
+          setDisplay(statusCard, page === "resumo");
+          setDisplay(historyCard, page === "resumo");
+          setDisplay(cornerView, page === "agenda" || page === "cantinho");
+          setDisplay(chatCard, page === "chat");
+          setDisplay(missionCard, page === "missao");
+
+          if (page === "fotos") {
+            if (typeof atualizarContadorFotos === "function") atualizarContadorFotos();
+            if (typeof iniciarCarrosselMemorias === "function") iniciarCarrosselMemorias();
+          }
+          if (page === "agenda") {
+            window.lauDesktopCantinhoNamoradoAtual = "viewAgenda";
+            mostrarPainelNamoradoDesktop(["viewAgenda"], false);
+            if (typeof renderizarCantinhoNamorado === "function") renderizarCantinhoNamorado();
+            if (typeof renderizarAgendaNamorado === "function") renderizarAgendaNamorado();
+          }
+          if (page === "cantinho") {
+            const painelAtualNamorado = window.lauDesktopCantinhoNamoradoAtual || window.lauMobileCantinhoNamoradoAtual || "viewNeed";
+            mostrarPainelNamoradoDesktop([painelAtualNamorado], true);
+          }
+        }
+
+        window.scrollTo({ top: 0, behavior: "auto" });
+      };
+
+      const aplicarAnteriorDesktop = window.aplicarPermissao;
+      window.aplicarPermissao = function (usuario) {
+        aplicarAnteriorDesktop(usuario);
+        if (isDesktop()) {
+          setTimeout(() => {
+            ensureDesktopNav(usuario);
+            window.abrirPaginaDesktop(usuario === "Namorado" ? "resumo" : "status");
+          }, 90);
+        }
+      };
+
+      let resizeDesktopTimer = null;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeDesktopTimer);
+        resizeDesktopTimer = setTimeout(() => {
+          const usuario = localStorage.getItem("lauraos_usuario");
+          if (!usuario) return;
+
+          if (isDesktop()) {
+            const page = window.lauDesktopPageAtual || (usuario === "Namorado" ? "resumo" : "status");
+            ensureDesktopNav(usuario);
+            window.abrirPaginaDesktop(page);
+          } else {
+            document.body.classList.remove("desktop-app-ready");
+            const nav = document.getElementById("desktopTabbar");
+            if (nav) nav.style.display = "none";
+          }
+        }, 180);
       }, { passive: true });
     })();
   </script>
