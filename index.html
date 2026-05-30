@@ -2561,6 +2561,77 @@
         overflow: hidden;
       }
     }
+
+
+    /* V20: aba Fotos e área do namorado mais limpa no mobile */
+    @media (max-width: 760px) {
+      body.mobile-app-ready .mobile-tabbar {
+        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+        gap: 2px;
+        padding-left: 4px;
+        padding-right: 4px;
+      }
+
+      body.mobile-app-ready .mobile-tabbar button {
+        min-height: 58px;
+        padding: 7px 1px;
+        border-radius: 13px;
+        font-size: 0.58rem;
+      }
+
+      body.mobile-app-ready .mobile-tabbar button strong {
+        font-size: 0.94rem;
+      }
+
+      body.mobile-app-ready.namorado-mode {
+        background: #f4faff;
+      }
+
+      body.mobile-app-ready.namorado-mode .role-area {
+        background: #f4faff;
+      }
+
+      body.mobile-app-ready.namorado-mode .viewer-card,
+      body.mobile-app-ready.namorado-mode .chat-card,
+      body.mobile-app-ready.namorado-mode .namorado-corner-view,
+      body.mobile-app-ready.namorado-mode .current-mission-card {
+        border: 1px solid #cfe7ff;
+        background: #ffffff;
+        border-radius: 18px;
+      }
+
+      body.mobile-app-ready.namorado-mode .viewer-card h3,
+      body.mobile-app-ready.namorado-mode .chat-card h3,
+      body.mobile-app-ready.namorado-mode .namorado-corner-view h3,
+      body.mobile-app-ready.namorado-mode .current-mission-card h3 {
+        color: #2f80ed;
+      }
+
+      body.mobile-app-ready.namorado-mode .corner-menu {
+        background: rgba(244, 250, 255, 0.96);
+      }
+
+      body.mobile-app-ready .namorado-memory-card .memory-frame,
+      body.mobile-app-ready #memoryCorner .memory-frame {
+        min-height: 220px;
+      }
+
+      body.mobile-app-ready #memoryCorner .photo-gallery,
+      body.mobile-app-ready .photo-gallery {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      body.mobile-app-ready #memoryCorner .photo-gallery img,
+      body.mobile-app-ready .photo-gallery img {
+        border-radius: 13px;
+      }
+
+      body.mobile-app-ready .namorado-corner-view .corner-menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+
 </style>
 </head>
 
@@ -4663,6 +4734,7 @@
         const tabsLau = [
           ["status", "💗", "Hoje"],
           ["agenda", "🗓️", "Agenda"],
+          ["fotos", "📸", "Fotos"],
           ["chat", "💬", "Chat"],
           ["diario", "📓", "Diário"],
           ["cantinho", "🧚", "Mais"]
@@ -4670,6 +4742,7 @@
 
         const tabsNamorado = [
           ["resumo", "💙", "Resumo"],
+          ["fotos", "📸", "Fotos"],
           ["agenda", "🗓️", "Agenda"],
           ["chat", "💬", "Chat"],
           ["cantinho", "🧚", "Lau"],
@@ -4765,7 +4838,7 @@
           setDisplay(moodNote, statusOn);
           setDisplay(saveMood, statusOn);
           setDisplay(chatCard, page === "chat");
-          setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario");
+          setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario" || page === "fotos");
 
           if (page === "agenda") {
             window.lauMobileCantinhoAtual = "agendaCorner";
@@ -4775,6 +4848,12 @@
           if (page === "diario") {
             window.lauMobileCantinhoAtual = "diaryCorner";
             mostrarPainelCantinho(["diaryCorner"], false);
+          }
+          if (page === "fotos") {
+            window.lauMobileCantinhoAtual = "memoryCorner";
+            mostrarPainelCantinho(["memoryCorner"], false);
+            if (typeof atualizarContadorFotos === "function") atualizarContadorFotos();
+            if (typeof renderizarGaleriaFotosLau === "function") renderizarGaleriaFotosLau();
           }
           if (page === "cantinho") {
             const painelAtual = window.lauMobileCantinhoAtual || "wishCorner";
@@ -4797,17 +4876,22 @@
           const missionCard = namoradoArea.querySelector(".current-mission-card");
 
           setDisplay(roleHeader, page === "resumo");
-          setDisplay(memoryCard, page === "resumo");
+          setDisplay(memoryCard, page === "fotos");
           setDisplay(statusCard, page === "resumo");
           setDisplay(historyCard, page === "resumo");
           setDisplay(cornerView, page === "agenda" || page === "cantinho");
           setDisplay(chatCard, page === "chat");
           setDisplay(missionCard, page === "missao");
 
+          if (page === "fotos") {
+            if (typeof atualizarContadorFotos === "function") atualizarContadorFotos();
+            if (typeof iniciarCarrosselMemorias === "function") iniciarCarrosselMemorias();
+          }
           if (page === "agenda") {
             window.lauMobileCantinhoNamoradoAtual = "viewAgenda";
             mostrarPainelNamorado(["viewAgenda"], false);
             if (typeof renderizarCantinhoNamorado === "function") renderizarCantinhoNamorado();
+            if (typeof renderizarAgendaNamorado === "function") renderizarAgendaNamorado();
           }
           if (page === "cantinho") {
             const painelAtualNamorado = window.lauMobileCantinhoNamoradoAtual || "viewNeed";
