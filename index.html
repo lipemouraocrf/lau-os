@@ -3483,6 +3483,26 @@
         min-height: 58px !important;
       }
 
+      body.desktop-app-ready .mobile-photo-viewer-card,
+      body.desktop-app-ready .namorado-memory-card {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+      }
+
+      body.desktop-app-ready .mobile-photo-viewer-card .memory-frame,
+      body.desktop-app-ready .namorado-memory-card .memory-frame {
+        width: min(430px, 86%) !important;
+        min-height: auto !important;
+        border-radius: 24px !important;
+      }
+
+      body.desktop-app-ready .mobile-photo-viewer-card .pet-label,
+      body.desktop-app-ready .namorado-memory-card .pet-label {
+        margin-top: 10px !important;
+        font-size: 0.9rem !important;
+      }
 
       body.desktop-app-ready .photo-gallery {
         grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)) !important;
@@ -3516,39 +3536,103 @@
     }
 
 
-    /* V30 FIX aplicado na versão certa: fotos só na aba Fotos + fadinhas no desktop da Lau */
+
+    /* V31: área de Fotos/Nossos momentos caprichada + fadinhas no desktop da Lau */
     @media (min-width: 761px) {
+      body.desktop-app-ready.laura-mode .fairy-sky {
+        display: block !important;
+        position: fixed !important;
+        left: 180px !important;
+        top: 72px !important;
+        right: 18px !important;
+        bottom: 18px !important;
+        z-index: 2 !important;
+        pointer-events: none !important;
+        overflow: hidden !important;
+      }
+
+      body.desktop-app-ready.namorado-mode .fairy-sky,
+      body.desktop-app-ready #cursorFairy {
+        display: none !important;
+      }
+
+      body.desktop-app-ready.laura-mode {
+        cursor: auto !important;
+      }
+
+      body.desktop-app-ready.laura-mode .flying-fairy {
+        font-size: 1.85rem !important;
+        opacity: 0.42 !important;
+        filter: drop-shadow(0 8px 18px rgba(255, 95, 170, 0.22)) !important;
+      }
+
       body.desktop-app-ready .mobile-photo-viewer-card,
       body.desktop-app-ready .namorado-memory-card {
-        display: none;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        min-height: calc(100vh - 176px) !important;
+        width: 100% !important;
+        padding: 24px 26px !important;
+        gap: 10px !important;
+      }
+
+      body.desktop-app-ready .mobile-photo-viewer-card h3,
+      body.desktop-app-ready .namorado-memory-card h3 {
+        font-size: 1.55rem !important;
+        line-height: 1.1 !important;
+        margin: 0 !important;
+        letter-spacing: 0.2px !important;
+      }
+
+      body.desktop-app-ready .mobile-photo-viewer-card p,
+      body.desktop-app-ready .namorado-memory-card p {
+        max-width: 520px !important;
+        margin: 0 auto 8px !important;
+        font-size: 0.9rem !important;
+        line-height: 1.45 !important;
+        opacity: 0.95 !important;
       }
 
       body.desktop-app-ready .mobile-photo-viewer-card .memory-frame,
       body.desktop-app-ready .namorado-memory-card .memory-frame {
-        width: min(560px, 94%) !important;
-        min-height: auto !important;
-        border-radius: 24px !important;
+        width: min(560px, 82%) !important;
+        max-width: 560px !important;
+        aspect-ratio: 1 / 1 !important;
+        min-height: 0 !important;
+        height: auto !important;
+        margin: 8px auto 6px !important;
+        border-radius: 28px !important;
+        border: 5px solid #ffffff !important;
+        box-shadow: 0 22px 54px rgba(255, 95, 170, 0.16) !important;
+        background: linear-gradient(135deg, #fff7fb, #ffe3f1) !important;
+      }
+
+      body.desktop-app-ready.namorado-mode .namorado-memory-card .memory-frame {
+        box-shadow: 0 22px 54px rgba(47, 128, 237, 0.14) !important;
+        background: linear-gradient(135deg, #ffffff, #eaf5ff) !important;
+      }
+
+      body.desktop-app-ready .mobile-photo-viewer-card .memory-photo,
+      body.desktop-app-ready .namorado-memory-card .memory-photo {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center center !important;
+      }
+
+      body.desktop-app-ready .mobile-photo-viewer-card .memory-placeholder,
+      body.desktop-app-ready .namorado-memory-card .memory-placeholder {
+        font-size: 4.4rem !important;
       }
 
       body.desktop-app-ready .mobile-photo-viewer-card .pet-label,
       body.desktop-app-ready .namorado-memory-card .pet-label {
-        margin-top: 10px !important;
-        font-size: 0.9rem !important;
-      }
-
-      body.desktop-app-ready.laura-mode .fairy-sky {
-        display: block !important;
-        z-index: 4;
-      }
-
-      body.desktop-app-ready.laura-mode .flying-fairy {
-        opacity: 0.45;
-        font-size: 1.55rem;
-        filter: drop-shadow(0 8px 14px rgba(255, 95, 170, 0.20));
-      }
-
-      body.desktop-app-ready.laura-mode #cursorFairy {
-        display: none !important;
+        font-size: 0.98rem !important;
+        margin: 6px 0 0 !important;
+        font-weight: 900 !important;
       }
     }
 
@@ -3931,13 +4015,13 @@
 
 
         <div class="mobile-photo-viewer-card" id="lauMobilePhotoViewer">
-          <h3>📸 Fotos da Lau</h3>
-          <p>As fotos que você adicionou no Baú aparecem aqui passando aos poucos.</p>
+          <h3>📸 Nossos momentos</h3>
+          <p>As fotos que a Lau adiciona ficam passando aqui, como um álbum fofinho dos dois.</p>
           <div class="memory-frame mobile-memory-frame">
             <div class="memory-placeholder" id="lauMobileMemoryPlaceholder">🧚‍♀️🦊</div>
             <img id="lauMobileMemoryPhoto" class="memory-photo hidden" alt="Foto adicionada pela Lau" />
           </div>
-          <div class="pet-label" id="lauMobilePhotoLabel">Quando adicionar fotos no Baú, elas aparecem aqui 💖</div>
+          <div class="pet-label" id="lauMobilePhotoLabel">Memórias passando por aqui 💖</div>
         </div>
 
         <div class="chat-card laura-chat-card">
@@ -3958,13 +4042,13 @@
         </div>
 
         <div class="viewer-card namorado-memory-card">
-          <h3>📸 Fotinhas que ela colocou</h3>
-          <p>As fotos que a Lau adicionar aparecem aqui também, mudando aos poucos.</p>
+          <h3>📸 Nossos momentos</h3>
+          <p>As fotos que a Lau adicionar aparecem aqui também, centralizadas e passando aos poucos.</p>
           <div class="memory-frame">
             <div class="memory-placeholder" id="namoradoMemoryPlaceholder">🧚‍♀️🦊</div>
             <img id="namoradoMemoryPhoto" class="memory-photo hidden" alt="Fotinha adicionada pela Lau" />
           </div>
-          <div class="pet-label">Memórias dela passando para você ver 💙</div>
+          <div class="pet-label">Memórias dos dois passando por aqui 💙</div>
         </div>
 
         <div class="viewer-card">
@@ -4762,7 +4846,7 @@
       }
 
       if (lauMobilePhotoLabel) {
-        lauMobilePhotoLabel.textContent = `${fotos.length} foto${fotos.length === 1 ? "" : "s"} passando por aqui 💖`;
+        lauMobilePhotoLabel.textContent = `${fotos.length} momento${fotos.length === 1 ? "" : "s"} passando por aqui 💖`;
       }
 
       memoriaIndex++;
@@ -6577,7 +6661,7 @@
           setDisplay(moodNote, statusOn);
           setDisplay(saveMood, statusOn);
           setDisplay(chatCard, page === "chat");
-          setDisplay(photoViewer, page === "fotos", "flex");
+          setDisplay(photoViewer, page === "fotos");
           setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario");
 
           if (page === "agenda") {
@@ -6614,7 +6698,7 @@
           const missionCard = namoradoArea.querySelector(".current-mission-card");
 
           setDisplay(roleHeader, page === "resumo");
-          setDisplay(memoryCard, page === "fotos", "flex");
+          setDisplay(memoryCard, page === "fotos");
           setDisplay(statusCard, page === "resumo");
           setDisplay(historyCard, page === "resumo");
           setDisplay(cornerView, page === "agenda" || page === "cantinho");
@@ -6851,7 +6935,7 @@
           setDisplay(moodNote, statusOn);
           setDisplay(saveMood, statusOn);
           setDisplay(chatCard, page === "chat");
-          setDisplay(photoViewer, page === "fotos", "flex");
+          setDisplay(photoViewer, page === "fotos");
           setDisplay(corner, Boolean(painelLau) || page === "cantinho");
 
           if (painelLau) {
@@ -6890,7 +6974,7 @@
           const painelNamorado = painelPorPaginaNamorado[page];
 
           setDisplay(roleHeader, page === "resumo");
-          setDisplay(memoryCard, page === "fotos", "flex");
+          setDisplay(memoryCard, page === "fotos");
           setDisplay(statusCard, page === "resumo");
           setDisplay(historyCard, page === "resumo");
           setDisplay(cornerView, Boolean(painelNamorado) || page === "cantinho");
