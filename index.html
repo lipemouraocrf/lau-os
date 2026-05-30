@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>LauOS 💖</title>
 
   <style>
@@ -2485,6 +2485,82 @@
       }
     }
 
+
+
+    /* V19: mobile mais estável, sem zoom/toque falhando e sem resetar abas internas */
+    @media (max-width: 760px) {
+      html,
+      body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        overscroll-behavior-x: none;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body.mobile-app-ready {
+        touch-action: pan-y;
+        padding-bottom: calc(76px + env(safe-area-inset-bottom));
+      }
+
+      body.mobile-app-ready .app,
+      body.mobile-app-ready .window,
+      body.mobile-app-ready main,
+      body.mobile-app-ready section,
+      body.mobile-app-ready .role-area,
+      body.mobile-app-ready .lau-corner,
+      body.mobile-app-ready .namorado-corner-view,
+      body.mobile-app-ready .corner-panel,
+      body.mobile-app-ready .agenda-calendar,
+      body.mobile-app-ready .countdown-card,
+      body.mobile-app-ready .viewer-card,
+      body.mobile-app-ready .chat-card {
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      body.mobile-app-ready input,
+      body.mobile-app-ready textarea,
+      body.mobile-app-ready select {
+        font-size: 16px !important;
+        max-width: 100%;
+      }
+
+      body.mobile-app-ready button,
+      body.mobile-app-ready .mobile-tabbar button,
+      body.mobile-app-ready .corner-menu button {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+
+      body.mobile-app-ready .mobile-tabbar {
+        z-index: 9999;
+        transform: translateZ(0);
+        will-change: transform;
+      }
+
+      body.mobile-app-ready .mobile-tabbar button {
+        min-height: 56px;
+        cursor: pointer;
+      }
+
+      body.mobile-app-ready .corner-menu {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        background: rgba(255, 248, 252, 0.96);
+        padding: 4px 0 10px;
+      }
+
+      body.mobile-app-ready .agenda-calendar,
+      body.mobile-app-ready .agenda-month-header,
+      body.mobile-app-ready .agenda-weekdays,
+      body.mobile-app-ready .agenda-days {
+        width: 100%;
+        overflow: hidden;
+      }
+    }
 </style>
 </head>
 
@@ -4042,6 +4118,7 @@
 
     // V8 FIX: funções dos botões do Cantinho da Lau
     function abrirCantinho(id) {
+      window.lauMobileCantinhoAtual = id;
       const container = document.getElementById("lauCorner");
       if (!container) return;
 
@@ -4063,6 +4140,7 @@
     }
 
     function abrirCantinhoNamorado(id) {
+      window.lauMobileCantinhoNamoradoAtual = id;
       const container = document.querySelector(".namorado-corner-view");
       if (!container) return;
 
@@ -4599,11 +4677,28 @@
         ];
 
         const tabs = usuario === "Namorado" ? tabsNamorado : tabsLau;
+        const assinatura = usuario + ":" + tabs.map((t) => t[0]).join("|");
+        if (nav.dataset.signature === assinatura && nav.children.length) return;
+
+        nav.dataset.signature = assinatura;
         nav.innerHTML = tabs.map(([page, icon, label]) => `
-          <button type="button" data-mobile-page="${page}" onclick="window.abrirPaginaMobile('${page}')">
+          <button type="button" data-mobile-page="${page}">
             <strong>${icon}</strong><span>${label}</span>
           </button>
         `).join("");
+
+        nav.querySelectorAll("button").forEach((btn) => {
+          btn.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            window.abrirPaginaMobile(btn.dataset.mobilePage);
+          });
+          btn.addEventListener("touchend", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            window.abrirPaginaMobile(btn.dataset.mobilePage);
+          }, { passive: false });
+        });
       }
 
       function mostrarPainelCantinho(idsParaMostrar, mostrarMenu) {
@@ -4673,14 +4768,17 @@
           setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario");
 
           if (page === "agenda") {
+            window.lauMobileCantinhoAtual = "agendaCorner";
             mostrarPainelCantinho(["agendaCorner"], false);
             if (typeof renderizarAgendaLau === "function") renderizarAgendaLau();
           }
           if (page === "diario") {
+            window.lauMobileCantinhoAtual = "diaryCorner";
             mostrarPainelCantinho(["diaryCorner"], false);
           }
           if (page === "cantinho") {
-            mostrarPainelCantinho(["wishCorner"], true);
+            const painelAtual = window.lauMobileCantinhoAtual || "wishCorner";
+            mostrarPainelCantinho([painelAtual], true);
           }
         }
 
@@ -4707,11 +4805,13 @@
           setDisplay(missionCard, page === "missao");
 
           if (page === "agenda") {
+            window.lauMobileCantinhoNamoradoAtual = "viewAgenda";
             mostrarPainelNamorado(["viewAgenda"], false);
             if (typeof renderizarCantinhoNamorado === "function") renderizarCantinhoNamorado();
           }
           if (page === "cantinho") {
-            mostrarPainelNamorado(["viewNeed"], true);
+            const painelAtualNamorado = window.lauMobileCantinhoNamoradoAtual || "viewNeed";
+            mostrarPainelNamorado([painelAtualNamorado], true);
           }
         }
 
