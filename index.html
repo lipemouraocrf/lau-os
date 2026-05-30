@@ -2298,6 +2298,114 @@
       }
     }
 
+  
+
+    /* V17: ajustes mobile minimalistas e correções de layout */
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .photo-gallery img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 2px solid #ffd6ea;
+      background: #fff;
+    }
+
+    @media (max-width: 760px) {
+      html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden !important;
+      }
+
+      body.mobile-app-ready * {
+        box-sizing: border-box;
+      }
+
+      body.mobile-app-ready .role-area,
+      body.mobile-app-ready .countdown-area,
+      body.mobile-app-ready .role-header,
+      body.mobile-app-ready .countdown-card,
+      body.mobile-app-ready .chat-card,
+      body.mobile-app-ready .viewer-card,
+      body.mobile-app-ready .lau-corner,
+      body.mobile-app-ready .namorado-corner-view,
+      body.mobile-app-ready .corner-panel {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      body.mobile-app-ready .countdown-area,
+      body.mobile-app-ready .role-area {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      body.mobile-app-ready .countdown-controls {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        width: 100%;
+      }
+
+      body.mobile-app-ready input,
+      body.mobile-app-ready textarea,
+      body.mobile-app-ready select {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block;
+      }
+
+      body.mobile-app-ready .agenda-calendar {
+        overflow: hidden !important;
+      }
+
+      body.mobile-app-ready .agenda-month-header {
+        display: grid;
+        grid-template-columns: 38px 1fr 38px;
+        align-items: center;
+      }
+
+      body.mobile-app-ready .agenda-month-header strong {
+        text-align: center;
+        min-width: 0;
+        font-size: 0.82rem;
+      }
+
+      body.mobile-app-ready .agenda-weekdays,
+      body.mobile-app-ready .agenda-days {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+      }
+
+      body.mobile-app-ready .agenda-day {
+        width: 100%;
+        min-width: 0;
+      }
+
+      body.mobile-app-ready .corner-menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+
+      body.mobile-app-ready .corner-menu button {
+        min-width: 0;
+        white-space: normal;
+      }
+
+      body.mobile-app-ready .photo-gallery {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      body.mobile-app-ready .mobile-tabbar {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+    }
+
   </style>
 </head>
 
@@ -2649,6 +2757,7 @@
             <button onclick="salvarFotosLau()">Adicionar fotos 💖</button>
             <button class="soft-secondary-btn" onclick="limparFotosLau()">Limpar fotos salvas</button>
             <div class="photo-count" id="photoCount">Nenhuma foto adicionada ainda.</div>
+            <div class="photo-gallery" id="photoGalleryLau">As fotos adicionadas vão aparecer aqui.</div>
           </div>
 
           <div class="corner-panel" id="quizGame">
@@ -3859,13 +3968,18 @@
 
       container.querySelectorAll(".corner-panel").forEach((panel) => {
         panel.classList.remove("show");
+        panel.style.display = "none";
       });
 
       const panel = document.getElementById(id);
-      if (panel) panel.classList.add("show");
+      if (panel) {
+        panel.classList.add("show");
+        panel.style.display = "block";
+      }
 
       if (id === "quizGame") carregarQuiz();
       if (id === "missionGame") renderizarMissaoLau();
+      if (id === "memoryCorner") renderizarGaleriaFotosLau();
       renderizarCantinhoLau();
     }
 
@@ -3875,10 +3989,14 @@
 
       container.querySelectorAll(".corner-panel").forEach((panel) => {
         panel.classList.remove("show");
+        panel.style.display = "none";
       });
 
       const panel = document.getElementById(id);
-      if (panel) panel.classList.add("show");
+      if (panel) {
+        panel.classList.add("show");
+        panel.style.display = "block";
+      }
       renderizarCantinhoNamorado();
     }
 
@@ -3915,6 +4033,7 @@
         return;
       }
 
+      const diario = lerListaCantinho("lauraos_diary");
       diario.unshift({ texto, data: new Date().toLocaleString("pt-BR") });
       salvarListaCantinho("lauraos_diary", diario);
       campo.value = "";
@@ -4338,11 +4457,33 @@
       setInterval(createSparkle, 1200);
       iniciarCarrosselMemorias();
     });
+
+
+    // V17: galeria de fotos dentro do Baú da Lau
+    function renderizarGaleriaFotosLau() {
+      const galeria = document.getElementById("photoGalleryLau");
+      if (!galeria) return;
+      const fotos = lerFotosLau();
+      if (!fotos.length) {
+        galeria.textContent = "As fotos adicionadas vão aparecer aqui.";
+        return;
+      }
+      galeria.innerHTML = fotos.map((foto, index) => `
+        <img src="${foto}" alt="Foto ${index + 1} adicionada pela Lau" />
+      `).join("");
+    }
+
+    const originalAtualizarContadorFotosV17 = atualizarContadorFotos;
+    atualizarContadorFotos = function () {
+      originalAtualizarContadorFotosV17();
+      renderizarGaleriaFotosLau();
+    };
+
   </script>
 
 
   <script>
-    /* V16: navegação mobile minimalista por abas */
+    /* V16/V17: navegação mobile minimalista por abas */
     (function () {
       const isMobile = () => window.matchMedia("(max-width: 760px)").matches;
 
@@ -4366,8 +4507,8 @@
           ["status", "💗", "Hoje"],
           ["agenda", "🗓️", "Agenda"],
           ["chat", "💬", "Chat"],
-          ["cantinho", "🧚", "Cantinho"],
-          ["quiz", "🦊", "Quiz"]
+          ["diario", "📓", "Diário"],
+          ["cantinho", "🧚", "Mais"]
         ];
 
         const tabsNamorado = [
@@ -4395,9 +4536,11 @@
         setDisplay(header, mostrarMenu);
         setDisplay(menu, mostrarMenu, "grid");
         corner.querySelectorAll(".corner-panel").forEach((panel) => {
-          setDisplay(panel, idsParaMostrar.includes(panel.id));
-          panel.classList.toggle("show", idsParaMostrar.includes(panel.id));
+          const deveMostrar = idsParaMostrar.includes(panel.id);
+          setDisplay(panel, deveMostrar);
+          panel.classList.toggle("show", deveMostrar);
         });
+        if (idsParaMostrar.includes("memoryCorner") && typeof renderizarGaleriaFotosLau === "function") renderizarGaleriaFotosLau();
       }
 
       function mostrarPainelNamorado(idsParaMostrar, mostrarMenu) {
@@ -4407,13 +4550,16 @@
         const menu = corner.querySelector(".corner-menu");
         setDisplay(menu, mostrarMenu, "grid");
         corner.querySelectorAll(".corner-panel").forEach((panel) => {
-          setDisplay(panel, idsParaMostrar.includes(panel.id));
-          panel.classList.toggle("show", idsParaMostrar.includes(panel.id));
+          const deveMostrar = idsParaMostrar.includes(panel.id);
+          setDisplay(panel, deveMostrar);
+          panel.classList.toggle("show", deveMostrar);
         });
+        if (idsParaMostrar.includes("memoryCorner") && typeof renderizarGaleriaFotosLau === "function") renderizarGaleriaFotosLau();
       }
 
       window.abrirPaginaMobile = function (page) {
         if (!isMobile()) return;
+        window.lauMobilePageAtual = page;
         const usuario = localStorage.getItem("lauraos_usuario") || "Lau";
         ensureMobileNav(usuario);
 
@@ -4444,18 +4590,17 @@
           setDisplay(moodNote, statusOn);
           setDisplay(saveMood, statusOn);
           setDisplay(chatCard, page === "chat");
-          setDisplay(corner, page === "agenda" || page === "cantinho" || page === "quiz");
+          setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario");
 
           if (page === "agenda") {
             mostrarPainelCantinho(["agendaCorner"], false);
             if (typeof renderizarAgendaLau === "function") renderizarAgendaLau();
           }
+          if (page === "diario") {
+            mostrarPainelCantinho(["diaryCorner"], false);
+          }
           if (page === "cantinho") {
             mostrarPainelCantinho(["wishCorner"], true);
-          }
-          if (page === "quiz") {
-            mostrarPainelCantinho(["quizGame", "missionGame"], false);
-            if (typeof carregarQuiz === "function") carregarQuiz();
           }
         }
 
