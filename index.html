@@ -1968,6 +1968,336 @@
       }
     }
 
+  
+
+    /* V16: mobile minimalista em formato de app */
+    .mobile-tabbar {
+      display: none;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        background: #fff8fc;
+        overflow-x: hidden;
+      }
+
+      body.mobile-app-ready .floating-hearts,
+      body.mobile-app-ready .sparkles,
+      body.mobile-app-ready .fairy-sky,
+      body.mobile-app-ready #cursorFairy,
+      body.mobile-app-ready #introHero,
+      body.mobile-app-ready #cuteDashboard,
+      body.mobile-app-ready .message-box,
+      body.mobile-app-ready .miss-panel,
+      body.mobile-app-ready .footer {
+        display: none !important;
+      }
+
+      body.mobile-app-ready .app {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      body.mobile-app-ready .window {
+        min-height: 100vh;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: #fff8fc;
+        backdrop-filter: none;
+        overflow: visible;
+      }
+
+      body.mobile-app-ready.namorado-mode .window {
+        background: #f6fbff;
+      }
+
+      body.mobile-app-ready .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 120;
+        padding: 10px 12px;
+        border-radius: 0;
+        box-shadow: 0 8px 22px rgba(255, 95, 170, 0.12);
+      }
+
+      body.mobile-app-ready.namorado-mode .topbar {
+        box-shadow: 0 8px 22px rgba(47, 128, 237, 0.12);
+      }
+
+      body.mobile-app-ready .traffic,
+      body.mobile-app-ready .time {
+        display: none;
+      }
+
+      body.mobile-app-ready .title {
+        font-size: 0.95rem;
+        letter-spacing: 0;
+      }
+
+      body.mobile-app-ready .logout-btn {
+        padding: 7px 11px;
+        font-size: 0.78rem;
+      }
+
+      body.mobile-app-ready .countdown-area,
+      body.mobile-app-ready .role-area {
+        margin: 0;
+        padding: 12px 12px 86px;
+      }
+
+      body.mobile-app-ready .countdown-area {
+        padding-bottom: 8px;
+      }
+
+      body.mobile-app-ready .countdown-card,
+      body.mobile-app-ready .viewer-card,
+      body.mobile-app-ready .chat-card,
+      body.mobile-app-ready .lau-corner,
+      body.mobile-app-ready .namorado-corner-view,
+      body.mobile-app-ready .level-card,
+      body.mobile-app-ready .corner-panel {
+        border-radius: 18px;
+        padding: 14px;
+        margin: 10px 0;
+        box-shadow: none;
+      }
+
+      body.mobile-app-ready .role-header {
+        padding: 14px;
+        margin: 0 0 10px;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.72);
+        border: 1px solid #ffd6ea;
+      }
+
+      body.mobile-app-ready.namorado-mode .role-header {
+        border-color: #cfe7ff;
+        background: rgba(246,251,255,0.9);
+      }
+
+      body.mobile-app-ready .role-header h2,
+      body.mobile-app-ready .viewer-card h3,
+      body.mobile-app-ready .chat-card h3,
+      body.mobile-app-ready .corner-header h3,
+      body.mobile-app-ready .corner-panel h4,
+      body.mobile-app-ready .countdown-card h2 {
+        font-size: 1.08rem;
+        margin-bottom: 6px;
+      }
+
+      body.mobile-app-ready .role-header p,
+      body.mobile-app-ready .viewer-card p,
+      body.mobile-app-ready .chat-card p,
+      body.mobile-app-ready .corner-header p,
+      body.mobile-app-ready .corner-panel p,
+      body.mobile-app-ready .countdown-card p {
+        font-size: 0.86rem;
+        line-height: 1.35;
+        margin-bottom: 8px;
+      }
+
+      body.mobile-app-ready .laura-companions,
+      body.mobile-app-ready .pet-label,
+      body.mobile-app-ready .corner-header,
+      body.mobile-app-ready .namorado-corner-view > p {
+        display: none;
+      }
+
+      body.mobile-app-ready .mood-options,
+      body.mobile-app-ready .levels-grid,
+      body.mobile-app-ready .readonly-levels,
+      body.mobile-app-ready .color-choice-grid,
+      body.mobile-app-ready .quiz-options {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px;
+      }
+
+      body.mobile-app-ready .mood-options button,
+      body.mobile-app-ready .corner-menu button,
+      body.mobile-app-ready button {
+        padding: 10px 11px;
+        font-size: 0.84rem;
+        border-radius: 14px;
+        box-shadow: none;
+      }
+
+      body.mobile-app-ready .corner-menu {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px;
+        margin: 0 0 10px;
+      }
+
+      body.mobile-app-ready .level-top,
+      body.mobile-app-ready .readonly-level-top {
+        font-size: 0.86rem;
+      }
+
+      body.mobile-app-ready input,
+      body.mobile-app-ready textarea,
+      body.mobile-app-ready select,
+      body.mobile-app-ready .corner-input,
+      body.mobile-app-ready .mission-input,
+      body.mobile-app-ready .mission-select {
+        font-size: 0.92rem !important;
+        border-radius: 14px !important;
+        padding: 11px 12px !important;
+      }
+
+      body.mobile-app-ready textarea,
+      body.mobile-app-ready .corner-panel textarea {
+        min-height: 86px;
+      }
+
+      body.mobile-app-ready .current-mood,
+      body.mobile-app-ready .mood-note-view,
+      body.mobile-app-ready .protocol-box,
+      body.mobile-app-ready .corner-item,
+      body.mobile-app-ready .agenda-item,
+      body.mobile-app-ready .mission-result,
+      body.mobile-app-ready .game-feedback {
+        border-radius: 14px;
+        padding: 11px;
+        font-size: 0.9rem;
+        line-height: 1.35;
+      }
+
+      body.mobile-app-ready .countdown-detailed {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 7px;
+      }
+
+      body.mobile-app-ready .countdown-unit {
+        padding: 9px 4px;
+        border-radius: 14px;
+      }
+
+      body.mobile-app-ready .countdown-number {
+        font-size: 1.25rem;
+      }
+
+      body.mobile-app-ready .countdown-label {
+        font-size: 0.68rem;
+      }
+
+      body.mobile-app-ready .countdown-controls,
+      body.mobile-app-ready .agenda-actions {
+        grid-template-columns: 1fr !important;
+        gap: 8px;
+      }
+
+      body.mobile-app-ready .memory-frame {
+        min-height: 170px;
+        border-radius: 16px;
+      }
+
+      body.mobile-app-ready .memory-placeholder {
+        font-size: 2.3rem;
+      }
+
+      body.mobile-app-ready .agenda-calendar {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 10px;
+        border-radius: 16px;
+      }
+
+      body.mobile-app-ready .agenda-month-header {
+        gap: 6px;
+        font-size: 0.86rem;
+      }
+
+      body.mobile-app-ready .agenda-month-header button {
+        padding: 6px 9px;
+        font-size: 0.72rem;
+      }
+
+      body.mobile-app-ready .agenda-weekdays,
+      body.mobile-app-ready .agenda-days {
+        gap: 3px;
+      }
+
+      body.mobile-app-ready .agenda-weekdays span {
+        font-size: 0.62rem;
+      }
+
+      body.mobile-app-ready .agenda-day {
+        min-height: 30px;
+        border-radius: 9px;
+        font-size: 0.76rem;
+      }
+
+      body.mobile-app-ready .agenda-day.has-event::after {
+        width: 5px;
+        height: 5px;
+        bottom: 4px;
+        right: 5px;
+      }
+
+      .mobile-tabbar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 160;
+        display: none;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+        padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(14px);
+        border-top: 1px solid #ffd6ea;
+      }
+
+      body.mobile-app-ready .mobile-tabbar {
+        display: grid;
+      }
+
+      body.mobile-app-ready.namorado-mode .mobile-tabbar {
+        border-top-color: #cfe7ff;
+      }
+
+      .mobile-tabbar button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 7px 2px;
+        border-radius: 14px;
+        font-size: 0.68rem;
+        line-height: 1.1;
+        background: transparent;
+        color: #9f4776;
+        box-shadow: none;
+      }
+
+      body.namorado-mode .mobile-tabbar button {
+        color: #2f6fb4;
+      }
+
+      .mobile-tabbar button strong {
+        font-size: 1rem;
+        line-height: 1;
+      }
+
+      .mobile-tabbar button.active {
+        background: #ffe7f3;
+        color: #ff4fa3;
+      }
+
+      body.namorado-mode .mobile-tabbar button.active {
+        background: #eaf4ff;
+        color: #2f80ed;
+      }
+
+      body.mobile-app-ready .mobile-only-hidden {
+        display: none !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -4009,5 +4339,189 @@
       iniciarCarrosselMemorias();
     });
   </script>
+
+
+  <script>
+    /* V16: navegação mobile minimalista por abas */
+    (function () {
+      const isMobile = () => window.matchMedia("(max-width: 760px)").matches;
+
+      function setDisplay(el, show, display = "block") {
+        if (!el) return;
+        el.style.display = show ? display : "none";
+      }
+
+      function ensureMobileNav(usuario) {
+        if (!isMobile()) return;
+        document.body.classList.add("mobile-app-ready");
+        let nav = document.getElementById("mobileTabbar");
+        if (!nav) {
+          nav = document.createElement("nav");
+          nav.id = "mobileTabbar";
+          nav.className = "mobile-tabbar";
+          document.body.appendChild(nav);
+        }
+
+        const tabsLau = [
+          ["status", "💗", "Hoje"],
+          ["agenda", "🗓️", "Agenda"],
+          ["chat", "💬", "Chat"],
+          ["cantinho", "🧚", "Cantinho"],
+          ["quiz", "🦊", "Quiz"]
+        ];
+
+        const tabsNamorado = [
+          ["resumo", "💙", "Resumo"],
+          ["agenda", "🗓️", "Agenda"],
+          ["chat", "💬", "Chat"],
+          ["cantinho", "🧚", "Lau"],
+          ["missao", "🫡", "Missão"]
+        ];
+
+        const tabs = usuario === "Namorado" ? tabsNamorado : tabsLau;
+        nav.innerHTML = tabs.map(([page, icon, label]) => `
+          <button type="button" data-mobile-page="${page}" onclick="window.abrirPaginaMobile('${page}')">
+            <strong>${icon}</strong><span>${label}</span>
+          </button>
+        `).join("");
+      }
+
+      function mostrarPainelCantinho(idsParaMostrar, mostrarMenu) {
+        const corner = document.getElementById("lauCorner");
+        if (!corner) return;
+        setDisplay(corner, true);
+        const header = corner.querySelector(".corner-header");
+        const menu = corner.querySelector(".corner-menu");
+        setDisplay(header, mostrarMenu);
+        setDisplay(menu, mostrarMenu, "grid");
+        corner.querySelectorAll(".corner-panel").forEach((panel) => {
+          setDisplay(panel, idsParaMostrar.includes(panel.id));
+          panel.classList.toggle("show", idsParaMostrar.includes(panel.id));
+        });
+      }
+
+      function mostrarPainelNamorado(idsParaMostrar, mostrarMenu) {
+        const corner = document.querySelector(".namorado-corner-view");
+        if (!corner) return;
+        setDisplay(corner, true);
+        const menu = corner.querySelector(".corner-menu");
+        setDisplay(menu, mostrarMenu, "grid");
+        corner.querySelectorAll(".corner-panel").forEach((panel) => {
+          setDisplay(panel, idsParaMostrar.includes(panel.id));
+          panel.classList.toggle("show", idsParaMostrar.includes(panel.id));
+        });
+      }
+
+      window.abrirPaginaMobile = function (page) {
+        if (!isMobile()) return;
+        const usuario = localStorage.getItem("lauraos_usuario") || "Lau";
+        ensureMobileNav(usuario);
+
+        document.querySelectorAll("#mobileTabbar button").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.mobilePage === page);
+        });
+
+        const countdown = document.getElementById("countdownArea");
+        setDisplay(countdown, page === "status" || page === "resumo");
+
+        if (usuario === "Lau") {
+          const lauraArea = document.getElementById("lauraArea");
+          if (!lauraArea) return;
+          setDisplay(lauraArea, true);
+
+          const roleHeader = lauraArea.querySelector(".role-header");
+          const moodOptions = document.getElementById("moodOptions");
+          const levelsGrid = lauraArea.querySelector(".levels-grid");
+          const moodNote = document.getElementById("moodNote");
+          const saveMood = lauraArea.querySelector(".save-mood-btn");
+          const chatCard = lauraArea.querySelector(".chat-card");
+          const corner = document.getElementById("lauCorner");
+
+          const statusOn = page === "status";
+          setDisplay(roleHeader, statusOn);
+          setDisplay(moodOptions, statusOn, "grid");
+          setDisplay(levelsGrid, statusOn, "grid");
+          setDisplay(moodNote, statusOn);
+          setDisplay(saveMood, statusOn);
+          setDisplay(chatCard, page === "chat");
+          setDisplay(corner, page === "agenda" || page === "cantinho" || page === "quiz");
+
+          if (page === "agenda") {
+            mostrarPainelCantinho(["agendaCorner"], false);
+            if (typeof renderizarAgendaLau === "function") renderizarAgendaLau();
+          }
+          if (page === "cantinho") {
+            mostrarPainelCantinho(["wishCorner"], true);
+          }
+          if (page === "quiz") {
+            mostrarPainelCantinho(["quizGame", "missionGame"], false);
+            if (typeof carregarQuiz === "function") carregarQuiz();
+          }
+        }
+
+        if (usuario === "Namorado") {
+          const namoradoArea = document.getElementById("namoradoArea");
+          if (!namoradoArea) return;
+          setDisplay(namoradoArea, true);
+
+          const roleHeader = namoradoArea.querySelector(".role-header");
+          const cards = Array.from(namoradoArea.querySelectorAll(":scope > .viewer-card"));
+          const memoryCard = namoradoArea.querySelector(".namorado-memory-card");
+          const statusCard = cards.find((card) => card.querySelector("#currentMood"));
+          const historyCard = cards.find((card) => card.querySelector("#historyList"));
+          const cornerView = namoradoArea.querySelector(".namorado-corner-view");
+          const chatCard = namoradoArea.querySelector(".chat-card");
+          const missionCard = namoradoArea.querySelector(".current-mission-card");
+
+          setDisplay(roleHeader, page === "resumo");
+          setDisplay(memoryCard, page === "resumo");
+          setDisplay(statusCard, page === "resumo");
+          setDisplay(historyCard, page === "resumo");
+          setDisplay(cornerView, page === "agenda" || page === "cantinho");
+          setDisplay(chatCard, page === "chat");
+          setDisplay(missionCard, page === "missao");
+
+          if (page === "agenda") {
+            mostrarPainelNamorado(["viewAgenda"], false);
+            if (typeof renderizarCantinhoNamorado === "function") renderizarCantinhoNamorado();
+          }
+          if (page === "cantinho") {
+            mostrarPainelNamorado(["viewNeed"], true);
+          }
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      const originalAplicarPermissao = window.aplicarPermissao;
+      window.aplicarPermissao = function (usuario) {
+        originalAplicarPermissao(usuario);
+        if (isMobile()) {
+          setTimeout(() => {
+            ensureMobileNav(usuario);
+            window.abrirPaginaMobile(usuario === "Namorado" ? "resumo" : "status");
+          }, 80);
+        }
+      };
+
+      window.addEventListener("resize", () => {
+        const usuario = localStorage.getItem("lauraos_usuario");
+        if (usuario && isMobile()) {
+          ensureMobileNav(usuario);
+          const active = document.querySelector("#mobileTabbar button.active")?.dataset.mobilePage;
+          window.abrirPaginaMobile(active || (usuario === "Namorado" ? "resumo" : "status"));
+        }
+        if (!isMobile()) {
+          document.body.classList.remove("mobile-app-ready");
+          const nav = document.getElementById("mobileTabbar");
+          if (nav) nav.style.display = "none";
+          document.querySelectorAll('[style*="display"]').forEach((el) => {
+            if (!el.closest('.login-screen') && el.id !== 'bootScreen') el.style.display = "";
+          });
+        }
+      });
+    })();
+  </script>
+
 </body>
 </html>
