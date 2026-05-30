@@ -4857,6 +4857,51 @@
     const EMAIL_LAU = "lau@lauos.com";
     const EMAIL_NAMORADO = "lipe@lauos.com";
 
+    const EMAILS_LAU = [
+      "lau@lauos.com",
+      "paixao@lauos.com",
+      "chatonildo@lauos.com",
+      "bravinho@lauos.com",
+      "bicudo@lauos.com",
+      "lipe-login@lauos.com"
+    ];
+
+    const EMAILS_NAMORADO = [
+      "lipe@lauos.com",
+      "laura@lauos.com",
+      "lau-login@lauos.com",
+      "vida@lauos.com",
+      "princesa@lauos.com"
+    ];
+
+    const LOGIN_LAU_ALIASES = {
+      "paixão": { email: "paixao@lauos.com", password: "paixão" },
+      "paixao": { email: "paixao@lauos.com", password: "paixão" },
+      "chatonildo": { email: "chatonildo@lauos.com", password: "chatonildo" },
+      "bravinho": { email: "bravinho@lauos.com", password: "bravinho" },
+      "bicudo": { email: "bicudo@lauos.com", password: "bicudo" },
+      "lipe": { email: "lipe-login@lauos.com", password: "lipe" }
+    };
+
+    const LOGIN_NAMORADO_ALIASES = {
+      "laura": { email: "laura@lauos.com", password: "laura" },
+      "lau": { email: "lau-login@lauos.com", password: "lau" },
+      "vida": { email: "vida@lauos.com", password: "vida" },
+      "princesa": { email: "princesa@lauos.com", password: "princesa" }
+    };
+
+    function normalizarTextoLogin(valor) {
+      return (valor || "").trim().toLowerCase();
+    }
+
+    function isEmailLau(email) {
+      return EMAILS_LAU.includes((email || "").toLowerCase());
+    }
+
+    function isEmailNamorado(email) {
+      return EMAILS_NAMORADO.includes((email || "").toLowerCase());
+    }
+
     let cacheFotosLau = [];
     let cacheStatusLau = [];
     let cacheChatLau = [];
@@ -4874,8 +4919,9 @@
     }
 
     function normalizarRolePorEmail(email) {
-      if (email === EMAIL_LAU) return "Lau";
-      if (email === EMAIL_NAMORADO) return "Namorado";
+      const emailNormalizado = (email || "").toLowerCase();
+      if (isEmailLau(emailNormalizado)) return "Lau";
+      if (isEmailNamorado(emailNormalizado)) return "Namorado";
       return null;
     }
 
@@ -4951,25 +4997,41 @@
       if (erroLau) erroLau.textContent = "";
       if (erroNamorado) erroNamorado.textContent = "";
 
-      const email = tipo === "Lau" ? EMAIL_LAU : EMAIL_NAMORADO;
       const campo = tipo === "Lau" ? campoLau : campoNamorado;
       const erro = tipo === "Lau" ? erroLau : erroNamorado;
-      const senha = (campo?.value || "").trim();
+      const valorDigitado = normalizarTextoLogin(campo?.value);
+      const mapaLogin = tipo === "Lau" ? LOGIN_LAU_ALIASES : LOGIN_NAMORADO_ALIASES;
+      const credencial = mapaLogin[valorDigitado];
 
-      if (!senha) {
+      if (!valorDigitado) {
         if (erro) erro.textContent = "Digite a senha primeiro.";
         return;
       }
 
-      const { data, error } = await sb.auth.signInWithPassword({ email, password: senha });
-      if (error || !data?.user) {
+      if (!credencial) {
         if (erro) erro.textContent = tipo === "Lau" ? "Senha errada para a área da Lau." : "Senha errada para a área do namorado.";
         if (tipo === "Lau" && hintLau) hintLau.textContent = "Dica: talvez seja um apelido fofo, dramático ou meio implicante.";
         if (tipo !== "Lau" && hintNamorado) hintNamorado.textContent = "Dica: tenta algo pequeno, carinhoso e bem de casal.";
         return;
       }
 
+      const { data, error } = await sb.auth.signInWithPassword({
+        email: credencial.email,
+        password: credencial.password
+      });
+
+      if (error || !data?.user) {
+        if (erro) erro.textContent = "Não consegui entrar. Confere se esse usuário foi criado no Supabase.";
+        console.error(error);
+        return;
+      }
+
       const usuario = normalizarRolePorEmail(data.user.email);
+      if (!usuario) {
+        if (erro) erro.textContent = "Login criado, mas ainda não está liberado nas permissões do LauOS.";
+        return;
+      }
+
       localStorage.setItem("lauraos_usuario", usuario);
       document.body.classList.remove("login-open");
       if (loginScreen) loginScreen.style.display = "none";
@@ -5126,7 +5188,7 @@
     // DIARIO PRIVADO
     async function carregarDiarioSupabase() {
       const { data: sessionData } = await sb.auth.getSession();
-      if (sessionData?.session?.user?.email !== EMAIL_LAU) { cacheDiarioLau = []; return; }
+      if (!isEmailLau(sessionData?.session?.user?.email)) { cacheDiarioLau = []; return; }
       const { data, error } = await sb.from("lau_diario").select("*").order("created_at", { ascending: false }).limit(50);
       if (error) { console.error(error); return; }
       cacheDiarioLau = data || [];
@@ -5138,7 +5200,7 @@
       if (!texto) { showMessage("Escreve alguma coisa no diário primeiro 📓"); return; }
       const { data: sessionData } = await sb.auth.getSession();
       const user = sessionData?.session?.user;
-      if (!user || user.email !== EMAIL_LAU) { showMessage("Esse diário é privado da Lau 📓"); return; }
+      if (!user || !isEmailLau(user.email)) { showMessage("Esse diário é privado da Lau 📓"); return; }
       const { error } = await sb.from("lau_diario").insert({ user_id: user.id, texto });
       if (error) { console.error(error); showMessage("Não consegui salvar o diário."); return; }
       campo.value = "";
@@ -5156,7 +5218,7 @@
 
     abrirHistoricoDiarioLau = async function () {
       const { data } = await sb.auth.getSession();
-      if (data?.session?.user?.email !== EMAIL_LAU) { showMessage("Esse diário é privado da Lau 📓"); return; }
+      if (!isEmailLau(data?.session?.user?.email)) { showMessage("Esse diário é privado da Lau 📓"); return; }
       await carregarDiarioSupabase();
       renderizarHistoricoDiarioModal();
       document.getElementById("diaryHistoryModal").classList.add("show");

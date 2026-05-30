@@ -1,0 +1,24 @@
+{
+  "name": "laura-os",
+  "version": "1.0.0",
+  "description": "",
+  "main": "criar-usuarios.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lipemouraocrf/lau-os.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/lipemouraocrf/lau-os/issues"
+  },
+  "homepage": "https://github.com/lipemouraocrf/lau-os#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.2"
+  }
+}
