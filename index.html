@@ -3316,53 +3316,9 @@
     }
 
 
-    /* V30: fotos somente na aba Fotos + fadinhas leves no desktop da Lau */
+
+    /* V29: desktop mais fino, estável e com atalhos diretos */
     @media (min-width: 761px) {
-      body.desktop-app-ready #lauMobilePhotoViewer,
-      body.desktop-app-ready .namorado-memory-card {
-        display: none !important;
-      }
-
-      body.desktop-app-ready.desktop-page-fotos.laura-mode #lauMobilePhotoViewer,
-      body.desktop-app-ready.desktop-page-fotos.namorado-mode .namorado-memory-card {
-        display: block !important;
-      }
-
-      body.desktop-app-ready.laura-mode .fairy-sky {
-        display: block !important;
-        z-index: 15;
-        opacity: 0.72;
-      }
-
-      body.desktop-app-ready .flying-fairy {
-        font-size: 1.35rem;
-        opacity: 0.62;
-        animation-name: fairyDesktopDrift;
-        animation-timing-function: ease-in-out;
-        filter: drop-shadow(0 6px 12px rgba(255, 95, 170, 0.20));
-      }
-
-      body.desktop-app-ready .flying-fairy:nth-child(1) {
-        top: 22%;
-        left: 14%;
-        animation-duration: 18s;
-        animation-delay: 0s;
-      }
-
-      body.desktop-app-ready .flying-fairy:nth-child(2) {
-        top: 54%;
-        left: 52%;
-        animation-duration: 22s;
-        animation-delay: 2.4s;
-      }
-
-      body.desktop-app-ready .flying-fairy:nth-child(3) {
-        top: 76%;
-        left: 78%;
-        animation-duration: 20s;
-        animation-delay: 4.2s;
-      }
-
       body.desktop-app-ready.laura-mode {
         cursor: auto !important;
       }
@@ -3370,14 +3326,230 @@
       body.desktop-app-ready #cursorFairy {
         display: none !important;
       }
+
+      body.desktop-app-ready .desktop-tabbar {
+        width: 154px !important;
+        left: 12px !important;
+        top: 12px !important;
+        bottom: 12px !important;
+        padding: 10px 8px !important;
+        gap: 4px !important;
+        border-radius: 18px !important;
+      }
+
+      body.desktop-app-ready .desktop-nav-brand {
+        padding: 3px 5px 8px !important;
+        gap: 7px !important;
+        font-size: 0.82rem !important;
+      }
+
+      body.desktop-app-ready .desktop-nav-brand img {
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 10px !important;
+      }
+
+      body.desktop-app-ready .desktop-nav-brand small {
+        font-size: 0.64rem !important;
+      }
+
+      body.desktop-app-ready .desktop-tabbar button {
+        min-height: 30px !important;
+        padding: 6px 7px !important;
+        border-radius: 11px !important;
+        font-size: 0.76rem !important;
+        gap: 7px !important;
+      }
+
+      body.desktop-app-ready .desktop-tabbar button strong {
+        width: 21px !important;
+        height: 21px !important;
+        min-width: 21px !important;
+        border-radius: 8px !important;
+        font-size: 0.82rem !important;
+      }
+
+      body.desktop-app-ready .app {
+        width: min(1180px, calc(100vw - 194px)) !important;
+        margin-left: 180px !important;
+        margin-right: 12px !important;
+        padding-top: 10px !important;
+      }
+
+      body.desktop-app-ready .window {
+        min-height: calc(100vh - 20px) !important;
+        border-radius: 20px !important;
+      }
+
+      body.desktop-app-ready .topbar {
+        padding: 10px 14px !important;
+      }
+
+      body.desktop-app-ready .countdown-area,
+      body.desktop-app-ready .role-area {
+        padding: 12px 14px !important;
+      }
+
+      body.desktop-app-ready .role-header {
+        margin-bottom: 8px !important;
+      }
+
+      body.desktop-app-ready .role-header h2 {
+        font-size: 1.25rem !important;
+      }
+
+      body.desktop-app-ready .laura-companions {
+        display: none !important;
+      }
+
+      body.desktop-app-ready .countdown-card,
+      body.desktop-app-ready .viewer-card,
+      body.desktop-app-ready .chat-card,
+      body.desktop-app-ready .lau-corner,
+      body.desktop-app-ready .namorado-corner-view,
+      body.desktop-app-ready .level-card,
+      body.desktop-app-ready .corner-panel,
+      body.desktop-app-ready .current-mission-card,
+      body.desktop-app-ready .agenda-card,
+      body.desktop-app-ready .photo-card {
+        padding: 12px !important;
+        border-radius: 15px !important;
+      }
+
+      body.desktop-app-ready .desktop-content-grid,
+      body.desktop-app-ready .levels-grid {
+        gap: 8px !important;
+      }
+
+      body.desktop-app-ready .level-card {
+        padding: 10px !important;
+      }
+
+      body.desktop-app-ready .level-top {
+        font-size: 0.78rem !important;
+        margin-bottom: 7px !important;
+      }
+
+      body.desktop-app-ready h2 {
+        font-size: 1.35rem !important;
+      }
+
+      body.desktop-app-ready h3 {
+        font-size: 1.08rem !important;
+        margin-bottom: 6px !important;
+      }
+
+      body.desktop-app-ready h4 {
+        font-size: 0.95rem !important;
+      }
+
+      body.desktop-app-ready p,
+      body.desktop-app-ready .corner-panel p,
+      body.desktop-app-ready .viewer-card p,
+      body.desktop-app-ready .chat-card p {
+        font-size: 0.8rem !important;
+        line-height: 1.32 !important;
+        margin-bottom: 8px !important;
+      }
+
+      body.desktop-app-ready .corner-menu {
+        grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)) !important;
+        gap: 6px !important;
+      }
+
+      body.desktop-app-ready .corner-menu button {
+        min-height: 30px !important;
+        padding: 7px 6px !important;
+        font-size: 0.72rem !important;
+        border-radius: 10px !important;
+      }
+
+      body.desktop-app-ready .story-chat {
+        height: 245px !important;
+        max-height: 245px !important;
+        padding: 10px !important;
+        gap: 8px !important;
+        border-radius: 15px !important;
+      }
+
+      body.desktop-app-ready .chat-message {
+        padding: 9px 11px !important;
+        border-radius: 14px !important;
+        font-size: 0.78rem !important;
+        max-width: 72% !important;
+      }
+
+      body.desktop-app-ready .chat-card textarea {
+        min-height: 58px !important;
+      }
+
+
+      body.desktop-app-ready .photo-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)) !important;
+        gap: 8px !important;
+      }
+
+      body.desktop-app-ready .photo-item .delete-photo-btn,
+      body.desktop-app-ready .delete-photo-btn {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 0.74rem !important;
+      }
+
+      body.desktop-app-ready .agenda-calendar {
+        max-width: 540px !important;
+      }
+
+      body.desktop-app-ready .calendar-day,
+      body.desktop-app-ready .weekday {
+        min-height: 30px !important;
+        font-size: 0.76rem !important;
+      }
+
+      body.desktop-app-ready .current-mood,
+      body.desktop-app-ready .mood-note-view,
+      body.desktop-app-ready .protocol-box,
+      body.desktop-app-ready .history-list,
+      body.desktop-app-ready .readonly-levels {
+        font-size: 0.82rem !important;
+      }
     }
 
-    @keyframes fairyDesktopDrift {
-      0% { transform: translate3d(0, 0, 0) rotate(-8deg) scale(0.95); opacity: 0.25; }
-      25% { transform: translate3d(38px, -24px, 0) rotate(8deg) scale(1); opacity: 0.72; }
-      50% { transform: translate3d(76px, 18px, 0) rotate(-4deg) scale(0.98); opacity: 0.58; }
-      75% { transform: translate3d(30px, 34px, 0) rotate(10deg) scale(1.04); opacity: 0.76; }
-      100% { transform: translate3d(0, 0, 0) rotate(-8deg) scale(0.95); opacity: 0.25; }
+
+    /* V30 FIX aplicado na versão certa: fotos só na aba Fotos + fadinhas no desktop da Lau */
+    @media (min-width: 761px) {
+      body.desktop-app-ready .mobile-photo-viewer-card,
+      body.desktop-app-ready .namorado-memory-card {
+        display: none;
+      }
+
+      body.desktop-app-ready .mobile-photo-viewer-card .memory-frame,
+      body.desktop-app-ready .namorado-memory-card .memory-frame {
+        width: min(560px, 94%) !important;
+        min-height: auto !important;
+        border-radius: 24px !important;
+      }
+
+      body.desktop-app-ready .mobile-photo-viewer-card .pet-label,
+      body.desktop-app-ready .namorado-memory-card .pet-label {
+        margin-top: 10px !important;
+        font-size: 0.9rem !important;
+      }
+
+      body.desktop-app-ready.laura-mode .fairy-sky {
+        display: block !important;
+        z-index: 4;
+      }
+
+      body.desktop-app-ready.laura-mode .flying-fairy {
+        opacity: 0.45;
+        font-size: 1.55rem;
+        filter: drop-shadow(0 8px 14px rgba(255, 95, 170, 0.20));
+      }
+
+      body.desktop-app-ready.laura-mode #cursorFairy {
+        display: none !important;
+      }
     }
 
 </style>
@@ -6405,7 +6577,7 @@
           setDisplay(moodNote, statusOn);
           setDisplay(saveMood, statusOn);
           setDisplay(chatCard, page === "chat");
-          setDisplay(photoViewer, page === "fotos");
+          setDisplay(photoViewer, page === "fotos", "flex");
           setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario");
 
           if (page === "agenda") {
@@ -6442,7 +6614,7 @@
           const missionCard = namoradoArea.querySelector(".current-mission-card");
 
           setDisplay(roleHeader, page === "resumo");
-          setDisplay(memoryCard, page === "fotos");
+          setDisplay(memoryCard, page === "fotos", "flex");
           setDisplay(statusCard, page === "resumo");
           setDisplay(historyCard, page === "resumo");
           setDisplay(cornerView, page === "agenda" || page === "cantinho");
@@ -6536,7 +6708,10 @@
             ["fotos", "📸", "Fotos"],
             ["agenda", "🗓️", "Agenda"],
             ["chat", "💬", "Chat"],
-            ["cantinho", "🧚", "Lau"],
+            ["preciso", "🥺", "Preciso"],
+            ["desejos", "🌟", "Desejos"],
+            ["frases", "💬", "Frases"],
+            ["manual", "📖", "Manual"],
             ["missao", "🫡", "Missão"]
           ];
         }
@@ -6546,7 +6721,11 @@
           ["fotos", "📸", "Fotos"],
           ["chat", "💬", "Chat"],
           ["diario", "📓", "Diário"],
-          ["cantinho", "🧚", "Mais"]
+          ["cofrinho", "🌟", "Cofrinho"],
+          ["preciso", "🥺", "Preciso"],
+          ["frases", "💬", "Frases"],
+          ["manual", "📖", "Manual"],
+          ["bau", "🖼️", "Baú"]
         ];
       }
 
@@ -6628,10 +6807,6 @@
         if (!isDesktop()) return;
         const usuario = localStorage.getItem("lauraos_usuario") || "Lau";
         window.lauDesktopPageAtual = page;
-        ["status", "resumo", "agenda", "fotos", "chat", "diario", "cantinho", "missao"].forEach((nomePagina) => {
-          document.body.classList.remove(`desktop-page-${nomePagina}`);
-        });
-        document.body.classList.add(`desktop-page-${page}`);
         ensureDesktopNav(usuario);
 
         document.querySelectorAll("#desktopTabbar button[data-desktop-page]").forEach((btn) => {
@@ -6659,24 +6834,32 @@
           const corner = document.getElementById("lauCorner");
 
           const statusOn = page === "status";
+          const painelPorPaginaLau = {
+            agenda: "agendaCorner",
+            diario: "diaryCorner",
+            cofrinho: "wishCorner",
+            preciso: "needCorner",
+            frases: "phrasesCorner",
+            manual: "manualCorner",
+            bau: "memoryCorner"
+          };
+          const painelLau = painelPorPaginaLau[page];
+
           setDisplay(roleHeader, statusOn);
           setDisplay(moodOptions, statusOn, "grid");
           setDisplay(levelsGrid, statusOn, "grid");
           setDisplay(moodNote, statusOn);
           setDisplay(saveMood, statusOn);
           setDisplay(chatCard, page === "chat");
-          setDisplay(photoViewer, page === "fotos");
-          setDisplay(corner, page === "agenda" || page === "cantinho" || page === "diario");
+          setDisplay(photoViewer, page === "fotos", "flex");
+          setDisplay(corner, Boolean(painelLau) || page === "cantinho");
 
-          if (page === "agenda") {
-            window.lauDesktopCantinhoAtual = "agendaCorner";
-            mostrarPainelCantinhoDesktop(["agendaCorner"], false);
-            if (typeof renderizarAgendaLau === "function") renderizarAgendaLau();
+          if (painelLau) {
+            window.lauDesktopCantinhoAtual = painelLau;
+            mostrarPainelCantinhoDesktop([painelLau], false);
           }
-          if (page === "diario") {
-            window.lauDesktopCantinhoAtual = "diaryCorner";
-            mostrarPainelCantinhoDesktop(["diaryCorner"], false);
-          }
+          if (page === "agenda" && typeof renderizarAgendaLau === "function") renderizarAgendaLau();
+          if (page === "bau" && typeof renderizarGaleriaFotosLau === "function") renderizarGaleriaFotosLau();
           if (page === "fotos") {
             if (typeof atualizarContadorFotos === "function") atualizarContadorFotos();
             if (typeof iniciarCarrosselMemorias === "function") iniciarCarrosselMemorias(true);
@@ -6697,11 +6880,20 @@
           const chatCard = namoradoArea.querySelector(".chat-card");
           const missionCard = namoradoArea.querySelector(".current-mission-card");
 
+          const painelPorPaginaNamorado = {
+            agenda: "viewAgenda",
+            preciso: "viewNeed",
+            desejos: "viewWishes",
+            frases: "viewPhrases",
+            manual: "viewManual"
+          };
+          const painelNamorado = painelPorPaginaNamorado[page];
+
           setDisplay(roleHeader, page === "resumo");
-          setDisplay(memoryCard, page === "fotos");
+          setDisplay(memoryCard, page === "fotos", "flex");
           setDisplay(statusCard, page === "resumo");
           setDisplay(historyCard, page === "resumo");
-          setDisplay(cornerView, page === "agenda" || page === "cantinho");
+          setDisplay(cornerView, Boolean(painelNamorado) || page === "cantinho");
           setDisplay(chatCard, page === "chat");
           setDisplay(missionCard, page === "missao");
 
@@ -6709,12 +6901,12 @@
             if (typeof atualizarContadorFotos === "function") atualizarContadorFotos();
             if (typeof iniciarCarrosselMemorias === "function") iniciarCarrosselMemorias();
           }
-          if (page === "agenda") {
-            window.lauDesktopCantinhoNamoradoAtual = "viewAgenda";
-            mostrarPainelNamoradoDesktop(["viewAgenda"], false);
+          if (painelNamorado) {
+            window.lauDesktopCantinhoNamoradoAtual = painelNamorado;
+            mostrarPainelNamoradoDesktop([painelNamorado], false);
             if (typeof renderizarCantinhoNamorado === "function") renderizarCantinhoNamorado();
-            if (typeof renderizarAgendaNamorado === "function") renderizarAgendaNamorado();
           }
+          if (page === "agenda" && typeof renderizarAgendaNamorado === "function") renderizarAgendaNamorado();
           if (page === "cantinho") {
             const painelAtualNamorado = window.lauDesktopCantinhoNamoradoAtual || window.lauMobileCantinhoNamoradoAtual || "viewNeed";
             mostrarPainelNamoradoDesktop([painelAtualNamorado], true);
