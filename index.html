@@ -3684,6 +3684,120 @@
     }
 
 
+
+
+    /* V36: Nossas músicas */
+    .music-card-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .music-card-item {
+      background: rgba(255,255,255,0.86);
+      border: 2px solid #ffd6ea;
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: 0 10px 24px rgba(255,95,170,0.10);
+    }
+
+    body.namorado-mode .music-card-item {
+      border-color: #cfe7ff;
+      box-shadow: 0 10px 24px rgba(47,128,237,0.08);
+    }
+
+    .music-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-weight: 900;
+      color: #ff4fa3;
+    }
+
+    body.namorado-mode .music-card-top {
+      color: #247fd1;
+    }
+
+    .music-card-top small {
+      color: #ad5b86;
+      font-weight: 700;
+    }
+
+    .music-embed-wrap {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .music-embed-wrap iframe {
+      width: 100%;
+      min-height: 152px;
+      border: 0;
+      display: block;
+    }
+
+    .music-delete-btn {
+      width: 30px;
+      height: 30px;
+      min-height: 30px;
+      padding: 0;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.96);
+      color: #ff4fa3;
+      border: 1px solid rgba(255,79,163,0.22);
+      box-shadow: 0 6px 14px rgba(90,42,69,0.12);
+      flex-shrink: 0;
+    }
+
+    body.namorado-mode .music-delete-btn {
+      color: #247fd1;
+      border-color: rgba(36,127,209,0.18);
+    }
+
+    .music-help {
+      background: #fff0f7;
+      border: 2px dashed #ffc2df;
+      border-radius: 16px;
+      padding: 12px;
+      color: #a83c72;
+      font-weight: 800;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    body.namorado-mode .music-help {
+      background: #eef7ff;
+      border-color: #cfe7ff;
+      color: #2269ab;
+    }
+
+    @media (min-width: 761px) {
+      body.desktop-app-ready .music-card-list {
+        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      }
+
+      body.desktop-app-ready .music-embed-wrap iframe {
+        min-height: 154px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body.mobile-app-ready .music-card-item {
+        border-radius: 16px;
+        padding: 11px;
+      }
+      body.mobile-app-ready .music-card-list {
+        gap: 10px;
+      }
+      body.mobile-app-ready .music-embed-wrap iframe {
+        min-height: 152px;
+      }
+    }
+
+
     /* V32: no celular, Diario e Agenda saem do menu Mais porque ja estao na barra inferior */
     @media (max-width: 760px) {
       body.mobile-app-ready #lauCorner .corner-menu button[onclick*="diaryCorner"],
@@ -3938,6 +4052,7 @@
             <button onclick="abrirCantinho('needCorner')">🥺 Preciso</button>
             <button onclick="abrirCantinho('colorCorner')">🎨 Humor</button>
             <button onclick="abrirCantinho('phrasesCorner')">💬 Frases</button>
+            <button onclick="abrirCantinho('musicCorner')">🎵 Músicas</button>
             <button onclick="abrirCantinho('calendarCorner')">📅 Momentos</button>
             <button onclick="abrirCantinho('agendaCorner')">🗓️ Agenda</button>
             <button onclick="abrirCantinho('manualCorner')">📖 Manual</button>
@@ -3998,6 +4113,18 @@
             <input class="corner-input" id="phraseInput" placeholder="Ex: eu tô aqui com você" />
             <button onclick="adicionarFraseLau()">Salvar frase 💖</button>
             <div class="corner-list" id="phraseList">Nenhuma frase salva ainda.</div>
+          </div>
+
+
+
+          <div class="corner-panel" id="musicCorner">
+            <h4>🎵 Nossas músicas</h4>
+            <p>Guarde links do Spotify para tocar quando vocês quiserem. É só colar o link da música, álbum ou playlist.</p>
+            <div class="music-help">Cole um link do Spotify e aperte salvar. O player aparece aqui dentro do LauOS.</div>
+            <input class="corner-input" id="musicTitleInput" placeholder="Nome opcional. Ex: nossa música" />
+            <input class="corner-input" id="musicUrlInput" placeholder="Cole o link do Spotify aqui" />
+            <button onclick="adicionarMusicaLau()">Adicionar música 🎵</button>
+            <div class="music-card-list" id="musicListLau">Nenhuma música salva ainda.</div>
           </div>
 
           <div class="corner-panel" id="calendarCorner">
@@ -4142,6 +4269,7 @@
             <button onclick="abrirCantinhoNamorado('viewNeed')">🥺 Preciso</button>
             <button onclick="abrirCantinhoNamorado('viewWishes')">🌟 Desejos</button>
             <button onclick="abrirCantinhoNamorado('viewPhrases')">💬 Frases</button>
+            <button onclick="abrirCantinhoNamorado('viewMusic')">🎵 Músicas</button>
             <button onclick="abrirCantinhoNamorado('viewMoments')">📅 Momentos</button>
             <button onclick="abrirCantinhoNamorado('viewAgenda')">🗓️ Agenda</button>
             <button onclick="abrirCantinhoNamorado('viewManual')">📖 Manual</button>
@@ -4150,6 +4278,16 @@
           <div class="corner-panel show" id="viewNeed">Nenhum alerta enviado ainda.</div>
           <div class="corner-panel" id="viewWishes">Nenhum desejo salvo ainda.</div>
           <div class="corner-panel" id="viewPhrases">Nenhuma frase salva ainda.</div>
+          
+          <div class="corner-panel" id="viewMusic">
+            <h4>🎵 Nossas músicas</h4>
+            <p>Links do Spotify salvos para vocês ouvirem quando quiserem.</p>
+            <div class="music-help">Você também pode adicionar um link aqui.</div>
+            <input class="corner-input" id="musicTitleInputNamorado" placeholder="Nome opcional. Ex: música da gente" />
+            <input class="corner-input" id="musicUrlInputNamorado" placeholder="Cole o link do Spotify aqui" />
+            <button onclick="adicionarMusicaNamorado()">Adicionar música 🎵</button>
+            <div class="music-card-list" id="musicListNamorado">Nenhuma música salva ainda.</div>
+          </div>
           <div class="corner-panel" id="viewMoments">Nenhum momento salvo ainda.</div>
           <div class="corner-panel" id="viewAgenda">Nenhuma agenda salva ainda.</div>
           <div class="corner-panel" id="viewManual">Manual ainda não preenchido.</div>
@@ -6856,6 +6994,7 @@
             ["preciso", "🥺", "Preciso"],
             ["desejos", "🌟", "Desejos"],
             ["frases", "💬", "Frases"],
+            ["musicas", "🎵", "Músicas"],
             ["manual", "📖", "Manual"],
             ["missao", "🫡", "Missão"]
           ];
@@ -6869,6 +7008,7 @@
           ["cofrinho", "🌟", "Cofrinho"],
           ["preciso", "🥺", "Preciso"],
           ["frases", "💬", "Frases"],
+          ["musicas", "🎵", "Músicas"],
           ["manual", "📖", "Manual"],
           ["bau", "🖼️", "Baú"]
         ];
@@ -6986,6 +7126,7 @@
             cofrinho: "wishCorner",
             preciso: "needCorner",
             frases: "phrasesCorner",
+            musicas: "musicCorner",
             manual: "manualCorner",
             bau: "memoryCorner"
           };
@@ -7031,6 +7172,7 @@
             preciso: "viewNeed",
             desejos: "viewWishes",
             frases: "viewPhrases",
+            musicas: "viewMusic",
             manual: "viewManual"
           };
           const painelNamorado = painelPorPaginaNamorado[page];
@@ -7889,6 +8031,201 @@ body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
       sincronizarLauOSSilencioso();
     }, 300);
   };
+})();
+</script>
+
+
+<script>
+/* V36: Nossas músicas com Spotify */
+(function () {
+  const MUSICA_PADRAO_LAUOS = {
+    id: 'default-one-time',
+    titulo: 'One Time',
+    url: 'https://open.spotify.com/intl-pt/track/6eZgWxu8bikN6JDkH9wVBM?si=5e880a9142f94715',
+    embed_url: 'https://open.spotify.com/embed/track/6eZgWxu8bikN6JDkH9wVBM?utm_source=generator',
+    created_at: null,
+    fixa: true
+  };
+
+  let cacheMusicasLau = [];
+
+  function extrairSpotifyEmbed(url) {
+    const texto = String(url || '').trim();
+    if (!texto) return null;
+
+    const match = texto.match(/open\.spotify\.com\/(?:intl-[a-z]{2}\/)?(track|album|playlist|artist|episode|show)\/([A-Za-z0-9]+)/i);
+    if (!match) return null;
+
+    const tipo = match[1].toLowerCase();
+    const id = match[2];
+    return `https://open.spotify.com/embed/${tipo}/${id}?utm_source=generator`;
+  }
+
+  function tituloMusica(url, titulo) {
+    const tituloLimpo = String(titulo || '').trim();
+    if (tituloLimpo) return tituloLimpo;
+    if (String(url || '').includes('/playlist/')) return 'Playlist dos dois';
+    if (String(url || '').includes('/album/')) return 'Álbum salvo';
+    return 'Música salva';
+  }
+
+  async function carregarMusicasSupabase() {
+    try {
+      const { data, error } = await sb.from('lau_musicas').select('*').order('created_at', { ascending: false }).limit(50);
+      if (error) throw error;
+      cacheMusicasLau = data || [];
+    } catch (err) {
+      console.warn('Não consegui carregar lau_musicas. Rode o SQL da tabela de músicas.', err);
+      cacheMusicasLau = [];
+    }
+  }
+
+  function musicasParaRenderizar() {
+    const salvas = Array.isArray(cacheMusicasLau) ? cacheMusicasLau : [];
+    const temOneTime = salvas.some((m) => String(m.url || '').includes('6eZgWxu8bikN6JDkH9wVBM') || String(m.embed_url || '').includes('6eZgWxu8bikN6JDkH9wVBM'));
+    return temOneTime ? salvas : [MUSICA_PADRAO_LAUOS, ...salvas];
+  }
+
+  function renderizarMusicas(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const musicas = musicasParaRenderizar();
+    if (!musicas.length) {
+      container.textContent = 'Nenhuma música salva ainda.';
+      return;
+    }
+
+    container.innerHTML = musicas.map((musica) => {
+      const embed = musica.embed_url || extrairSpotifyEmbed(musica.url);
+      if (!embed) return '';
+      const podeExcluir = musica.id && !musica.fixa;
+      return `
+        <div class="music-card-item">
+          <div class="music-card-top">
+            <div>
+              <div>🎵 ${escapeHtml(musica.titulo || 'Música salva')}</div>
+              <small>${musica.created_at ? escapeHtml(dataBR(musica.created_at)) : 'música inicial do LauOS'}</small>
+            </div>
+            ${podeExcluir ? `<button class="music-delete-btn" type="button" onclick="excluirMusicaLau(${Number(musica.id)})" aria-label="Excluir música">×</button>` : ''}
+          </div>
+          <div class="music-embed-wrap">
+            <iframe src="${escapeHtml(embed)}" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+          </div>
+        </div>
+      `;
+    }).join('') || 'Nenhuma música salva ainda.';
+  }
+
+  function renderizarTodasMusicas() {
+    renderizarMusicas('musicListLau');
+    renderizarMusicas('musicListNamorado');
+  }
+
+  async function adicionarMusicaPorCampos(tituloId, urlId) {
+    const tituloInput = document.getElementById(tituloId);
+    const urlInput = document.getElementById(urlId);
+    const url = String(urlInput?.value || '').trim();
+    const embed = extrairSpotifyEmbed(url);
+    if (!embed) {
+      showMessage('Cole um link válido do Spotify primeiro 🎵');
+      return;
+    }
+    const titulo = tituloMusica(url, tituloInput?.value);
+    const { error } = await sb.from('lau_musicas').insert({ titulo, url, embed_url: embed });
+    if (error) {
+      console.error(error);
+      showMessage('Não consegui salvar a música. Rode o SQL da tabela lau_musicas no Supabase.');
+      return;
+    }
+    if (tituloInput) tituloInput.value = '';
+    if (urlInput) urlInput.value = '';
+    await carregarMusicasSupabase();
+    renderizarTodasMusicas();
+    showMessage('Música adicionada em Nossas músicas 🎵');
+  }
+
+  window.adicionarMusicaLau = function () {
+    return adicionarMusicaPorCampos('musicTitleInput', 'musicUrlInput');
+  };
+
+  window.adicionarMusicaNamorado = function () {
+    return adicionarMusicaPorCampos('musicTitleInputNamorado', 'musicUrlInputNamorado');
+  };
+
+  window.excluirMusicaLau = async function (id) {
+    if (!id) return;
+    const ok = confirm('Excluir essa música de Nossas músicas?');
+    if (!ok) return;
+    const { error } = await sb.from('lau_musicas').delete().eq('id', id);
+    if (error) {
+      console.error(error);
+      showMessage('Não consegui excluir a música. Confira a policy de delete.');
+      return;
+    }
+    await carregarMusicasSupabase();
+    renderizarTodasMusicas();
+    showMessage('Música removida 🎵');
+  };
+
+  const carregarTudoAnteriorV36 = window.carregarTudoSupabase;
+  if (typeof carregarTudoAnteriorV36 === 'function') {
+    window.carregarTudoSupabase = carregarTudoSupabase = async function () {
+      await carregarTudoAnteriorV36();
+      await carregarMusicasSupabase();
+      renderizarTodasMusicas();
+    };
+  }
+
+  const syncAnteriorV36 = window.sincronizarLauOS;
+  if (typeof syncAnteriorV36 === 'function') {
+    window.sincronizarLauOS = async function () {
+      await syncAnteriorV36();
+      await carregarMusicasSupabase();
+      renderizarTodasMusicas();
+    };
+  }
+
+  const abrirCantinhoAnteriorV36 = window.abrirCantinho;
+  if (typeof abrirCantinhoAnteriorV36 === 'function') {
+    window.abrirCantinho = function (id) {
+      abrirCantinhoAnteriorV36(id);
+      if (id === 'musicCorner') {
+        carregarMusicasSupabase().then(renderizarTodasMusicas);
+      }
+    };
+  }
+
+  const abrirCantinhoNamoradoAnteriorV36 = window.abrirCantinhoNamorado;
+  if (typeof abrirCantinhoNamoradoAnteriorV36 === 'function') {
+    window.abrirCantinhoNamorado = function (id) {
+      abrirCantinhoNamoradoAnteriorV36(id);
+      if (id === 'viewMusic') {
+        carregarMusicasSupabase().then(renderizarTodasMusicas);
+      }
+    };
+  }
+
+  const renderizarCantinhoLauAnteriorV36 = window.renderizarCantinhoLau;
+  if (typeof renderizarCantinhoLauAnteriorV36 === 'function') {
+    window.renderizarCantinhoLau = renderizarCantinhoLau = function () {
+      renderizarCantinhoLauAnteriorV36();
+      renderizarTodasMusicas();
+    };
+  }
+
+  const renderizarCantinhoNamoradoAnteriorV36 = window.renderizarCantinhoNamorado;
+  if (typeof renderizarCantinhoNamoradoAnteriorV36 === 'function') {
+    window.renderizarCantinhoNamorado = renderizarCantinhoNamorado = function () {
+      renderizarCantinhoNamoradoAnteriorV36();
+      renderizarTodasMusicas();
+    };
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) carregarMusicasSupabase().then(renderizarTodasMusicas);
+  });
+
+  setTimeout(() => carregarMusicasSupabase().then(renderizarTodasMusicas), 1200);
 })();
 </script>
 
