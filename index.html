@@ -8036,7 +8036,7 @@ body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
 
 
 <script>
-/* V36: Nossas músicas com Spotify */
+/* V37: Nossas músicas com Spotify - player estável, sem reiniciar iframe a cada sincronização */
 (function () {
   const MUSICA_PADRAO_LAUOS = {
     id: 'default-one-time',
@@ -8048,6 +8048,7 @@ body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
   };
 
   let cacheMusicasLau = [];
+  let ultimaAssinaturaMusicas = '';
 
   function extrairSpotifyEmbed(url) {
     const texto = String(url || '').trim();
@@ -8069,6 +8070,10 @@ body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
     return 'Música salva';
   }
 
+  function assinaturaListaMusicas(lista) {
+    return lista.map((m) => `${m.id || 'fixa'}:${m.embed_url || extrairSpotifyEmbed(m.url) || ''}:${m.titulo || ''}`).join('|');
+  }
+
   async function carregarMusicasSupabase() {
     try {
       const { data, error } = await sb.from('lau_musicas').select('*').order('created_at', { ascending: false }).limit(50);
@@ -8086,16 +8091,8 @@ body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
     return temOneTime ? salvas : [MUSICA_PADRAO_LAUOS, ...salvas];
   }
 
-  function renderizarMusicas(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    const musicas = musicasParaRenderizar();
-    if (!musicas.length) {
-      container.textContent = 'Nenhuma música salva ainda.';
-      return;
-    }
-
-    container.innerHTML = musicas.map((musica) => {
+  function montarHtmlMusicas(musicas) {
+    return musicas.map((musica) => {
       const embed = musica.embed_url || extrairSpotifyEmbed(musica.url);
       if (!embed) return '';
       const podeExcluir = musica.id && !musica.fixa;
@@ -8109,16 +8106,55 @@ body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
             ${podeExcluir ? `<button class="music-delete-btn" type="button" onclick="excluirMusicaLau(${Number(musica.id)})" aria-label="Excluir música">×</button>` : ''}
           </div>
           <div class="music-embed-wrap">
-            <iframe src="${escapeHtml(embed)}" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+            <iframe
+              src="${escapeHtml(embed)}"
+              loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              allowfullscreen>
+            </iframe>
           </div>
         </div>
       `;
     }).join('') || 'Nenhuma música salva ainda.';
   }
 
-  function renderizarTodasMusicas() {
-    renderizarMusicas('musicListLau');
-    renderizarMusicas('musicListNamorado');
+  function renderizarMusicas(containerId, forcar = false) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const musicas = musicasParaRenderizar();
+    const assinatura = assinaturaListaMusicas(musicas);
+
+    // Ponto principal do bug: não recriar iframe do Spotify se a lista não mudou.
+    // Recriar o iframe faz o player piscar e parar a música.
+    if (!forcar && container.dataset.musicSignature === assinatura) return;
+
+    container.dataset.musicSignature = assinatura;
+    if (!musicas.length) {
+      container.textContent = 'Nenhuma música salva ainda.';
+      return;
+    }
+
+    container.innerHTML = montarHtmlMusicas(musicas);
+  }
+
+  function renderizarTodasMusicas(forcar = false) {
+    renderizarMusicas('musicListLau', forcar);
+    renderizarMusicas('musicListNamorado', forcar);
+  }
+
+  async function sincronizarMusicasSemPiscar() {
+    const assinaturaAntes = ultimaAssinaturaMusicas;
+    await carregarMusicasSupabase();
+    const assinaturaDepois = assinaturaListaMusicas(musicasParaRenderizar());
+    ultimaAssinaturaMusicas = assinaturaDepois;
+
+    // Só redesenha quando adicionou/removeu música. Se for só refresh automático, não toca no player.
+    if (assinaturaDepois !== assinaturaAntes) {
+      renderizarTodasMusicas(true);
+    } else {
+      renderizarTodasMusicas(false);
+    }
   }
 
   async function adicionarMusicaPorCampos(tituloId, urlId) {
@@ -8140,7 +8176,8 @@ body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
     if (tituloInput) tituloInput.value = '';
     if (urlInput) urlInput.value = '';
     await carregarMusicasSupabase();
-    renderizarTodasMusicas();
+    ultimaAssinaturaMusicas = assinaturaListaMusicas(musicasParaRenderizar());
+    renderizarTodasMusicas(true);
     showMessage('Música adicionada em Nossas músicas 🎵');
   }
 
@@ -8163,69 +8200,72 @@ body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
       return;
     }
     await carregarMusicasSupabase();
-    renderizarTodasMusicas();
+    ultimaAssinaturaMusicas = assinaturaListaMusicas(musicasParaRenderizar());
+    renderizarTodasMusicas(true);
     showMessage('Música removida 🎵');
   };
 
-  const carregarTudoAnteriorV36 = window.carregarTudoSupabase;
-  if (typeof carregarTudoAnteriorV36 === 'function') {
+  const carregarTudoAnteriorV37 = window.carregarTudoSupabase;
+  if (typeof carregarTudoAnteriorV37 === 'function') {
     window.carregarTudoSupabase = carregarTudoSupabase = async function () {
-      await carregarTudoAnteriorV36();
-      await carregarMusicasSupabase();
-      renderizarTodasMusicas();
+      await carregarTudoAnteriorV37();
+      await sincronizarMusicasSemPiscar();
     };
   }
 
-  const syncAnteriorV36 = window.sincronizarLauOS;
-  if (typeof syncAnteriorV36 === 'function') {
+  const syncAnteriorV37 = window.sincronizarLauOS;
+  if (typeof syncAnteriorV37 === 'function') {
     window.sincronizarLauOS = async function () {
-      await syncAnteriorV36();
-      await carregarMusicasSupabase();
-      renderizarTodasMusicas();
+      await syncAnteriorV37();
+      await sincronizarMusicasSemPiscar();
     };
   }
 
-  const abrirCantinhoAnteriorV36 = window.abrirCantinho;
-  if (typeof abrirCantinhoAnteriorV36 === 'function') {
+  const abrirCantinhoAnteriorV37 = window.abrirCantinho;
+  if (typeof abrirCantinhoAnteriorV37 === 'function') {
     window.abrirCantinho = function (id) {
-      abrirCantinhoAnteriorV36(id);
+      abrirCantinhoAnteriorV37(id);
       if (id === 'musicCorner') {
-        carregarMusicasSupabase().then(renderizarTodasMusicas);
+        sincronizarMusicasSemPiscar();
       }
     };
   }
 
-  const abrirCantinhoNamoradoAnteriorV36 = window.abrirCantinhoNamorado;
-  if (typeof abrirCantinhoNamoradoAnteriorV36 === 'function') {
+  const abrirCantinhoNamoradoAnteriorV37 = window.abrirCantinhoNamorado;
+  if (typeof abrirCantinhoNamoradoAnteriorV37 === 'function') {
     window.abrirCantinhoNamorado = function (id) {
-      abrirCantinhoNamoradoAnteriorV36(id);
+      abrirCantinhoNamoradoAnteriorV37(id);
       if (id === 'viewMusic') {
-        carregarMusicasSupabase().then(renderizarTodasMusicas);
+        sincronizarMusicasSemPiscar();
       }
     };
   }
 
-  const renderizarCantinhoLauAnteriorV36 = window.renderizarCantinhoLau;
-  if (typeof renderizarCantinhoLauAnteriorV36 === 'function') {
+  const renderizarCantinhoLauAnteriorV37 = window.renderizarCantinhoLau;
+  if (typeof renderizarCantinhoLauAnteriorV37 === 'function') {
     window.renderizarCantinhoLau = renderizarCantinhoLau = function () {
-      renderizarCantinhoLauAnteriorV36();
-      renderizarTodasMusicas();
+      renderizarCantinhoLauAnteriorV37();
+      renderizarTodasMusicas(false);
     };
   }
 
-  const renderizarCantinhoNamoradoAnteriorV36 = window.renderizarCantinhoNamorado;
-  if (typeof renderizarCantinhoNamoradoAnteriorV36 === 'function') {
+  const renderizarCantinhoNamoradoAnteriorV37 = window.renderizarCantinhoNamorado;
+  if (typeof renderizarCantinhoNamoradoAnteriorV37 === 'function') {
     window.renderizarCantinhoNamorado = renderizarCantinhoNamorado = function () {
-      renderizarCantinhoNamoradoAnteriorV36();
-      renderizarTodasMusicas();
+      renderizarCantinhoNamoradoAnteriorV37();
+      renderizarTodasMusicas(false);
     };
   }
 
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) carregarMusicasSupabase().then(renderizarTodasMusicas);
+    if (!document.hidden) sincronizarMusicasSemPiscar();
   });
 
-  setTimeout(() => carregarMusicasSupabase().then(renderizarTodasMusicas), 1200);
+  setTimeout(async () => {
+    await carregarMusicasSupabase();
+    ultimaAssinaturaMusicas = assinaturaListaMusicas(musicasParaRenderizar());
+    renderizarTodasMusicas(true);
+  }, 1200);
 })();
 </script>
 
