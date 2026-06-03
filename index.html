@@ -10054,5 +10054,354 @@ body.namorado-mode .v41-view-box { border-color: #d8ebff; }
 })();
 </script>
 
+
+<style>
+/* V45: estabiliza a aba Status do Namorado no PC e celular */
+body:not(.lauos-status-active) #boyStatusLauView,
+body:not(.lauos-status-active) #boyStatusNamoradoEditor {
+  display: none !important;
+}
+
+body.lauos-status-active #countdownArea {
+  display: none !important;
+}
+
+body.lauos-status-active.laura-mode #lauraArea {
+  display: block !important;
+}
+
+body.lauos-status-active.laura-mode #namoradoArea {
+  display: none !important;
+}
+
+body.lauos-status-active.laura-mode #lauraArea > .role-header,
+body.lauos-status-active.laura-mode #moodOptions,
+body.lauos-status-active.laura-mode #lauraArea > .levels-grid,
+body.lauos-status-active.laura-mode #moodNote,
+body.lauos-status-active.laura-mode #lauraArea > .save-mood-btn,
+body.lauos-status-active.laura-mode #lauCorner,
+body.lauos-status-active.laura-mode #lauMobilePhotoViewer,
+body.lauos-status-active.laura-mode #lauraArea > .chat-card {
+  display: none !important;
+}
+
+body.lauos-status-active.laura-mode #boyStatusLauView {
+  display: block !important;
+  max-width: 760px;
+  margin: 12px auto;
+}
+
+body.lauos-status-active.namorado-mode #namoradoArea {
+  display: block !important;
+}
+
+body.lauos-status-active.namorado-mode #lauraArea {
+  display: none !important;
+}
+
+body.lauos-status-active.namorado-mode #namoradoArea > .role-header,
+body.lauos-status-active.namorado-mode #namoradoArea > .viewer-card,
+body.lauos-status-active.namorado-mode #namoradoArea > .chat-card,
+body.lauos-status-active.namorado-mode #namoradoArea > .current-mission-card {
+  display: none !important;
+}
+
+body.lauos-status-active.namorado-mode #boyStatusNamoradoEditor {
+  display: block !important;
+  max-width: 820px;
+  margin: 12px auto;
+}
+
+body.mobile-app-ready.lauos-status-active #lauraArea,
+body.mobile-app-ready.lauos-status-active #namoradoArea {
+  padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
+}
+</style>
+
+<script>
+/* V45: correção da tela branca/piscada no Status do Namorado */
+(function () {
+  const STATUS_PAGE = 'boyStatus';
+  let statusRefreshRunning = false;
+  let lastStatusJson = '';
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function currentUser() {
+    return localStorage.getItem('lauraos_usuario') || (document.body.classList.contains('namorado-mode') ? 'Namorado' : 'Lau');
+  }
+
+  function isDesktopNow() {
+    return window.matchMedia('(min-width: 761px)').matches;
+  }
+
+  function currentPage() {
+    return isDesktopNow() ? window.lauDesktopPageAtual : window.lauMobilePageAtual;
+  }
+
+  function shouldShowStatus() {
+    return currentPage() === STATUS_PAGE;
+  }
+
+  function safeText(value) {
+    if (typeof escapeHtml === 'function') return escapeHtml(value || '');
+    return String(value || '').replace(/[&<>"']/g, function (char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[char];
+    });
+  }
+
+  function dateText(value) {
+    try {
+      if (typeof dataBR === 'function') return dataBR(value);
+      return value ? new Date(value).toLocaleString('pt-BR') : new Date().toLocaleString('pt-BR');
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function statusHtml(status) {
+    if (!status) return 'Nenhum status enviado ainda.';
+
+    const niveis = status.niveis || {};
+    const labels = {
+      saudade: '🥺 Saudade',
+      cansaco: '😴 Cansaço',
+      carinho: '💙 Carinho',
+      stress: '😤 Stress'
+    };
+
+    const barras = Object.keys(labels).map(function (key) {
+      const valor = Math.max(0, Math.min(100, Number(niveis[key] || 0)));
+      return '<div class="readonly-level">' +
+        '<div>' + labels[key] + ': ' + valor + '%</div>' +
+        '<div class="readonly-bar"><div class="readonly-fill" style="width:' + valor + '%"></div></div>' +
+      '</div>';
+    }).join('');
+
+    return '<strong>' + safeText(status.humor || '') + '</strong><br>' +
+      safeText(status.observacao || '').replaceAll('\n', '<br>') +
+      '<br><small>' + safeText(dateText(status.created_at)) + '</small>' +
+      '<div class="readonly-levels" style="margin-top:12px">' + barras + '</div>';
+  }
+
+  function editorHtml() {
+    return '<div class="v41-boy-status-card" id="boyStatusNamoradoEditor">' +
+      '<h3>💙 Meu status de hoje</h3>' +
+      '<p>Agora ela também consegue saber como você está.</p>' +
+      '<div class="v41-status-grid" id="boyStatusMoodButtons">' +
+        ['🥰 Com saudade','😴 Cansado','😤 Estressado','💙 Carente','🔥 Motivado','🤍 Tranquilo','🍟 Com fome','🫠 Precisando dela'].map(function (h) {
+          return '<button type="button" data-humor="' + h + '" onclick="selecionarHumorNamoradoV41(\'' + h + '\')">' + h + '</button>';
+        }).join('') +
+      '</div>' +
+      '<div class="v41-status-levels">' +
+        [
+          ['boySaudade','🥺 Saudade',80],
+          ['boyCansaco','😴 Cansaço',30],
+          ['boyCarinho','💙 Vontade de carinho',70],
+          ['boyStress','😤 Stress',20]
+        ].map(function (row) {
+          return '<div class="v41-status-level"><label><span>' + row[1] + '</span><span id="' + row[0] + 'Value">' + row[2] + '%</span></label><input type="range" min="0" max="100" value="' + row[2] + '" id="' + row[0] + '" oninput="atualizarNivelNamoradoV41(\'' + row[0] + '\')"></div>';
+        }).join('') +
+      '</div>' +
+      '<textarea class="v41-status-note" id="boyStatusNote" placeholder="Ex: hoje tô com saudade, meio cansado, mas pensando em você..."></textarea>' +
+      '<button onclick="salvarStatusNamoradoV41()">Enviar meu status para a Lau 💙</button>' +
+      '<div class="v41-view-box" id="boyStatusSavedView">Nenhum status seu enviado ainda.</div>' +
+    '</div>';
+  }
+
+  function viewerHtml() {
+    return '<div class="v41-boy-status-card" id="boyStatusLauView">' +
+      '<h3>💙 Status do namorado</h3>' +
+      '<div class="v41-view-box" id="boyStatusLauContent">Nenhum status enviado ainda.</div>' +
+    '</div>';
+  }
+
+  function ensureCards() {
+    const namoradoArea = byId('namoradoArea');
+    const lauraArea = byId('lauraArea');
+
+    if (namoradoArea && !byId('boyStatusNamoradoEditor')) {
+      namoradoArea.insertAdjacentHTML('beforeend', editorHtml());
+    }
+
+    if (lauraArea && !byId('boyStatusLauView')) {
+      lauraArea.insertAdjacentHTML('beforeend', viewerHtml());
+    }
+  }
+
+  function setVisible(node, show, display) {
+    if (!node) return;
+    node.style.display = show ? (display || 'block') : 'none';
+  }
+
+  function applyStatusLayout() {
+    ensureCards();
+
+    if (!shouldShowStatus()) {
+      document.body.classList.remove('lauos-status-active', 'lauos-show-boy-status');
+      const lauView = byId('boyStatusLauView');
+      const editor = byId('boyStatusNamoradoEditor');
+      if (lauView) lauView.style.display = 'none';
+      if (editor) editor.style.display = 'none';
+      return;
+    }
+
+    const user = currentUser();
+    document.body.classList.add('lauos-status-active', 'lauos-show-boy-status');
+
+    setVisible(byId('countdownArea'), false);
+
+    if (user === 'Lau') {
+      const lauraArea = byId('lauraArea');
+      setVisible(lauraArea, true);
+      setVisible(byId('namoradoArea'), false);
+
+      if (lauraArea) {
+        setVisible(lauraArea.querySelector('.role-header'), false);
+        setVisible(lauraArea.querySelector('.levels-grid'), false);
+        setVisible(lauraArea.querySelector('.save-mood-btn'), false);
+        setVisible(lauraArea.querySelector('.chat-card'), false);
+      }
+
+      ['moodOptions', 'moodNote', 'lauCorner', 'lauMobilePhotoViewer'].forEach(function (id) {
+        setVisible(byId(id), false);
+      });
+
+      setVisible(byId('boyStatusLauView'), true);
+      setVisible(byId('boyStatusNamoradoEditor'), false);
+    } else {
+      const namoradoArea = byId('namoradoArea');
+      setVisible(byId('lauraArea'), false);
+      setVisible(namoradoArea, true);
+
+      if (namoradoArea) {
+        setVisible(namoradoArea.querySelector('.role-header'), false);
+        namoradoArea.querySelectorAll(':scope > .viewer-card').forEach(function (card) {
+          setVisible(card, false);
+        });
+        setVisible(namoradoArea.querySelector('.chat-card'), false);
+        setVisible(namoradoArea.querySelector('.current-mission-card'), false);
+      }
+
+      setVisible(byId('boyStatusNamoradoEditor'), true);
+      setVisible(byId('boyStatusLauView'), false);
+    }
+
+    document.querySelectorAll('#desktopTabbar button[data-desktop-page], #mobileTabbar button[data-mobile-page]').forEach(function (btn) {
+      const page = btn.dataset.desktopPage || btn.dataset.mobilePage;
+      btn.classList.toggle('active', page === STATUS_PAGE);
+    });
+  }
+
+  async function refreshStatus() {
+    if (statusRefreshRunning) return;
+    if (typeof sb === 'undefined') return;
+
+    statusRefreshRunning = true;
+    try {
+      const response = await sb.from('namorado_status').select('*').order('created_at', { ascending: false }).limit(1);
+      if (response.error) throw response.error;
+
+      const status = (response.data || [])[0] || null;
+      const json = JSON.stringify(status || {});
+      if (json !== lastStatusJson) {
+        lastStatusJson = json;
+        const html = statusHtml(status);
+        const lauContent = byId('boyStatusLauContent');
+        const savedView = byId('boyStatusSavedView');
+        if (lauContent) lauContent.innerHTML = html;
+        if (savedView) savedView.innerHTML = html;
+      }
+    } catch (error) {
+      console.warn('Status do namorado não carregou:', error);
+    } finally {
+      statusRefreshRunning = false;
+    }
+  }
+
+  function enterStatusPage(source) {
+    if (isDesktopNow()) window.lauDesktopPageAtual = STATUS_PAGE;
+    else window.lauMobilePageAtual = STATUS_PAGE;
+
+    applyStatusLayout();
+    refreshStatus();
+
+    setTimeout(applyStatusLayout, 80);
+    setTimeout(applyStatusLayout, 250);
+  }
+
+  const oldMobile = window.abrirPaginaMobile;
+  window.abrirPaginaMobile = function (page) {
+    if (page === STATUS_PAGE) {
+      enterStatusPage('mobile');
+      return;
+    }
+
+    document.body.classList.remove('lauos-status-active', 'lauos-show-boy-status');
+    const result = typeof oldMobile === 'function' ? oldMobile(page) : undefined;
+    setTimeout(applyStatusLayout, 80);
+    return result;
+  };
+
+  const oldDesktop = window.abrirPaginaDesktop;
+  window.abrirPaginaDesktop = function (page) {
+    if (page === STATUS_PAGE) {
+      enterStatusPage('desktop');
+      return;
+    }
+
+    document.body.classList.remove('lauos-status-active', 'lauos-show-boy-status');
+    const result = typeof oldDesktop === 'function' ? oldDesktop(page) : undefined;
+    setTimeout(applyStatusLayout, 80);
+    return result;
+  };
+
+  const oldSaveStatus = window.salvarStatusNamoradoV41;
+  if (typeof oldSaveStatus === 'function') {
+    window.salvarStatusNamoradoV41 = async function () {
+      const result = await oldSaveStatus.apply(this, arguments);
+      await refreshStatus();
+      applyStatusLayout();
+      return result;
+    };
+  }
+
+  window.addEventListener('resize', function () {
+    if (shouldShowStatus()) setTimeout(applyStatusLayout, 60);
+  });
+
+  window.addEventListener('focus', function () {
+    if (shouldShowStatus()) {
+      applyStatusLayout();
+      refreshStatus();
+    }
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden && shouldShowStatus()) {
+      applyStatusLayout();
+      refreshStatus();
+    }
+  });
+
+  setInterval(function () {
+    if (shouldShowStatus()) {
+      applyStatusLayout();
+      refreshStatus();
+    }
+  }, 1200);
+
+  setTimeout(function () {
+    ensureCards();
+    if (shouldShowStatus()) {
+      applyStatusLayout();
+      refreshStatus();
+    }
+  }, 900);
+})();
+</script>
+
 </body>
 </html>
