@@ -4069,6 +4069,15 @@
             <div class="corner-list" id="wishList">Nenhum desejo guardado ainda.</div>
           </div>
 
+          <div class="corner-panel" id="blogCorner">
+            <h4>📝 Blog da Lau</h4>
+            <p>Um bloguinho antigo, fofo e compartilhado. O que ela publicar aqui o namorado consegue ler.</p>
+            <input class="corner-input" id="blogTitleInput" placeholder="Título do post. Ex: querido blog..." />
+            <textarea id="blogTextInput" placeholder="Escreva seu post aqui, Lau..."></textarea>
+            <button onclick="publicarPostBlogLau()">Publicar no blog 📝</button>
+            <div class="blog-posts-list" id="blogListLau">Nenhum post publicado ainda.</div>
+          </div>
+
           <div class="corner-panel" id="diaryCorner">
             <h4>📓 Diário secreto da Lau</h4>
             <p>Um espaço só dela. O namorado não vê esse conteúdo; aqui ela pode escrever com confiança.</p>
@@ -4276,6 +4285,11 @@
             <button onclick="abrirCantinhoNamorado('viewColor')">🎨 Cor</button>
           </div>
           <div class="corner-panel show" id="viewNeed">Nenhum alerta enviado ainda.</div>
+          <div class="corner-panel" id="viewBlog">
+            <h4>📝 Blog da Lau</h4>
+            <p>Posts que ela resolveu compartilhar com você.</p>
+            <div class="blog-posts-list" id="blogListNamorado">Nenhum post publicado ainda.</div>
+          </div>
           <div class="corner-panel" id="viewWishes">Nenhum desejo salvo ainda.</div>
           <div class="corner-panel" id="viewPhrases">Nenhuma frase salva ainda.</div>
           
@@ -6750,20 +6764,21 @@
 
         const tabsLau = [
           ["status", "💗", "Hoje"],
+          ["blog", "📝", "Blog"],
           ["agenda", "🗓️", "Agenda"],
           ["fotos", "📸", "Fotos"],
-          ["chat", "💬", "Chat"],
           ["diario", "📓", "Diário"],
-          ["cantinho", "🧚", "Mais"]
+          ["chat", "💬", "Chat"],
+          ["cantinho", "⋯", "Mais"]
         ];
 
         const tabsNamorado = [
-          ["resumo", "💙", "Resumo"],
-          ["fotos", "📸", "Fotos"],
+          ["resumo", "💙", "Hoje"],
+          ["blog", "📝", "Blog"],
           ["agenda", "🗓️", "Agenda"],
+          ["fotos", "📸", "Fotos"],
           ["chat", "💬", "Chat"],
-          ["cantinho", "🧚", "Lau"],
-          ["missao", "🫡", "Missão"]
+          ["cantinho", "⋯", "Mais"]
         ];
 
         const tabs = usuario === "Namorado" ? tabsNamorado : tabsLau;
@@ -6987,30 +7002,22 @@
       function tabsDoUsuario(usuario) {
         if (usuario === "Namorado") {
           return [
-            ["resumo", "💙", "Resumo"],
-            ["fotos", "📸", "Fotos"],
+            ["resumo", "💙", "Hoje"],
+            ["blog", "📝", "Blog"],
             ["agenda", "🗓️", "Agenda"],
+            ["fotos", "📸", "Fotos"],
             ["chat", "💬", "Chat"],
-            ["preciso", "🥺", "Preciso"],
-            ["desejos", "🌟", "Desejos"],
-            ["frases", "💬", "Frases"],
-            ["musicas", "🎵", "Músicas"],
-            ["manual", "📖", "Manual"],
-            ["missao", "🫡", "Missão"]
+            ["cantinho", "⋯", "Mais"]
           ];
         }
         return [
           ["status", "💗", "Hoje"],
+          ["blog", "📝", "Blog"],
           ["agenda", "🗓️", "Agenda"],
           ["fotos", "📸", "Fotos"],
-          ["chat", "💬", "Chat"],
           ["diario", "📓", "Diário"],
-          ["cofrinho", "🌟", "Cofrinho"],
-          ["preciso", "🥺", "Preciso"],
-          ["frases", "💬", "Frases"],
-          ["musicas", "🎵", "Músicas"],
-          ["manual", "📖", "Manual"],
-          ["bau", "🖼️", "Baú"]
+          ["chat", "💬", "Chat"],
+          ["cantinho", "⋯", "Mais"]
         ];
       }
 
@@ -8266,6 +8273,1784 @@ body.namorado-mode .agenda-routine-list .agenda-item strong { color: #2f80ed; }
     ultimaAssinaturaMusicas = assinaturaListaMusicas(musicasParaRenderizar());
     renderizarTodasMusicas(true);
   }, 1200);
+})();
+</script>
+
+
+<style>
+/* V39: limpeza de navegação + Blog da Lau + Diário em páginas + Agenda editável */
+.blog-posts-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+.blog-post-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,248,252,.96));
+  border: 2px solid #ffd6ea;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(255, 95, 170, 0.10);
+  position: relative;
+}
+.blog-post-card::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 42px;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, #ffd6ea 0 8px, transparent 8px 14px);
+  opacity: .75;
+}
+.blog-post-title {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #ff4fa3;
+  margin-bottom: 10px;
+  padding-right: 34px;
+}
+.blog-post-date {
+  display: inline-block;
+  font-size: .78rem;
+  font-weight: 900;
+  color: #a83c72;
+  background: #fff0f7;
+  border: 1px solid #ffd6ea;
+  border-radius: 999px;
+  padding: 4px 9px;
+  margin-bottom: 10px;
+}
+.blog-post-text {
+  white-space: pre-wrap;
+  line-height: 1.62;
+  font-weight: 700;
+}
+.blog-delete-btn,
+.agenda-delete-btn {
+  width: 27px;
+  height: 27px;
+  min-height: 27px;
+  padding: 0;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.94);
+  color: #ff4fa3;
+  border: 1px solid rgba(255,79,163,.25);
+  box-shadow: 0 6px 14px rgba(90,42,69,.14);
+  font-size: .9rem;
+}
+.blog-delete-btn {
+  position: absolute;
+  top: 11px;
+  right: 11px;
+}
+.agenda-delete-btn {
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+.agenda-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.agenda-item-content {
+  min-width: 0;
+  flex: 1;
+}
+.diary-book {
+  margin-top: 14px;
+  background:
+    linear-gradient(90deg, rgba(255,214,234,.34) 0 1px, transparent 1px 100%),
+    linear-gradient(180deg, #fffdf8, #fff7fb);
+  background-size: 28px 100%, 100% 100%;
+  border: 2px solid #ffd6ea;
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: inset 0 0 28px rgba(255,143,199,.12);
+}
+.diary-book-date {
+  display: inline-block;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: #fff0f7;
+  color: #a83c72;
+  font-weight: 900;
+  font-size: .82rem;
+  margin-bottom: 12px;
+}
+.diary-book-text {
+  min-height: 180px;
+  white-space: pre-wrap;
+  line-height: 1.7;
+  font-weight: 700;
+  color: #5a2a45;
+}
+.diary-book-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+}
+.diary-book-controls button {
+  padding: 9px 12px;
+  border-radius: 14px;
+  font-size: .82rem;
+}
+.diary-page-indicator {
+  font-weight: 900;
+  color: #a83c72;
+  font-size: .86rem;
+  text-align: center;
+}
+body.namorado-mode .blog-post-card {
+  border-color: #cfe7ff;
+  box-shadow: 0 10px 24px rgba(47, 128, 237, 0.08);
+}
+body.namorado-mode .blog-post-card::before {
+  background: repeating-linear-gradient(90deg, #cfe7ff 0 8px, transparent 8px 14px);
+}
+body.namorado-mode .blog-post-title {
+  color: #2f80ed;
+}
+body.namorado-mode .blog-post-date {
+  background: #eaf4ff;
+  border-color: #cfe7ff;
+  color: #2f6fb4;
+}
+body.mobile-app-ready .mobile-tabbar {
+  grid-template-columns: repeat(auto-fit, minmax(39px, 1fr)) !important;
+}
+body.mobile-app-ready .mobile-tabbar button {
+  font-size: .54rem !important;
+}
+body.mobile-app-ready .blog-post-card,
+body.mobile-app-ready .diary-book {
+  border-radius: 16px;
+  padding: 13px;
+}
+body.mobile-app-ready .diary-book-text {
+  min-height: 150px;
+  font-size: .92rem;
+}
+@media (min-width: 761px) {
+  body.desktop-app-ready .desktop-tabbar {
+    width: 164px !important;
+  }
+  body.desktop-app-ready .app {
+    width: min(1180px, calc(100vw - 204px)) !important;
+    margin-left: 190px !important;
+  }
+  body.desktop-app-ready .blog-post-card {
+    padding: 14px !important;
+  }
+}
+</style>
+
+<script>
+/* V39: Blog antigo + menus limpos + diario em paginas + agenda com exclusao */
+(function () {
+  const LAU_EMAILS_V39 = [
+    'lau@lauos.com',
+    'paixao@lauos.com',
+    'chatonildo@lauos.com',
+    'bravinho@lauos.com',
+    'bicudo@lauos.com',
+    'lipe-login@lauos.com'
+  ];
+
+  let cacheBlogLau = [];
+  let diarioPaginaAtual = 0;
+  let agendaDiaSelecionadoV39Lau = null;
+  let agendaDiaSelecionadoV39Namorado = null;
+
+  function isLauSessionEmail(email) {
+    return LAU_EMAILS_V39.includes(String(email || '').toLowerCase());
+  }
+
+  function v39SetDisplay(el, show, display = 'block') {
+    if (!el) return;
+    el.style.display = show ? display : 'none';
+  }
+
+  function v39HojeISO() {
+    if (typeof hojeISO === 'function') return hojeISO();
+    const agora = new Date();
+    return `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}-${String(agora.getDate()).padStart(2, '0')}`;
+  }
+
+  function v39OrdenarAgenda(lista) {
+    return [...(lista || [])].sort((a, b) => {
+      const aHora = a.hora || '99:99';
+      const bHora = b.hora || '99:99';
+      return `${a.data || ''} ${aHora}`.localeCompare(`${b.data || ''} ${bHora}`);
+    });
+  }
+
+  function rotinaArrayV39(dataISO) {
+    const valor = (cacheRotinasLau || {})[dataISO];
+    if (!valor) return [];
+    return Array.isArray(valor) ? valor : [valor];
+  }
+
+  function compromissoArrayV39(dataISO) {
+    return v39OrdenarAgenda((cacheAgendaLau || []).filter((item) => item.data === dataISO));
+  }
+
+  function usuarioAtualV39() {
+    return localStorage.getItem('lauraos_usuario') || 'Lau';
+  }
+
+  function podeEditarLauV39() {
+    return usuarioAtualV39() === 'Lau';
+  }
+
+  function garantirPainelBlog() {
+    const lauCorner = document.getElementById('lauCorner');
+    if (lauCorner && !document.getElementById('blogCorner')) {
+      const div = document.createElement('div');
+      div.className = 'corner-panel';
+      div.id = 'blogCorner';
+      div.innerHTML = `
+        <h4>📝 Blog da Lau</h4>
+        <p>Um bloguinho antigo, fofo e compartilhado. O que ela publicar aqui o namorado consegue ler.</p>
+        <input class="corner-input" id="blogTitleInput" placeholder="Título do post. Ex: querido blog..." />
+        <textarea id="blogTextInput" placeholder="Escreva seu post aqui, Lau..."></textarea>
+        <button onclick="publicarPostBlogLau()">Publicar no blog 📝</button>
+        <div class="blog-posts-list" id="blogListLau">Nenhum post publicado ainda.</div>
+      `;
+      lauCorner.appendChild(div);
+    }
+
+    const namoradoCorner = document.querySelector('.namorado-corner-view');
+    if (namoradoCorner && !document.getElementById('viewBlog')) {
+      const div = document.createElement('div');
+      div.className = 'corner-panel';
+      div.id = 'viewBlog';
+      div.innerHTML = `
+        <h4>📝 Blog da Lau</h4>
+        <p>Posts que ela resolveu compartilhar com você.</p>
+        <div class="blog-posts-list" id="blogListNamorado">Nenhum post publicado ainda.</div>
+      `;
+      namoradoCorner.appendChild(div);
+    }
+  }
+
+  function configurarMenusMais() {
+    const lauMenu = document.querySelector('#lauCorner .corner-menu');
+    if (lauMenu) {
+      lauMenu.innerHTML = `
+        <button onclick="abrirCantinho('missionGame')">🫡 Missão</button>
+        <button onclick="abrirCantinho('wishCorner')">🌟 Desejos</button>
+        <button onclick="abrirCantinho('musicCorner')">🎵 Músicas</button>
+        <button onclick="abrirCantinho('calendarCorner')">📅 Momentos</button>
+      `;
+    }
+
+    const namoradoMenu = document.querySelector('.namorado-corner-view .corner-menu');
+    if (namoradoMenu) {
+      namoradoMenu.innerHTML = `
+        <button onclick="abrirPaginaAtualV39('missao')">🫡 Missão</button>
+        <button onclick="abrirCantinhoNamorado('viewWishes')">🌟 Desejos</button>
+        <button onclick="abrirCantinhoNamorado('viewMusic')">🎵 Músicas</button>
+        <button onclick="abrirCantinhoNamorado('viewMoments')">📅 Momentos</button>
+      `;
+    }
+  }
+
+  window.abrirPaginaAtualV39 = function (page) {
+    if (window.matchMedia('(max-width: 760px)').matches && typeof window.abrirPaginaMobile === 'function') {
+      window.abrirPaginaMobile(page);
+      return;
+    }
+    if (typeof window.abrirPaginaDesktop === 'function') {
+      window.abrirPaginaDesktop(page);
+    }
+  };
+
+  function mostrarPainelLauV39(ids, mostrarMenu = false) {
+    garantirPainelBlog();
+    configurarMenusMais();
+
+    const corner = document.getElementById('lauCorner');
+    if (!corner) return;
+    v39SetDisplay(corner, true);
+    v39SetDisplay(corner.querySelector('.corner-header'), mostrarMenu);
+    v39SetDisplay(corner.querySelector('.corner-menu'), mostrarMenu, 'grid');
+
+    corner.querySelectorAll('.corner-panel').forEach((panel) => {
+      const show = ids.includes(panel.id);
+      v39SetDisplay(panel, show);
+      panel.classList.toggle('show', show);
+    });
+
+    if (ids.includes('memoryCorner') && typeof renderizarGaleriaFotosLau === 'function') renderizarGaleriaFotosLau();
+    if (ids.includes('blogCorner')) renderizarBlogLau();
+    if (ids.includes('diaryCorner')) renderizarDiarioLivroLau();
+    if (ids.includes('agendaCorner')) renderizarAgendaLau();
+    if (ids.includes('missionGame') && typeof renderizarMissaoLau === 'function') renderizarMissaoLau();
+  }
+
+  function mostrarPainelNamoradoV39(ids, mostrarMenu = false) {
+    garantirPainelBlog();
+    configurarMenusMais();
+
+    const corner = document.querySelector('.namorado-corner-view');
+    if (!corner) return;
+    v39SetDisplay(corner, true);
+    v39SetDisplay(corner.querySelector('.corner-menu'), mostrarMenu, 'grid');
+
+    corner.querySelectorAll('.corner-panel').forEach((panel) => {
+      const show = ids.includes(panel.id);
+      v39SetDisplay(panel, show);
+      panel.classList.toggle('show', show);
+    });
+
+    if (ids.includes('viewBlog')) renderizarBlogNamorado();
+    if (ids.includes('viewAgenda')) renderizarAgendaNamorado();
+  }
+
+  // Sobrescreve os botões internos antigos para manter apenas o novo "Mais".
+  window.abrirCantinho = function (id) {
+    const permitidos = ['missionGame', 'wishCorner', 'musicCorner', 'calendarCorner'];
+    const painel = permitidos.includes(id) ? id : 'wishCorner';
+    window.lauMobileCantinhoAtual = painel;
+    window.lauDesktopCantinhoAtual = painel;
+    mostrarPainelLauV39([painel], true);
+  };
+
+  window.abrirCantinhoNamorado = function (id) {
+    const permitidos = ['viewWishes', 'viewMusic', 'viewMoments'];
+    const painel = permitidos.includes(id) ? id : 'viewWishes';
+    window.lauMobileCantinhoNamoradoAtual = painel;
+    window.lauDesktopCantinhoNamoradoAtual = painel;
+    mostrarPainelNamoradoV39([painel], true);
+  };
+
+  // BLOG
+  window.carregarBlogSupabase = async function () {
+    try {
+      const { data, error } = await sb.from('lau_blog').select('*').order('created_at', { ascending: false }).limit(80);
+      if (error) throw error;
+      cacheBlogLau = data || [];
+    } catch (err) {
+      console.warn('Blog ainda não carregou. Rode o SQL da tabela lau_blog.', err);
+      cacheBlogLau = [];
+    }
+  };
+
+  function montarBlogHtml(editavel) {
+    if (!cacheBlogLau.length) return '<div class="corner-item">Nenhum post publicado ainda.</div>';
+
+    return cacheBlogLau.map((post) => `
+      <article class="blog-post-card">
+        ${editavel ? `<button class="blog-delete-btn" onclick="excluirPostBlogLau(${Number(post.id)})" title="Excluir post">×</button>` : ''}
+        <div class="blog-post-title">${escapeHtml(post.titulo || 'Querido blog...')}</div>
+        <div class="blog-post-date">${escapeHtml(dataBR(post.created_at))}</div>
+        <div class="blog-post-text">${escapeHtml(post.texto || '').replaceAll('\n', '<br>')}</div>
+      </article>
+    `).join('');
+  }
+
+  window.renderizarBlogLau = function () {
+    const lista = document.getElementById('blogListLau');
+    if (lista) lista.innerHTML = montarBlogHtml(true);
+  };
+
+  window.renderizarBlogNamorado = function () {
+    const lista = document.getElementById('blogListNamorado');
+    if (lista) lista.innerHTML = montarBlogHtml(false);
+  };
+
+  window.publicarPostBlogLau = async function () {
+    const tituloInput = document.getElementById('blogTitleInput');
+    const textoInput = document.getElementById('blogTextInput');
+    const titulo = (tituloInput?.value || '').trim() || 'Querido blog...';
+    const texto = (textoInput?.value || '').trim();
+
+    if (!texto) {
+      showMessage('Escreve o post antes de publicar 📝');
+      return;
+    }
+
+    const { data: sessionData } = await sb.auth.getSession();
+    if (!isLauSessionEmail(sessionData?.session?.user?.email)) {
+      showMessage('Só a Lau pode publicar no blog 📝');
+      return;
+    }
+
+    const { error } = await sb.from('lau_blog').insert({ titulo, texto });
+    if (error) {
+      console.error(error);
+      showMessage('Não consegui publicar. Confira o SQL do blog no Supabase.');
+      return;
+    }
+
+    if (tituloInput) tituloInput.value = '';
+    if (textoInput) textoInput.value = '';
+    await carregarBlogSupabase();
+    renderizarBlogLau();
+    renderizarBlogNamorado();
+    showMessage('Post publicado no Blog da Lau 📝');
+  };
+
+  window.excluirPostBlogLau = async function (id) {
+    if (!confirm('Excluir esse post do Blog da Lau?')) return;
+    const { error } = await sb.from('lau_blog').delete().eq('id', id);
+    if (error) {
+      console.error(error);
+      showMessage('Não consegui excluir esse post.');
+      return;
+    }
+    await carregarBlogSupabase();
+    renderizarBlogLau();
+    renderizarBlogNamorado();
+    showMessage('Post removido do blog.');
+  };
+
+  // DIARIO EM PAGINAS
+  function entradasDiarioOrdenadas() {
+    return [...(cacheDiarioLau || [])].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+  }
+
+  window.renderizarDiarioLivroLau = function () {
+    const diaryList = document.getElementById('diaryList');
+    if (!diaryList) return;
+
+    const entradas = entradasDiarioOrdenadas();
+    if (!entradas.length) {
+      diaryList.innerHTML = `
+        <div class="diary-book">
+          <div class="diary-book-date">Diário vazio</div>
+          <div class="diary-book-text">Quando a Lau escrever, cada dia vai aparecer como uma página aqui.</div>
+        </div>
+      `;
+      return;
+    }
+
+    if (diarioPaginaAtual < 0) diarioPaginaAtual = 0;
+    if (diarioPaginaAtual >= entradas.length) diarioPaginaAtual = entradas.length - 1;
+    const entrada = entradas[diarioPaginaAtual];
+
+    diaryList.innerHTML = `
+      <div class="diary-book">
+        <div class="diary-book-date">📓 ${escapeHtml(dataBR(entrada.created_at))}</div>
+        <div class="diary-book-text">${escapeHtml(entrada.texto || '').replaceAll('\n', '<br>')}</div>
+        <div class="diary-book-controls">
+          <button onclick="mudarPaginaDiarioLau(1)" ${diarioPaginaAtual >= entradas.length - 1 ? 'disabled' : ''}>← anterior</button>
+          <div class="diary-page-indicator">página ${diarioPaginaAtual + 1} de ${entradas.length}</div>
+          <button onclick="mudarPaginaDiarioLau(-1)" ${diarioPaginaAtual <= 0 ? 'disabled' : ''}>próxima →</button>
+        </div>
+      </div>
+    `;
+  };
+
+  window.mudarPaginaDiarioLau = function (delta) {
+    diarioPaginaAtual += delta;
+    renderizarDiarioLivroLau();
+  };
+
+  const salvarDiarioLauAnteriorV39 = window.salvarDiarioLau;
+  window.salvarDiarioLau = async function () {
+    await salvarDiarioLauAnteriorV39();
+    diarioPaginaAtual = 0;
+    await carregarDiarioSupabase();
+    renderizarDiarioLivroLau();
+  };
+
+  const renderizarHistoricoDiarioModalAnteriorV39 = window.renderizarHistoricoDiarioModal;
+  window.renderizarHistoricoDiarioModal = function () {
+    renderizarDiarioLivroLau();
+    if (typeof renderizarHistoricoDiarioModalAnteriorV39 === 'function') {
+      renderizarHistoricoDiarioModalAnteriorV39();
+    }
+  };
+
+  // AGENDA COM CLIQUE, ORDEM POR HORARIO E EXCLUSAO
+  function dataComEventoV39() {
+    return new Set([
+      ...(cacheAgendaLau || []).map((item) => item.data),
+      ...Object.keys(cacheRotinasLau || {})
+    ]);
+  }
+
+  function montarCalendarioV39(tipo) {
+    const ano = agendaMesAtual.getFullYear();
+    const mes = agendaMesAtual.getMonth();
+    const primeiroDia = new Date(ano, mes, 1).getDay();
+    const totalDias = new Date(ano, mes + 1, 0).getDate();
+    const nomeMes = agendaMesAtual.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+    const hoje = v39HojeISO();
+    const selecionado = tipo === 'namorado' ? (agendaDiaSelecionadoV39Namorado || hoje) : (agendaDiaSelecionadoV39Lau || hoje);
+    const fn = tipo === 'namorado' ? 'selecionarDiaAgendaNamorado' : 'selecionarDiaAgendaLau';
+    const datasComEvento = dataComEventoV39();
+
+    let dias = '';
+    for (let i = 0; i < primeiroDia; i++) dias += '<div class="agenda-day empty"></div>';
+
+    for (let dia = 1; dia <= totalDias; dia++) {
+      const dataISO = `${ano}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+      const classes = ['agenda-day', 'clickable-day'];
+      if (dataISO === hoje) classes.push('today');
+      if (datasComEvento.has(dataISO)) classes.push('has-event');
+      if (dataISO === selecionado) classes.push('selected-day');
+      dias += `<div class="${classes.join(' ')}" role="button" tabindex="0" onclick="${fn}('${dataISO}')" onkeydown="if(event.key==='Enter') ${fn}('${dataISO}')" title="${escapeHtml(formatarDataBR(dataISO))}">${dia}</div>`;
+    }
+
+    return `
+      <div class="agenda-month-header">
+        <button onclick="mudarMesAgenda(-1)">‹</button>
+        <span>${escapeHtml(nomeMes)}</span>
+        <button onclick="mudarMesAgenda(1)">›</button>
+      </div>
+      <div class="agenda-weekdays">
+        <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+      </div>
+      <div class="agenda-days">${dias}</div>
+      <div class="sync-dot">sincronizando automaticamente</div>
+    `;
+  }
+
+  function agendaItemHtmlV39(item, editavel) {
+    return `
+      <div class="agenda-item">
+        <div class="agenda-item-row">
+          <div class="agenda-item-content">
+            <strong>${item.hora ? escapeHtml(item.hora) + ' — ' : 'Sem horário — '}${escapeHtml(item.texto || '')}</strong><br>
+            <small>${escapeHtml(formatarDataBR(item.data || ''))}${item.criadoEm ? ' • salvo em ' + escapeHtml(item.criadoEm) : ''}</small>
+          </div>
+          ${editavel && item.id ? `<button class="agenda-delete-btn" onclick="excluirAgendaLau(${Number(item.id)})" title="Remover compromisso">×</button>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  function rotinaItemHtmlV39(item, idx, editavel) {
+    return `
+      <div class="agenda-item">
+        <div class="agenda-item-row">
+          <div class="agenda-item-content">
+            <strong>Rotina — Parte ${idx + 1}</strong><br>
+            ${escapeHtml(item.texto || '').replaceAll('\n', '<br>')}<br>
+            <small>${escapeHtml(item.atualizadoEm || '')}</small>
+          </div>
+          ${editavel && item.id ? `<button class="agenda-delete-btn" onclick="excluirAgendaLau(${Number(item.id)})" title="Remover rotina">×</button>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  window.excluirAgendaLau = async function (id) {
+    if (!confirm('Remover esse item da agenda?')) return;
+    const { error } = await sb.from('lau_agenda').delete().eq('id', id);
+    if (error) {
+      console.error(error);
+      showMessage('Não consegui remover da agenda. Confira a policy de delete.');
+      return;
+    }
+    await carregarAgendaSupabase();
+    renderizarAgendaLau();
+    renderizarAgendaNamorado();
+    showMessage('Item removido da agenda 🗓️');
+  };
+
+  window.selecionarDiaAgendaLau = function (dataISO) {
+    agendaDiaSelecionadoV39Lau = dataISO;
+    renderizarAgendaLau();
+  };
+
+  window.selecionarDiaAgendaNamorado = function (dataISO) {
+    agendaDiaSelecionadoV39Namorado = dataISO;
+    renderizarAgendaNamorado();
+  };
+
+  window.montarListaAgendaHtml = function (lista, vazio) {
+    const ordenada = v39OrdenarAgenda(lista || []);
+    if (!ordenada.length) return vazio;
+    return ordenada.map((item) => agendaItemHtmlV39(item, podeEditarLauV39())).join('');
+  };
+
+  function detalheDiaAgendaV39(dataISO, editavel) {
+    const compromissos = compromissoArrayV39(dataISO);
+    const rotinas = rotinaArrayV39(dataISO);
+    const compromissosHtml = compromissos.length
+      ? `<div class="agenda-section-title">Compromissos</div><div class="agenda-routine-list">${compromissos.map((item) => agendaItemHtmlV39(item, editavel)).join('')}</div>`
+      : '';
+    const rotinasHtml = rotinas.length
+      ? `<div class="agenda-section-title">Rotina do dia</div><div class="agenda-routine-list">${rotinas.map((item, idx) => rotinaItemHtmlV39(item, idx, editavel)).join('')}</div>`
+      : '';
+
+    return `
+      <div class="agenda-day-details">
+        <h5>Dia selecionado — ${escapeHtml(formatarDataBR(dataISO))}</h5>
+        ${compromissosHtml || rotinasHtml ? compromissosHtml + rotinasHtml : '<div class="agenda-item">Nada salvo para esse dia ainda.</div>'}
+      </div>
+    `;
+  }
+
+  window.renderizarAgendaLau = function () {
+    const hoje = v39HojeISO();
+    const agendaDate = document.getElementById('agendaDate');
+    const dailyDate = document.getElementById('dailyRoutineDate');
+    if (agendaDate && !agendaDate.value) agendaDate.value = hoje;
+    if (dailyDate && !dailyDate.value) dailyDate.value = hoje;
+    if (!agendaDiaSelecionadoV39Lau) agendaDiaSelecionadoV39Lau = dailyDate?.value || hoje;
+
+    const calendar = document.getElementById('agendaCalendarLau');
+    if (calendar) calendar.innerHTML = montarCalendarioV39('lau');
+
+    const lista = document.getElementById('agendaListLau');
+    if (lista) lista.innerHTML = montarListaAgendaHtml(cacheAgendaLau || [], 'Nenhum compromisso salvo ainda.');
+
+    const rotinaBox = document.getElementById('dailyRoutineStatus');
+    if (rotinaBox) {
+      const rotinaHoje = rotinaArrayV39(hoje);
+      rotinaBox.innerHTML = rotinaHoje.length
+        ? `<div class="agenda-section-title">Histórico de hoje</div><div class="agenda-routine-list">${rotinaHoje.map((item, idx) => rotinaItemHtmlV39(item, idx, true)).join('')}</div>`
+        : 'Nenhuma rotina salva para hoje.';
+    }
+
+    const antigo = document.getElementById('agendaSelectedDayLau');
+    const htmlDetalhe = `<div id="agendaSelectedDayLau">${detalheDiaAgendaV39(agendaDiaSelecionadoV39Lau || hoje, true)}</div>`;
+    if (antigo) antigo.outerHTML = htmlDetalhe;
+    else if (calendar) calendar.insertAdjacentHTML('afterend', htmlDetalhe);
+  };
+
+  window.renderizarAgendaNamorado = function () {
+    const viewAgenda = document.getElementById('viewAgenda');
+    if (!viewAgenda) return;
+    const hoje = v39HojeISO();
+    if (!agendaDiaSelecionadoV39Namorado) agendaDiaSelecionadoV39Namorado = hoje;
+    const compromissosHoje = compromissoArrayV39(hoje);
+    const proximos = v39OrdenarAgenda((cacheAgendaLau || []).filter((item) => item.data >= hoje)).slice(0, 12);
+    const rotinaHoje = rotinaArrayV39(hoje);
+
+    viewAgenda.innerHTML = `
+      <h4>🗓️ Agenda da Lau</h4>
+      <p>Toque em qualquer dia para ver compromissos e rotina.</p>
+      <div class="agenda-calendar" id="agendaCalendarNamorado">${montarCalendarioV39('namorado')}</div>
+      <div id="agendaSelectedDayNamorado">${detalheDiaAgendaV39(agendaDiaSelecionadoV39Namorado || hoje, false)}</div>
+      <div class="agenda-section-title">Agenda de hoje</div>
+      <div class="corner-list">
+        ${rotinaHoje.length ? rotinaHoje.map((item, idx) => rotinaItemHtmlV39(item, idx, false)).join('') : '<div class="agenda-item">Nenhuma rotina do dia salva ainda.</div>'}
+        ${compromissosHoje.length ? compromissosHoje.map((item) => agendaItemHtmlV39(item, false)).join('') : ''}
+      </div>
+      <div class="agenda-section-title">Próximos compromissos</div>
+      <div class="corner-list">${proximos.length ? proximos.map((item) => agendaItemHtmlV39(item, false)).join('') : 'Nenhum compromisso futuro salvo ainda.'}</div>
+    `;
+  };
+
+  // Paginas principais: Hoje, Blog, Agenda, Fotos, Diario, Chat, Mais.
+  const abrirMobileAnteriorV39 = window.abrirPaginaMobile;
+  window.abrirPaginaMobile = function (page) {
+    const usuario = usuarioAtualV39();
+    if (page === 'blog') {
+      garantirPainelBlog();
+      configurarMenusMais();
+      window.lauMobilePageAtual = page;
+      document.querySelectorAll('#mobileTabbar button').forEach((btn) => btn.classList.toggle('active', btn.dataset.mobilePage === page));
+      v39SetDisplay(document.getElementById('countdownArea'), false);
+
+      if (usuario === 'Lau') {
+        const lauraArea = document.getElementById('lauraArea');
+        if (!lauraArea) return;
+        v39SetDisplay(lauraArea, true);
+        v39SetDisplay(lauraArea.querySelector('.role-header'), false);
+        v39SetDisplay(document.getElementById('moodOptions'), false);
+        v39SetDisplay(lauraArea.querySelector('.levels-grid'), false);
+        v39SetDisplay(document.getElementById('moodNote'), false);
+        v39SetDisplay(lauraArea.querySelector('.save-mood-btn'), false);
+        v39SetDisplay(lauraArea.querySelector('.chat-card'), false);
+        v39SetDisplay(document.getElementById('lauMobilePhotoViewer'), false);
+        mostrarPainelLauV39(['blogCorner'], false);
+        carregarBlogSupabase().then(renderizarBlogLau);
+      } else {
+        const namoradoArea = document.getElementById('namoradoArea');
+        if (!namoradoArea) return;
+        v39SetDisplay(namoradoArea, true);
+        v39SetDisplay(namoradoArea.querySelector('.role-header'), false);
+        const cards = Array.from(namoradoArea.querySelectorAll(':scope > .viewer-card'));
+        const memoryCard = namoradoArea.querySelector('.namorado-memory-card');
+        const statusCard = cards.find((card) => card.querySelector('#currentMood'));
+        const historyCard = cards.find((card) => card.querySelector('#historyList'));
+        const chatCard = namoradoArea.querySelector('.chat-card');
+        const missionCard = namoradoArea.querySelector('.current-mission-card');
+        [memoryCard, statusCard, historyCard, chatCard, missionCard].forEach((el) => v39SetDisplay(el, false));
+        mostrarPainelNamoradoV39(['viewBlog'], false);
+        carregarBlogSupabase().then(renderizarBlogNamorado);
+      }
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      return;
+    }
+
+    if (abrirMobileAnteriorV39) abrirMobileAnteriorV39(page);
+
+    if (page === 'cantinho') {
+      configurarMenusMais();
+      if (usuario === 'Lau') mostrarPainelLauV39([window.lauMobileCantinhoAtual || 'wishCorner'], true);
+      else mostrarPainelNamoradoV39([window.lauMobileCantinhoNamoradoAtual || 'viewWishes'], true);
+    }
+
+    if (page === 'fotos' && usuario === 'Lau') {
+      // Na aba Fotos, mostra somente o painel "Nossos momentos".
+      // Upload/limpar fotos fica apenas em Mais > Baú.
+      v39SetDisplay(document.getElementById('lauCorner'), false);
+      v39SetDisplay(document.getElementById('lauMobilePhotoViewer'), true, 'flex');
+      if (typeof atualizarContadorFotos === 'function') atualizarContadorFotos();
+      if (typeof iniciarCarrosselMemorias === 'function') iniciarCarrosselMemorias(true);
+    }
+
+    if (page === 'diario') {
+      carregarDiarioSupabase().then(() => {
+        diarioPaginaAtual = 0;
+        renderizarDiarioLivroLau();
+      });
+    }
+  };
+
+  const abrirDesktopAnteriorV39 = window.abrirPaginaDesktop;
+  window.abrirPaginaDesktop = function (page) {
+    const usuario = usuarioAtualV39();
+
+    if (page === 'blog') {
+      garantirPainelBlog();
+      configurarMenusMais();
+      window.lauDesktopPageAtual = page;
+      document.querySelectorAll('#desktopTabbar button[data-desktop-page]').forEach((btn) => btn.classList.toggle('active', btn.dataset.desktopPage === page));
+      v39SetDisplay(document.getElementById('countdownArea'), false);
+
+      if (usuario === 'Lau') {
+        const lauraArea = document.getElementById('lauraArea');
+        if (!lauraArea) return;
+        v39SetDisplay(lauraArea, true);
+        v39SetDisplay(lauraArea.querySelector('.role-header'), false);
+        v39SetDisplay(document.getElementById('moodOptions'), false);
+        v39SetDisplay(lauraArea.querySelector('.levels-grid'), false);
+        v39SetDisplay(document.getElementById('moodNote'), false);
+        v39SetDisplay(lauraArea.querySelector('.save-mood-btn'), false);
+        v39SetDisplay(lauraArea.querySelector('.chat-card'), false);
+        v39SetDisplay(document.getElementById('lauMobilePhotoViewer'), false);
+        mostrarPainelLauV39(['blogCorner'], false);
+        carregarBlogSupabase().then(renderizarBlogLau);
+      } else {
+        const namoradoArea = document.getElementById('namoradoArea');
+        if (!namoradoArea) return;
+        v39SetDisplay(namoradoArea, true);
+        v39SetDisplay(namoradoArea.querySelector('.role-header'), false);
+        const cards = Array.from(namoradoArea.querySelectorAll(':scope > .viewer-card'));
+        const memoryCard = namoradoArea.querySelector('.namorado-memory-card');
+        const statusCard = cards.find((card) => card.querySelector('#currentMood'));
+        const historyCard = cards.find((card) => card.querySelector('#historyList'));
+        const chatCard = namoradoArea.querySelector('.chat-card');
+        const missionCard = namoradoArea.querySelector('.current-mission-card');
+        [memoryCard, statusCard, historyCard, chatCard, missionCard].forEach((el) => v39SetDisplay(el, false));
+        mostrarPainelNamoradoV39(['viewBlog'], false);
+        carregarBlogSupabase().then(renderizarBlogNamorado);
+      }
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      return;
+    }
+
+    if (abrirDesktopAnteriorV39) abrirDesktopAnteriorV39(page);
+
+    if (page === 'cantinho') {
+      configurarMenusMais();
+      if (usuario === 'Lau') mostrarPainelLauV39([window.lauDesktopCantinhoAtual || 'wishCorner'], true);
+      else mostrarPainelNamoradoV39([window.lauDesktopCantinhoNamoradoAtual || 'viewWishes'], true);
+    }
+
+    if (page === 'fotos' && usuario === 'Lau') {
+      // Na aba Fotos, mostra somente o painel "Nossos momentos".
+      // Upload/limpar fotos fica apenas em Mais > Baú.
+      v39SetDisplay(document.getElementById('lauCorner'), false);
+      v39SetDisplay(document.getElementById('lauMobilePhotoViewer'), true, 'flex');
+      if (typeof atualizarContadorFotos === 'function') atualizarContadorFotos();
+      if (typeof iniciarCarrosselMemorias === 'function') iniciarCarrosselMemorias(true);
+    }
+
+    if (page === 'diario') {
+      carregarDiarioSupabase().then(() => {
+        diarioPaginaAtual = 0;
+        renderizarDiarioLivroLau();
+      });
+    }
+  };
+
+  const carregarTudoAnteriorV39 = window.carregarTudoSupabase;
+  if (typeof carregarTudoAnteriorV39 === 'function') {
+    window.carregarTudoSupabase = async function () {
+      await carregarTudoAnteriorV39();
+      await carregarBlogSupabase();
+      garantirPainelBlog();
+      configurarMenusMais();
+      renderizarBlogLau();
+      renderizarBlogNamorado();
+      renderizarDiarioLivroLau();
+    };
+  }
+
+  const aplicarPermissaoAnteriorV39 = window.aplicarPermissao || aplicarPermissao;
+  window.aplicarPermissao = aplicarPermissao = function (usuario) {
+    aplicarPermissaoAnteriorV39(usuario);
+    setTimeout(async () => {
+      garantirPainelBlog();
+      configurarMenusMais();
+      await carregarBlogSupabase();
+      renderizarBlogLau();
+      renderizarBlogNamorado();
+      renderizarDiarioLivroLau();
+    }, 400);
+  };
+
+  // Sincroniza blog sem reiniciar player de musica.
+  setInterval(async () => {
+    try {
+      const { data } = await sb.auth.getSession();
+      if (!data?.session) return;
+      await carregarBlogSupabase();
+      const pageMobile = window.lauMobilePageAtual;
+      const pageDesktop = window.lauDesktopPageAtual;
+      if (pageMobile === 'blog' || pageDesktop === 'blog') {
+        renderizarBlogLau();
+        renderizarBlogNamorado();
+      }
+    } catch (e) {}
+  }, 35000);
+})();
+</script>
+
+
+<style>
+/* V40: ajustes finais - Fotos sem upload e Missão fora da lateral */
+@media (min-width: 761px) {
+  body.desktop-app-ready #desktopTabbar button[data-desktop-page="missao"] {
+    display: none !important;
+  }
+}
+</style>
+
+<script>
+/* V40: remove o botão Missão da lateral; missão continua em Mais */
+(function () {
+  function removerBotaoMissaoLateral() {
+    document.querySelectorAll('#desktopTabbar button[data-desktop-page="missao"]').forEach((btn) => btn.remove());
+  }
+
+  const abrirDesktopAnteriorV40 = window.abrirPaginaDesktop;
+  if (typeof abrirDesktopAnteriorV40 === 'function') {
+    window.abrirPaginaDesktop = function (page) {
+      if (page === 'missao') page = 'cantinho';
+      abrirDesktopAnteriorV40(page);
+      setTimeout(removerBotaoMissaoLateral, 30);
+    };
+  }
+
+  const aplicarPermissaoAnteriorV40 = window.aplicarPermissao;
+  if (typeof aplicarPermissaoAnteriorV40 === 'function') {
+    window.aplicarPermissao = function (usuario) {
+      aplicarPermissaoAnteriorV40(usuario);
+      setTimeout(removerBotaoMissaoLateral, 80);
+      setTimeout(removerBotaoMissaoLateral, 180);
+      setTimeout(removerBotaoMissaoLateral, 400);
+    };
+  }
+
+  window.addEventListener('load', () => {
+    setTimeout(removerBotaoMissaoLateral, 300);
+    setTimeout(removerBotaoMissaoLateral, 900);
+  });
+})();
+</script>
+
+
+
+<style>
+/* V41: ajustes finais agenda/momentos/cronometro/status namorado */
+.v41-hidden { display: none !important; }
+.v41-boy-status-card {
+  background: rgba(255,255,255,.82);
+  border: 2px solid #ffd2e8;
+  border-radius: 22px;
+  padding: 18px;
+  margin: 12px 0;
+  box-shadow: 0 10px 28px rgba(255,95,170,.10);
+}
+body.namorado-mode .v41-boy-status-card {
+  border-color: #b8dcff;
+  box-shadow: 0 10px 28px rgba(47,128,237,.10);
+}
+.v41-boy-status-card h3 { color: #ff4fa3; margin-bottom: 8px; }
+body.namorado-mode .v41-boy-status-card h3 { color: #2f80ed; }
+.v41-status-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 12px 0; }
+.v41-status-grid button { padding: 10px; border-radius: 14px; font-size: .84rem; box-shadow: none; }
+.v41-status-grid button.selected { outline: 3px solid rgba(255, 95, 170, .22); transform: scale(1.02); }
+body.namorado-mode .v41-status-grid button.selected { outline-color: rgba(47,128,237,.22); }
+.v41-status-levels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
+.v41-status-level { background: #fff8fc; border: 2px solid #ffd6ea; border-radius: 16px; padding: 10px; font-weight: 900; }
+body.namorado-mode .v41-status-level { background: #f7fbff; border-color: #d8ebff; }
+.v41-status-level label { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 6px; font-size: .86rem; }
+.v41-status-note { width: 100%; min-height: 84px; border: 2px solid #ffc2df; border-radius: 16px; padding: 12px; font-family: inherit; color: #5a2a45; background: white; }
+.v41-view-box { background: white; border: 2px solid #ffe0ef; border-radius: 18px; padding: 14px; margin-top: 12px; line-height: 1.5; font-weight: 800; }
+body.namorado-mode .v41-view-box { border-color: #d8ebff; }
+.v41-agenda-dia-limpa .agenda-day-details { margin-top: 12px; }
+.v41-reset-date-btn { margin-top: 8px; background: linear-gradient(135deg, #ffd6ea, #ff9ccc); color: #7a3158; box-shadow: none; }
+.v41-moment-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.v41-moment-delete { width: 28px; height: 28px; min-height: 28px; padding: 0; border-radius: 999px; background: #fff; color: #ff4fa3; border: 1px solid rgba(255,79,163,.25); box-shadow: 0 6px 14px rgba(90,42,69,.14); }
+@media (max-width: 760px) {
+  .v41-status-grid, .v41-status-levels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v41-boy-status-card { padding: 14px; border-radius: 18px; }
+}
+</style>
+<script>
+/* V41: agenda mais limpa, excluir momentos, zerar cronometro e status do namorado */
+(function () {
+  const EMAILS_TODOS_V41 = [
+    'lau@lauos.com','paixao@lauos.com','chatonildo@lauos.com','bravinho@lauos.com','bicudo@lauos.com','lipe-login@lauos.com',
+    'lipe@lauos.com','laura@lauos.com','lau-login@lauos.com','vida@lauos.com','princesa@lauos.com'
+  ];
+  const EMAILS_NAMORADO_V41 = ['lipe@lauos.com','laura@lauos.com','lau-login@lauos.com','vida@lauos.com','princesa@lauos.com'];
+  let humorNamoradoSelecionadoV41 = '';
+  let cacheStatusNamoradoV41 = null;
+
+  function el(id) { return document.getElementById(id); }
+  function setDisplayV41(node, show, display = 'block') { if (node) node.style.display = show ? display : 'none'; }
+  function usuarioV41() { return localStorage.getItem('lauraos_usuario') || 'Lau'; }
+  function hojeV41() { return typeof v39HojeISO === 'function' ? v39HojeISO() : (typeof dataHojeISOv35 === 'function' ? dataHojeISOv35() : new Date().toISOString().slice(0,10)); }
+  function dataFmtV41(dataISO) { return typeof formatarDataBR === 'function' ? formatarDataBR(dataISO) : dataISO; }
+  function ordenarAgendaV41(lista) {
+    return [...(lista || [])].sort((a,b) => {
+      const ah = a.hora || '99:99';
+      const bh = b.hora || '99:99';
+      return `${a.data || ''} ${ah}`.localeCompare(`${b.data || ''} ${bh}`);
+    });
+  }
+  function rotinaArrayV41(dataISO) {
+    const r = (window.cacheRotinasLau || cacheRotinasLau || {})[dataISO];
+    if (!r) return [];
+    return Array.isArray(r) ? r : [r];
+  }
+  function compromissosDiaV41(dataISO) {
+    return ordenarAgendaV41((window.cacheAgendaLau || cacheAgendaLau || []).filter((item) => item.data === dataISO));
+  }
+  function agendaItemV41(item, editavel) {
+    return `<div class="agenda-item"><div class="agenda-item-row"><div class="agenda-item-content"><strong>${item.hora ? escapeHtml(item.hora) + ' — ' : 'Sem horário — '}${escapeHtml(item.texto || '')}</strong><br><small>${escapeHtml(dataFmtV41(item.data || ''))}${item.criadoEm ? ' • salvo em ' + escapeHtml(item.criadoEm) : ''}</small></div>${editavel && item.id ? `<button class="agenda-delete-btn" onclick="excluirAgendaLau(${Number(item.id)})" title="Remover compromisso">×</button>` : ''}</div></div>`;
+  }
+  function rotinaItemV41(item, idx, editavel) {
+    return `<div class="agenda-item"><div class="agenda-item-row"><div class="agenda-item-content"><strong>Rotina — Parte ${idx + 1}</strong><br>${escapeHtml(item.texto || '').replaceAll('\n','<br>')}<br><small>${escapeHtml(item.atualizadoEm || '')}</small></div>${editavel && item.id ? `<button class="agenda-delete-btn" onclick="excluirAgendaLau(${Number(item.id)})" title="Remover rotina">×</button>` : ''}</div></div>`;
+  }
+  function detalhesAgendaDiaV41(dataISO, editavel) {
+    const compromissos = compromissosDiaV41(dataISO);
+    const rotinas = rotinaArrayV41(dataISO);
+    return `<div class="agenda-day-details v41-agenda-dia-limpa"><h5>Agenda do dia — ${escapeHtml(dataFmtV41(dataISO))}</h5>${compromissos.length ? `<div class="agenda-section-title">Compromissos</div><div class="agenda-routine-list">${compromissos.map((item) => agendaItemV41(item, editavel)).join('')}</div>` : ''}${rotinas.length ? `<div class="agenda-section-title">Rotina do dia</div><div class="agenda-routine-list">${rotinas.map((item, idx) => rotinaItemV41(item, idx, editavel)).join('')}</div>` : ''}${(!compromissos.length && !rotinas.length) ? '<div class="agenda-item">Nada salvo para esse dia ainda.</div>' : ''}</div>`;
+  }
+
+  const renderizarAgendaLauAnteriorV41 = window.renderizarAgendaLau;
+  window.renderizarAgendaLau = renderizarAgendaLau = function () {
+    if (typeof renderizarAgendaLauAnteriorV41 === 'function') renderizarAgendaLauAnteriorV41();
+    const hoje = hojeV41();
+    if (!window.agendaDiaSelecionadoV39Lau && typeof agendaDiaSelecionadoV39Lau !== 'undefined') window.agendaDiaSelecionadoV39Lau = agendaDiaSelecionadoV39Lau || hoje;
+    const selecionado = window.agendaDiaSelecionadoV39Lau || (typeof agendaDiaSelecionadoV39Lau !== 'undefined' ? agendaDiaSelecionadoV39Lau : hoje) || hoje;
+    const lista = el('agendaListLau');
+    if (lista) lista.innerHTML = detalhesAgendaDiaV41(selecionado, true);
+    const rotinaBox = el('dailyRoutineStatus');
+    if (rotinaBox) rotinaBox.innerHTML = '<small>Use o calendário para escolher o dia e ver a rotina/compromissos.</small>';
+    const antigo = el('agendaSelectedDayLau');
+    if (antigo) antigo.remove();
+  };
+
+  const renderizarAgendaNamoradoAnteriorV41 = window.renderizarAgendaNamorado;
+  window.renderizarAgendaNamorado = renderizarAgendaNamorado = function () {
+    const viewAgenda = el('viewAgenda');
+    if (!viewAgenda) return;
+    if (typeof renderizarAgendaNamoradoAnteriorV41 === 'function') renderizarAgendaNamoradoAnteriorV41();
+    const hoje = hojeV41();
+    const selecionado = window.agendaDiaSelecionadoV39Namorado || (typeof agendaDiaSelecionadoV39Namorado !== 'undefined' ? agendaDiaSelecionadoV39Namorado : hoje) || hoje;
+    const calendario = typeof montarCalendarioV39 === 'function' ? montarCalendarioV39('namorado') : (typeof montarCalendarioAgendaHtml === 'function' ? montarCalendarioAgendaHtml() : '');
+    viewAgenda.innerHTML = `<h4>🗓️ Agenda da Lau</h4><p>Toque em um dia para ver só a agenda daquele dia.</p><div class="agenda-calendar" id="agendaCalendarNamorado">${calendario}</div><div id="agendaSelectedDayNamorado">${detalhesAgendaDiaV41(selecionado, false)}</div>`;
+  };
+
+  const selecionarDiaAgendaLauAnteriorV41 = window.selecionarDiaAgendaLau;
+  window.selecionarDiaAgendaLau = function (dataISO) {
+    window.agendaDiaSelecionadoV39Lau = dataISO;
+    try { if (typeof agendaDiaSelecionadoV39Lau !== 'undefined') agendaDiaSelecionadoV39Lau = dataISO; } catch(e) {}
+    if (typeof selecionarDiaAgendaLauAnteriorV41 === 'function') selecionarDiaAgendaLauAnteriorV41(dataISO);
+    renderizarAgendaLau();
+  };
+  const selecionarDiaAgendaNamoradoAnteriorV41 = window.selecionarDiaAgendaNamorado;
+  window.selecionarDiaAgendaNamorado = function (dataISO) {
+    window.agendaDiaSelecionadoV39Namorado = dataISO;
+    try { if (typeof agendaDiaSelecionadoV39Namorado !== 'undefined') agendaDiaSelecionadoV39Namorado = dataISO; } catch(e) {}
+    if (typeof selecionarDiaAgendaNamoradoAnteriorV41 === 'function') selecionarDiaAgendaNamoradoAnteriorV41(dataISO);
+    renderizarAgendaNamorado();
+  };
+
+  window.zerarDataEncontroLauOS = async function () {
+    if (!confirm('Zerar a contagem de Dias pra se ver?')) return;
+    localStorage.removeItem('lauraos_data_encontro');
+    try { await sb.from('lau_agenda').delete().eq('titulo', '__data_encontro__'); } catch (e) { console.warn(e); }
+    try { await carregarAgendaSupabase(); } catch (e) {}
+    const input = el('meetDateInput');
+    if (input) input.value = '';
+    if (typeof calcularDiasPraSeVer === 'function') calcularDiasPraSeVer();
+    showMessage('Contagem zerada 💞');
+  };
+  function garantirBotaoZerarCronometro() {
+    const controls = document.querySelector('.countdown-controls');
+    if (!controls || el('resetMeetDateBtn')) return;
+    const btn = document.createElement('button');
+    btn.id = 'resetMeetDateBtn';
+    btn.type = 'button';
+    btn.className = 'v41-reset-date-btn';
+    btn.textContent = 'Zerar data do encontro';
+    btn.onclick = window.zerarDataEncontroLauOS;
+    controls.appendChild(btn);
+  }
+
+  function lerMomentosV41() { return JSON.parse(localStorage.getItem('lauraos_moments') || '[]'); }
+  function salvarMomentosV41(lista) { localStorage.setItem('lauraos_moments', JSON.stringify((lista || []).slice(0, 60))); }
+  window.excluirMomentoLau = function (index) {
+    const momentos = lerMomentosV41();
+    if (index < 0 || index >= momentos.length) return;
+    if (!confirm('Excluir esse momento?')) return;
+    momentos.splice(index, 1);
+    salvarMomentosV41(momentos);
+    renderizarMomentosV41();
+    showMessage('Momento removido 📅');
+  };
+  function renderizarMomentosV41() {
+    const momentos = lerMomentosV41();
+    const momentList = el('momentList');
+    if (momentList) {
+      momentList.innerHTML = momentos.length ? momentos.map((item, index) => `<div class="history-item v41-moment-row"><div><strong>${escapeHtml(item.titulo)}</strong><br>${escapeHtml(item.data)}<br><small>Salvo em ${escapeHtml(item.criadoEm || '')}</small></div><button class="v41-moment-delete" onclick="excluirMomentoLau(${index})" title="Excluir momento">×</button></div>`).join('') : 'Nenhum momento salvo ainda.';
+    }
+    const viewMoments = el('viewMoments');
+    if (viewMoments) {
+      viewMoments.innerHTML = momentos.length ? momentos.map((item) => `<div class="history-item"><strong>${escapeHtml(item.titulo)}</strong><br>${escapeHtml(item.data)}<br><small>Salvo em ${escapeHtml(item.criadoEm || '')}</small></div>`).join('') : 'Nenhum momento salvo ainda.';
+    }
+  }
+  const renderizarCantinhoLauAnteriorV41 = window.renderizarCantinhoLau;
+  window.renderizarCantinhoLau = renderizarCantinhoLau = function () { if (typeof renderizarCantinhoLauAnteriorV41 === 'function') renderizarCantinhoLauAnteriorV41(); renderizarMomentosV41(); };
+  const renderizarCantinhoNamoradoAnteriorV41 = window.renderizarCantinhoNamorado;
+  window.renderizarCantinhoNamorado = renderizarCantinhoNamorado = function () { if (typeof renderizarCantinhoNamoradoAnteriorV41 === 'function') renderizarCantinhoNamoradoAnteriorV41(); renderizarMomentosV41(); };
+
+  function nivelValorV41(id) { const input = el(id); return Number(input?.value || 0); }
+  function updateNivelV41(id) { const span = el(id + 'Value'); const input = el(id); if (span && input) span.textContent = input.value + '%'; }
+  window.atualizarNivelNamoradoV41 = updateNivelV41;
+  window.selecionarHumorNamoradoV41 = function (humor) {
+    humorNamoradoSelecionadoV41 = humor;
+    document.querySelectorAll('#boyStatusMoodButtons button').forEach((b) => b.classList.toggle('selected', b.dataset.humor === humor));
+  };
+  function statusNamoradoEditorHtml() {
+    return `<div class="v41-boy-status-card" id="boyStatusNamoradoEditor"><h3>💙 Meu status de hoje</h3><p>Agora ela também consegue saber como você está.</p><div class="v41-status-grid" id="boyStatusMoodButtons">${['🥰 Com saudade','😴 Cansado','😤 Estressado','💙 Carente','🔥 Motivado','🤍 Tranquilo','🍟 Com fome','🫠 Precisando dela'].map((h) => `<button type="button" data-humor="${h}" onclick="selecionarHumorNamoradoV41('${h}')">${h}</button>`).join('')}</div><div class="v41-status-levels">${[['boySaudade','🥺 Saudade',80],['boyCansaco','😴 Cansaço',30],['boyCarinho','💙 Vontade de carinho',70],['boyStress','😤 Stress',20]].map(([id,label,val]) => `<div class="v41-status-level"><label><span>${label}</span><span id="${id}Value">${val}%</span></label><input type="range" min="0" max="100" value="${val}" id="${id}" oninput="atualizarNivelNamoradoV41('${id}')"></div>`).join('')}</div><textarea class="v41-status-note" id="boyStatusNote" placeholder="Ex: hoje tô com saudade, meio cansado, mas pensando em você..."></textarea><button onclick="salvarStatusNamoradoV41()">Enviar meu status para a Lau 💙</button><div class="v41-view-box" id="boyStatusSavedView">Nenhum status seu enviado ainda.</div></div>`;
+  }
+  function statusNamoradoViewHtml() {
+    return `<div class="v41-boy-status-card" id="boyStatusLauView"><h3>💙 Status do namorado</h3><p>Quando ele mandar como está, aparece aqui para a Lau.</p><div class="v41-view-box" id="boyStatusLauContent">Nenhum status enviado ainda.</div></div>`;
+  }
+  function garantirCardsStatusNamorado() {
+    const namoradoArea = el('namoradoArea');
+    if (namoradoArea && !el('boyStatusNamoradoEditor')) namoradoArea.insertAdjacentHTML('beforeend', statusNamoradoEditorHtml());
+    const lauraArea = el('lauraArea');
+    if (lauraArea && !el('boyStatusLauView')) lauraArea.insertAdjacentHTML('beforeend', statusNamoradoViewHtml());
+  }
+  async function carregarStatusNamoradoV41() {
+    try {
+      const { data, error } = await sb.from('namorado_status').select('*').order('created_at', { ascending: false }).limit(1);
+      if (error) throw error;
+      cacheStatusNamoradoV41 = (data || [])[0] || null;
+    } catch (e) { cacheStatusNamoradoV41 = null; }
+    renderizarStatusNamoradoV41();
+  }
+  window.salvarStatusNamoradoV41 = async function () {
+    if (!humorNamoradoSelecionadoV41) { showMessage('Escolhe como você está hoje primeiro 💙'); return; }
+    const note = (el('boyStatusNote')?.value || '').trim();
+    const niveis = { saudade: nivelValorV41('boySaudade'), cansaco: nivelValorV41('boyCansaco'), carinho: nivelValorV41('boyCarinho'), stress: nivelValorV41('boyStress') };
+    const { data: sessionData } = await sb.auth.getSession();
+    const email = sessionData?.session?.user?.email || '';
+    if (!EMAILS_NAMORADO_V41.includes(email)) { showMessage('Só o namorado pode enviar esse status 💙'); return; }
+    const { error } = await sb.from('namorado_status').insert({ humor: humorNamoradoSelecionadoV41, observacao: note || 'Ele não explicou muito, mas queria que você soubesse como ele está.', niveis });
+    if (error) { console.error(error); showMessage('Não consegui salvar seu status. Rode o SQL da tabela namorado_status.'); return; }
+    if (el('boyStatusNote')) el('boyStatusNote').value = '';
+    await carregarStatusNamoradoV41();
+    showMessage('Seu status foi enviado para a Lau 💙');
+  };
+  function htmlStatusNamorado(status) {
+    if (!status) return 'Nenhum status enviado ainda.';
+    const niveis = status.niveis || {};
+    const barras = Object.entries({ saudade:'🥺 Saudade', cansaco:'😴 Cansaço', carinho:'💙 Carinho', stress:'😤 Stress' }).map(([k,label]) => `<div class="readonly-level"><div>${label}: ${Number(niveis[k] || 0)}%</div><div class="readonly-bar"><div class="readonly-fill" style="width:${Number(niveis[k] || 0)}%"></div></div></div>`).join('');
+    return `<strong>${escapeHtml(status.humor || '')}</strong><br>${escapeHtml(status.observacao || '').replaceAll('\n','<br>')}<br><small>${escapeHtml(dataBR(status.created_at))}</small><div class="readonly-levels" style="margin-top:12px">${barras}</div>`;
+  }
+  function renderizarStatusNamoradoV41() {
+    const html = htmlStatusNamorado(cacheStatusNamoradoV41);
+    if (el('boyStatusLauContent')) el('boyStatusLauContent').innerHTML = html;
+    if (el('boyStatusSavedView')) el('boyStatusSavedView').innerHTML = html;
+  }
+  function inserirBotaoStatusNamorado(nav, tipo) {
+    if (!nav || nav.querySelector(`[data-${tipo}-page="boyStatus"]`)) return;
+    const first = nav.querySelector(`button[data-${tipo}-page]`);
+    if (!first) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset[`${tipo}Page`] = 'boyStatus';
+    btn.innerHTML = '<strong>💙</strong><span>Status</span>';
+    btn.addEventListener('click', (e) => { e.preventDefault(); tipo === 'mobile' ? window.abrirPaginaMobile('boyStatus') : window.abrirPaginaDesktop('boyStatus'); });
+    first.insertAdjacentElement('afterend', btn);
+  }
+  function garantirBotaoStatusNamorado() {
+    inserirBotaoStatusNamorado(el('mobileTabbar'), 'mobile');
+    inserirBotaoStatusNamorado(el('desktopTabbar'), 'desktop');
+  }
+  function mostrarPaginaStatusNamorado(isDesktop) {
+    garantirCardsStatusNamorado();
+    garantirBotaoStatusNamorado();
+    carregarStatusNamoradoV41();
+    const usuario = usuarioV41();
+    document.querySelectorAll(`${isDesktop ? '#desktopTabbar button[data-desktop-page]' : '#mobileTabbar button[data-mobile-page]'}`).forEach((btn) => {
+      const key = isDesktop ? btn.dataset.desktopPage : btn.dataset.mobilePage;
+      btn.classList.toggle('active', key === 'boyStatus');
+    });
+    setDisplayV41(el('countdownArea'), false);
+    if (usuario === 'Lau') {
+      const lauraArea = el('lauraArea');
+      const namoradoArea = el('namoradoArea');
+      setDisplayV41(lauraArea, true); setDisplayV41(namoradoArea, false);
+      ['moodOptions','moodNote','lauCorner','lauMobilePhotoViewer'].forEach((id) => setDisplayV41(el(id), false));
+      setDisplayV41(lauraArea?.querySelector('.role-header'), false);
+      setDisplayV41(lauraArea?.querySelector('.levels-grid'), false, 'grid');
+      setDisplayV41(lauraArea?.querySelector('.save-mood-btn'), false);
+      setDisplayV41(lauraArea?.querySelector('.chat-card'), false);
+      setDisplayV41(el('boyStatusLauView'), true);
+      setDisplayV41(el('boyStatusNamoradoEditor'), false);
+    } else {
+      const lauraArea = el('lauraArea');
+      const namoradoArea = el('namoradoArea');
+      setDisplayV41(lauraArea, false); setDisplayV41(namoradoArea, true);
+      setDisplayV41(namoradoArea?.querySelector('.role-header'), false);
+      namoradoArea?.querySelectorAll(':scope > .viewer-card').forEach((card) => setDisplayV41(card, false));
+      setDisplayV41(namoradoArea?.querySelector('.chat-card'), false);
+      setDisplayV41(namoradoArea?.querySelector('.current-mission-card'), false);
+      setDisplayV41(el('boyStatusNamoradoEditor'), true);
+      setDisplayV41(el('boyStatusLauView'), false);
+    }
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+  const abrirMobileAnteriorV41 = window.abrirPaginaMobile;
+  window.abrirPaginaMobile = function (page) {
+    if (page === 'boyStatus') { window.lauMobilePageAtual = page; mostrarPaginaStatusNamorado(false); return; }
+    if (typeof abrirMobileAnteriorV41 === 'function') abrirMobileAnteriorV41(page);
+    setTimeout(() => { garantirCardsStatusNamorado(); garantirBotaoStatusNamorado(); garantirBotaoZerarCronometro(); }, 80);
+  };
+  const abrirDesktopAnteriorV41 = window.abrirPaginaDesktop;
+  window.abrirPaginaDesktop = function (page) {
+    if (page === 'boyStatus') { window.lauDesktopPageAtual = page; mostrarPaginaStatusNamorado(true); return; }
+    if (typeof abrirDesktopAnteriorV41 === 'function') abrirDesktopAnteriorV41(page);
+    setTimeout(() => { garantirCardsStatusNamorado(); garantirBotaoStatusNamorado(); garantirBotaoZerarCronometro(); }, 80);
+  };
+  const carregarTudoAnteriorV41 = window.carregarTudoSupabase;
+  if (typeof carregarTudoAnteriorV41 === 'function') {
+    window.carregarTudoSupabase = async function () { await carregarTudoAnteriorV41(); await carregarStatusNamoradoV41(); garantirCardsStatusNamorado(); garantirBotaoStatusNamorado(); garantirBotaoZerarCronometro(); };
+  }
+  const aplicarPermissaoAnteriorV41 = window.aplicarPermissao || aplicarPermissao;
+  window.aplicarPermissao = aplicarPermissao = function (usuario) {
+    aplicarPermissaoAnteriorV41(usuario);
+    setTimeout(() => { garantirCardsStatusNamorado(); garantirBotaoStatusNamorado(); garantirBotaoZerarCronometro(); carregarStatusNamoradoV41(); }, 500);
+  };
+  setInterval(() => { garantirBotaoStatusNamorado(); carregarStatusNamoradoV41(); }, 30000);
+  setTimeout(() => { garantirCardsStatusNamorado(); garantirBotaoStatusNamorado(); garantirBotaoZerarCronometro(); carregarStatusNamoradoV41(); }, 1500);
+})();
+</script>
+
+<script>
+/* V42: status do namorado apenas na aba Status + momentos editáveis pelos dois */
+(function () {
+  const style = document.createElement('style');
+  style.textContent = `
+    body:not(.lauos-show-boy-status) #boyStatusLauView,
+    body:not(.lauos-show-boy-status) #boyStatusNamoradoEditor {
+      display: none !important;
+    }
+    .v42-moment-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .v42-moment-delete {
+      width: 28px;
+      height: 28px;
+      min-height: 28px;
+      padding: 0;
+      border-radius: 999px;
+      background: #fff;
+      color: #ff4fa3;
+      border: 1px solid rgba(255,79,163,.25);
+      box-shadow: 0 6px 14px rgba(90,42,69,.14);
+      flex: 0 0 auto;
+    }
+    body.namorado-mode .v42-moment-delete {
+      color: #2f80ed;
+      border-color: rgba(47,128,237,.25);
+    }
+  `;
+  document.head.appendChild(style);
+
+  function el(id) { return document.getElementById(id); }
+
+  function fecharStatusNamoradoV42() {
+    document.body.classList.remove('lauos-show-boy-status');
+    const lauView = el('boyStatusLauView');
+    const boyEdit = el('boyStatusNamoradoEditor');
+    if (lauView) lauView.style.display = 'none';
+    if (boyEdit) boyEdit.style.display = 'none';
+  }
+
+  const abrirMobileAnteriorV42 = window.abrirPaginaMobile;
+  window.abrirPaginaMobile = function (page) {
+    if (page !== 'boyStatus') fecharStatusNamoradoV42();
+    const result = typeof abrirMobileAnteriorV42 === 'function' ? abrirMobileAnteriorV42(page) : undefined;
+    setTimeout(() => {
+      if (page === 'boyStatus') document.body.classList.add('lauos-show-boy-status');
+      else fecharStatusNamoradoV42();
+      renderizarMomentosV42();
+    }, 120);
+    return result;
+  };
+
+  const abrirDesktopAnteriorV42 = window.abrirPaginaDesktop;
+  window.abrirPaginaDesktop = function (page) {
+    if (page !== 'boyStatus') fecharStatusNamoradoV42();
+    const result = typeof abrirDesktopAnteriorV42 === 'function' ? abrirDesktopAnteriorV42(page) : undefined;
+    setTimeout(() => {
+      if (page === 'boyStatus') document.body.classList.add('lauos-show-boy-status');
+      else fecharStatusNamoradoV42();
+      renderizarMomentosV42();
+    }, 120);
+    return result;
+  };
+
+  function lerMomentosV42() {
+    try { return JSON.parse(localStorage.getItem('lauraos_moments') || '[]'); }
+    catch (e) { return []; }
+  }
+
+  function salvarMomentosV42(lista) {
+    localStorage.setItem('lauraos_moments', JSON.stringify((lista || []).slice(0, 60)));
+  }
+
+  window.excluirMomentoLau = function (index) {
+    const momentos = lerMomentosV42();
+    if (index < 0 || index >= momentos.length) return;
+    if (!confirm('Excluir esse momento?')) return;
+    momentos.splice(index, 1);
+    salvarMomentosV42(momentos);
+    renderizarMomentosV42();
+    if (typeof showMessage === 'function') showMessage('Momento removido 📅');
+  };
+
+  window.excluirMomentoNamorado = window.excluirMomentoLau;
+
+  function itemMomentoHtml(item, index, podeExcluir) {
+    const titulo = typeof escapeHtml === 'function' ? escapeHtml(item.titulo || '') : String(item.titulo || '');
+    const data = typeof escapeHtml === 'function' ? escapeHtml(item.data || '') : String(item.data || '');
+    const criado = typeof escapeHtml === 'function' ? escapeHtml(item.criadoEm || '') : String(item.criadoEm || '');
+    return `
+      <div class="history-item v42-moment-row">
+        <div>
+          <strong>${titulo}</strong><br>
+          ${data}<br>
+          <small>${criado ? 'Salvo em ' + criado : ''}</small>
+        </div>
+        ${podeExcluir ? `<button class="v42-moment-delete" type="button" onclick="excluirMomentoLau(${index})" title="Excluir momento">×</button>` : ''}
+      </div>
+    `;
+  }
+
+  function renderizarMomentosV42() {
+    const momentos = lerMomentosV42();
+    const htmlEditavel = momentos.length
+      ? momentos.map((item, index) => itemMomentoHtml(item, index, true)).join('')
+      : 'Nenhum momento salvo ainda.';
+
+    const momentList = el('momentList');
+    if (momentList) momentList.innerHTML = htmlEditavel;
+
+    const viewMoments = el('viewMoments');
+    if (viewMoments) viewMoments.innerHTML = htmlEditavel;
+  }
+
+  const renderizarCantinhoLauAnteriorV42 = window.renderizarCantinhoLau;
+  window.renderizarCantinhoLau = function () {
+    const result = typeof renderizarCantinhoLauAnteriorV42 === 'function' ? renderizarCantinhoLauAnteriorV42() : undefined;
+    renderizarMomentosV42();
+    fecharStatusNamoradoV42();
+    return result;
+  };
+
+  const renderizarCantinhoNamoradoAnteriorV42 = window.renderizarCantinhoNamorado;
+  window.renderizarCantinhoNamorado = function () {
+    const result = typeof renderizarCantinhoNamoradoAnteriorV42 === 'function' ? renderizarCantinhoNamoradoAnteriorV42() : undefined;
+    renderizarMomentosV42();
+    fecharStatusNamoradoV42();
+    return result;
+  };
+
+  const abrirCantinhoAnteriorV42 = window.abrirCantinho;
+  window.abrirCantinho = function (id) {
+    const result = typeof abrirCantinhoAnteriorV42 === 'function' ? abrirCantinhoAnteriorV42(id) : undefined;
+    renderizarMomentosV42();
+    fecharStatusNamoradoV42();
+    return result;
+  };
+
+  const abrirCantinhoNamoradoAnteriorV42 = window.abrirCantinhoNamorado;
+  window.abrirCantinhoNamorado = function (id) {
+    const result = typeof abrirCantinhoNamoradoAnteriorV42 === 'function' ? abrirCantinhoNamoradoAnteriorV42(id) : undefined;
+    renderizarMomentosV42();
+    fecharStatusNamoradoV42();
+    return result;
+  };
+
+  setTimeout(() => {
+    fecharStatusNamoradoV42();
+    renderizarMomentosV42();
+  }, 800);
+})();
+</script>
+
+
+
+<script>
+/* V43: Momentos dos dois - namorado tambem adiciona e exclui */
+(function () {
+  const style = document.createElement('style');
+  style.textContent = `
+    .v43-moment-form {
+      display: grid;
+      grid-template-columns: 1fr 170px auto;
+      gap: 8px;
+      align-items: center;
+      margin: 10px 0 14px;
+      padding: 10px;
+      border: 1px solid #d8ecff;
+      border-radius: 14px;
+      background: rgba(244, 250, 255, 0.8);
+    }
+    .v43-moment-form input {
+      width: 100%;
+      border: 2px solid #b8d8ff;
+      border-radius: 12px;
+      padding: 9px 10px;
+      font-family: inherit;
+      color: #5a2a45;
+      background: white;
+    }
+    .v43-moment-form button {
+      padding: 9px 12px !important;
+      border-radius: 12px !important;
+      white-space: nowrap;
+    }
+    .v43-moment-author {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: .78rem;
+      opacity: .78;
+    }
+    @media (max-width: 760px) {
+      .v43-moment-form {
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+      .v43-moment-form button {
+        width: 100%;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  function el(id) { return document.getElementById(id); }
+  function safe(text) { return typeof escapeHtml === 'function' ? escapeHtml(text || '') : String(text || ''); }
+  function nowBR() { return new Date().toLocaleString('pt-BR'); }
+
+  function lerMomentos() {
+    try { return JSON.parse(localStorage.getItem('lauraos_moments') || '[]'); }
+    catch (e) { return []; }
+  }
+
+  function salvarMomentos(lista) {
+    localStorage.setItem('lauraos_moments', JSON.stringify((lista || []).slice(0, 80)));
+  }
+
+  function ordenarMomentos(lista) {
+    return [...(lista || [])].sort((a, b) => String(b.data || '').localeCompare(String(a.data || '')) || String(b.criadoEm || '').localeCompare(String(a.criadoEm || '')));
+  }
+
+  window.adicionarMomentoNamorado = function () {
+    const tituloInput = el('boyMomentTitle');
+    const dataInput = el('boyMomentDate');
+    const titulo = (tituloInput?.value || '').trim();
+    const data = dataInput?.value || '';
+
+    if (!titulo || !data) {
+      if (typeof showMessage === 'function') showMessage('Coloca o nome do momento e a data primeiro 📅');
+      return;
+    }
+
+    const momentos = lerMomentos();
+    momentos.unshift({ titulo, data, criadoEm: nowBR(), autor: 'Namorado' });
+    salvarMomentos(momentos);
+
+    if (tituloInput) tituloInput.value = '';
+    if (dataInput) dataInput.value = '';
+    renderizarMomentosV43();
+    if (typeof showMessage === 'function') showMessage('Momento adicionado por você 💙');
+  };
+
+  window.excluirMomentoLau = function (index) {
+    const momentos = ordenarMomentos(lerMomentos());
+    if (index < 0 || index >= momentos.length) return;
+    if (!confirm('Excluir esse momento?')) return;
+    const alvo = momentos[index];
+    const todos = lerMomentos();
+    const pos = todos.findIndex((item) =>
+      item.titulo === alvo.titulo &&
+      item.data === alvo.data &&
+      item.criadoEm === alvo.criadoEm &&
+      (item.autor || '') === (alvo.autor || '')
+    );
+    if (pos >= 0) todos.splice(pos, 1);
+    else todos.splice(index, 1);
+    salvarMomentos(todos);
+    renderizarMomentosV43();
+    if (typeof showMessage === 'function') showMessage('Momento removido 📅');
+  };
+  window.excluirMomentoNamorado = window.excluirMomentoLau;
+
+  function itemHtml(item, index) {
+    const autor = item.autor ? `<span class="v43-moment-author">Adicionado por: ${safe(item.autor)}</span>` : '';
+    return `
+      <div class="history-item v42-moment-row">
+        <div>
+          <strong>${safe(item.titulo)}</strong><br>
+          ${safe(item.data)}<br>
+          <small>${item.criadoEm ? 'Salvo em ' + safe(item.criadoEm) : ''}</small><br>
+          ${autor}
+        </div>
+        <button class="v42-moment-delete" type="button" onclick="excluirMomentoLau(${index})" title="Excluir momento">×</button>
+      </div>
+    `;
+  }
+
+  window.renderizarMomentosV43 = function () {
+    const momentos = ordenarMomentos(lerMomentos());
+    const listaHtml = momentos.length
+      ? momentos.map((item, index) => itemHtml(item, index)).join('')
+      : '<div class="corner-item">Nenhum momento salvo ainda.</div>';
+
+    const momentList = el('momentList');
+    if (momentList) momentList.innerHTML = listaHtml;
+
+    const viewMoments = el('viewMoments');
+    if (viewMoments) {
+      viewMoments.innerHTML = `
+        <h4>📅 Momentos dos dois</h4>
+        <p>Adicione lembranças, planos e datas importantes de vocês. Os dois podem adicionar e excluir.</p>
+        <div class="v43-moment-form">
+          <input id="boyMomentTitle" placeholder="Ex: nosso próximo encontro" />
+          <input id="boyMomentDate" type="date" />
+          <button type="button" onclick="adicionarMomentoNamorado()">Adicionar 💙</button>
+        </div>
+        <div class="corner-list">${listaHtml}</div>
+      `;
+    }
+  };
+
+  const renderLauAnt = window.renderizarCantinhoLau;
+  window.renderizarCantinhoLau = function () {
+    const r = typeof renderLauAnt === 'function' ? renderLauAnt() : undefined;
+    renderizarMomentosV43();
+    return r;
+  };
+
+  const renderNamAnt = window.renderizarCantinhoNamorado;
+  window.renderizarCantinhoNamorado = function () {
+    const r = typeof renderNamAnt === 'function' ? renderNamAnt() : undefined;
+    renderizarMomentosV43();
+    return r;
+  };
+
+  const abrirNamAnt = window.abrirCantinhoNamorado;
+  window.abrirCantinhoNamorado = function (id) {
+    const r = typeof abrirNamAnt === 'function' ? abrirNamAnt(id) : undefined;
+    setTimeout(renderizarMomentosV43, 60);
+    return r;
+  };
+
+  const abrirLauAnt = window.abrirCantinho;
+  window.abrirCantinho = function (id) {
+    const r = typeof abrirLauAnt === 'function' ? abrirLauAnt(id) : undefined;
+    setTimeout(renderizarMomentosV43, 60);
+    return r;
+  };
+
+  setTimeout(renderizarMomentosV43, 1200);
+})();
+</script>
+
+<!-- V44: no desktop, remove Mais e deixa as opções principais direto na lateral -->
+<style>
+@media (min-width: 761px) {
+  body.desktop-app-ready .desktop-tabbar {
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  body.desktop-app-ready .desktop-tabbar button[data-desktop-page="cantinho"] {
+    display: none !important;
+  }
+}
+</style>
+<script>
+(function () {
+  const isDesktop = () => window.matchMedia('(min-width: 761px)').matches;
+  const setDisplay = (el, show, display = 'block') => { if (el) el.style.display = show ? display : 'none'; };
+
+  function usuarioAtual() {
+    return localStorage.getItem('lauraos_usuario') || (document.body.classList.contains('namorado-mode') ? 'Namorado' : 'Lau');
+  }
+
+  function tabsDesktop(usuario) {
+    if (usuario === 'Namorado') {
+      return [
+        ['resumo', '💙', 'Hoje'],
+        ['boyStatus', '💙', 'Status'],
+        ['blog', '📝', 'Blog'],
+        ['agenda', '🗓️', 'Agenda'],
+        ['fotos', '📸', 'Fotos'],
+        ['chat', '💬', 'Chat'],
+        ['missao', '🫡', 'Missão'],
+        ['desejos', '🌟', 'Desejos'],
+        ['musicas', '🎵', 'Músicas'],
+        ['momentos', '📅', 'Momentos']
+      ];
+    }
+
+    return [
+      ['status', '💗', 'Hoje'],
+      ['boyStatus', '💙', 'Status'],
+      ['blog', '📝', 'Blog'],
+      ['agenda', '🗓️', 'Agenda'],
+      ['fotos', '📸', 'Fotos'],
+      ['diario', '📓', 'Diário'],
+      ['chat', '💬', 'Chat'],
+      ['missao', '🫡', 'Missão'],
+      ['desejos', '🌟', 'Desejos'],
+      ['musicas', '🎵', 'Músicas'],
+      ['momentos', '📅', 'Momentos']
+    ];
+  }
+
+  function rebuildDesktopNavV44() {
+    if (!isDesktop()) return;
+    const usuario = usuarioAtual();
+    let nav = document.getElementById('desktopTabbar');
+    if (!nav) {
+      nav = document.createElement('nav');
+      nav.id = 'desktopTabbar';
+      nav.className = 'desktop-tabbar';
+      document.body.appendChild(nav);
+    }
+
+    const tabs = tabsDesktop(usuario);
+    const assinatura = 'v44:' + usuario + ':' + tabs.map((t) => t[0]).join('|');
+    if (nav.dataset.signature === assinatura && nav.querySelector('[data-v44-nav="1"]')) {
+      marcarAtivoV44(window.lauDesktopPageAtual || (usuario === 'Namorado' ? 'resumo' : 'status'));
+      return;
+    }
+
+    nav.dataset.signature = assinatura;
+    nav.innerHTML = `
+      <div class="desktop-nav-brand">
+        <img src="/icons/icon-192.png" alt="LauOS" />
+        <div>
+          <div>LauOS</div>
+          <small>${usuario === 'Namorado' ? 'modo namorado' : 'cantinho da Lau'}</small>
+        </div>
+      </div>
+      ${tabs.map(([page, icon, label]) => `
+        <button type="button" data-v44-nav="1" data-desktop-page="${page}">
+          <strong>${icon}</strong><span>${label}</span>
+        </button>
+      `).join('')}
+    `;
+
+    nav.querySelectorAll('button[data-v44-nav="1"]').forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.abrirPaginaDesktop(btn.dataset.desktopPage);
+      });
+    });
+
+    marcarAtivoV44(window.lauDesktopPageAtual || (usuario === 'Namorado' ? 'resumo' : 'status'));
+    if (typeof atualizarBadgeChat === 'function') atualizarBadgeChat();
+  }
+
+  function marcarAtivoV44(page) {
+    if (!isDesktop()) return;
+    document.querySelectorAll('#desktopTabbar button[data-v44-nav="1"]').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.desktopPage === page);
+    });
+  }
+
+  function esconderBaseLau() {
+    const lauraArea = document.getElementById('lauraArea');
+    if (!lauraArea) return null;
+    setDisplay(document.getElementById('countdownArea'), false);
+    setDisplay(document.getElementById('namoradoArea'), false);
+    setDisplay(lauraArea, true);
+    setDisplay(lauraArea.querySelector('.role-header'), false);
+    setDisplay(document.getElementById('moodOptions'), false);
+    setDisplay(lauraArea.querySelector('.levels-grid'), false);
+    setDisplay(document.getElementById('moodNote'), false);
+    setDisplay(lauraArea.querySelector('.save-mood-btn'), false);
+    setDisplay(lauraArea.querySelector('.chat-card'), false);
+    setDisplay(document.getElementById('lauMobilePhotoViewer'), false);
+    return lauraArea;
+  }
+
+  function mostrarPainelLauDireto(panelId) {
+    const lauraArea = esconderBaseLau();
+    if (!lauraArea) return;
+    const corner = document.getElementById('lauCorner');
+    if (!corner) return;
+    setDisplay(corner, true);
+    setDisplay(corner.querySelector('.corner-header'), false);
+    setDisplay(corner.querySelector('.corner-menu'), false);
+    corner.querySelectorAll('.corner-panel').forEach((panel) => {
+      const show = panel.id === panelId;
+      setDisplay(panel, show);
+      panel.classList.toggle('show', show);
+    });
+    window.lauDesktopCantinhoAtual = panelId;
+    if (panelId === 'missionGame' && typeof renderizarMissaoLau === 'function') renderizarMissaoLau();
+    if (panelId === 'wishCorner' && typeof renderizarCantinhoLau === 'function') renderizarCantinhoLau();
+    if (panelId === 'musicCorner' && typeof renderizarMusicas === 'function') renderizarMusicas();
+    if (panelId === 'calendarCorner') {
+      if (typeof renderizarCantinhoLau === 'function') renderizarCantinhoLau();
+      if (typeof renderizarMomentosV43 === 'function') renderizarMomentosV43();
+    }
+  }
+
+  function esconderBaseNamorado() {
+    const namoradoArea = document.getElementById('namoradoArea');
+    if (!namoradoArea) return null;
+    setDisplay(document.getElementById('countdownArea'), false);
+    setDisplay(document.getElementById('lauraArea'), false);
+    setDisplay(namoradoArea, true);
+    setDisplay(namoradoArea.querySelector('.role-header'), false);
+    Array.from(namoradoArea.querySelectorAll(':scope > .viewer-card')).forEach((card) => setDisplay(card, false));
+    return namoradoArea;
+  }
+
+  function mostrarPainelNamoradoDireto(panelId) {
+    const namoradoArea = esconderBaseNamorado();
+    if (!namoradoArea) return;
+    const corner = namoradoArea.querySelector('.namorado-corner-view');
+    if (!corner) return;
+    setDisplay(corner, true);
+    setDisplay(corner.querySelector('.corner-menu'), false);
+    corner.querySelectorAll('.corner-panel').forEach((panel) => {
+      const show = panel.id === panelId;
+      setDisplay(panel, show);
+      panel.classList.toggle('show', show);
+    });
+    window.lauDesktopCantinhoNamoradoAtual = panelId;
+    if (typeof renderizarCantinhoNamorado === 'function') renderizarCantinhoNamorado();
+    if (panelId === 'viewMusic' && typeof renderizarMusicas === 'function') renderizarMusicas();
+    if (panelId === 'viewMoments' && typeof renderizarMomentosV43 === 'function') renderizarMomentosV43();
+  }
+
+  function abrirDiretoV44(page) {
+    const usuario = usuarioAtual();
+    if (usuario === 'Lau') {
+      const mapa = {
+        missao: 'missionGame',
+        desejos: 'wishCorner',
+        musicas: 'musicCorner',
+        momentos: 'calendarCorner'
+      };
+      if (mapa[page]) {
+        window.lauDesktopPageAtual = page;
+        rebuildDesktopNavV44();
+        marcarAtivoV44(page);
+        mostrarPainelLauDireto(mapa[page]);
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        return true;
+      }
+    }
+
+    if (usuario === 'Namorado') {
+      if (page === 'missao') {
+        window.lauDesktopPageAtual = page;
+        rebuildDesktopNavV44();
+        marcarAtivoV44(page);
+        const namoradoArea = esconderBaseNamorado();
+        const missionCard = namoradoArea?.querySelector('.current-mission-card');
+        setDisplay(missionCard, true);
+        if (typeof renderizarMissaoNamorado === 'function') renderizarMissaoNamorado();
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        return true;
+      }
+      const mapa = {
+        desejos: 'viewWishes',
+        musicas: 'viewMusic',
+        momentos: 'viewMoments'
+      };
+      if (mapa[page]) {
+        window.lauDesktopPageAtual = page;
+        rebuildDesktopNavV44();
+        marcarAtivoV44(page);
+        mostrarPainelNamoradoDireto(mapa[page]);
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const abrirDesktopAnteriorV44 = window.abrirPaginaDesktop;
+  window.abrirPaginaDesktop = function (page) {
+    if (isDesktop() && page === 'cantinho') page = 'desejos';
+    if (isDesktop() && abrirDiretoV44(page)) return;
+    const result = typeof abrirDesktopAnteriorV44 === 'function' ? abrirDesktopAnteriorV44(page) : undefined;
+    if (isDesktop()) {
+      window.lauDesktopPageAtual = page;
+      setTimeout(() => {
+        rebuildDesktopNavV44();
+        marcarAtivoV44(page);
+      }, 60);
+    }
+    return result;
+  };
+
+  const aplicarPermissaoAnteriorV44 = window.aplicarPermissao;
+  if (typeof aplicarPermissaoAnteriorV44 === 'function') {
+    window.aplicarPermissao = function (usuario) {
+      const result = aplicarPermissaoAnteriorV44(usuario);
+      setTimeout(rebuildDesktopNavV44, 100);
+      setTimeout(rebuildDesktopNavV44, 500);
+      return result;
+    };
+  }
+
+  window.addEventListener('load', () => {
+    setTimeout(rebuildDesktopNavV44, 600);
+    setTimeout(rebuildDesktopNavV44, 1400);
+  });
+
+  setInterval(() => {
+    if (isDesktop() && localStorage.getItem('lauraos_usuario')) rebuildDesktopNavV44();
+  }, 2500);
 })();
 </script>
 
