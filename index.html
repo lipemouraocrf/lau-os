@@ -8547,6 +8547,7 @@ body.mobile-app-ready .diary-book-text {
         <button onclick="abrirCantinho('wishCorner')">🌟 Desejos</button>
         <button onclick="abrirCantinho('musicCorner')">🎵 Músicas</button>
         <button onclick="abrirCantinho('calendarCorner')">📅 Momentos</button>
+        <button onclick="abrirCantinho('memoryCorner')">📸 Baú</button>
       `;
     }
 
@@ -9846,7 +9847,8 @@ body.namorado-mode .v41-view-box { border-color: #d8ebff; }
       ['missao', '🫡', 'Missão'],
       ['desejos', '🌟', 'Desejos'],
       ['musicas', '🎵', 'Músicas'],
-      ['momentos', '📅', 'Momentos']
+      ['momentos', '📅', 'Momentos'],
+      ['bau', '📸', 'Baú']
     ];
   }
 
@@ -9935,6 +9937,7 @@ body.namorado-mode .v41-view-box { border-color: #d8ebff; }
     if (panelId === 'missionGame' && typeof renderizarMissaoLau === 'function') renderizarMissaoLau();
     if (panelId === 'wishCorner' && typeof renderizarCantinhoLau === 'function') renderizarCantinhoLau();
     if (panelId === 'musicCorner' && typeof renderizarMusicas === 'function') renderizarMusicas();
+    if (panelId === 'memoryCorner' && typeof renderizarGaleriaFotosLau === 'function') renderizarGaleriaFotosLau();
     if (panelId === 'calendarCorner') {
       if (typeof renderizarCantinhoLau === 'function') renderizarCantinhoLau();
       if (typeof renderizarMomentosV43 === 'function') renderizarMomentosV43();
@@ -9977,7 +9980,8 @@ body.namorado-mode .v41-view-box { border-color: #d8ebff; }
         missao: 'missionGame',
         desejos: 'wishCorner',
         musicas: 'musicCorner',
-        momentos: 'calendarCorner'
+        momentos: 'calendarCorner',
+        bau: 'memoryCorner'
       };
       if (mapa[page]) {
         window.lauDesktopPageAtual = page;
