@@ -1,0 +1,372 @@
+/* LauOS v85 - páginas do Namorado isoladas e compactas */
+body.namorado-v85-active #namoradoV85Host {
+  display: block !important;
+}
+
+.namorado-v85-loading {
+  max-width: 760px;
+  margin: 18px auto;
+  padding: 18px;
+  border: 2px solid #b9dcff;
+  border-radius: 24px;
+  background: rgba(255,255,255,.78);
+  color: #2f80ed;
+  text-align: center;
+  font-weight: 900;
+}
+
+.namorado-v85-host {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding: 8px 8px 24px;
+  color: #5a2a44;
+}
+
+.namorado-v85-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto 10px;
+  padding: 10px 14px;
+  border: 2px solid #b9dcff;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(240,248,255,.72));
+  box-shadow: 0 14px 28px rgba(47,128,237,.08);
+}
+
+.namorado-v85-head h2 {
+  margin: 0 0 2px;
+  color: #2f80ed;
+  font-size: clamp(1.05rem, 2vw, 1.45rem);
+}
+
+.namorado-v85-head p {
+  margin: 0;
+  font-size: .78rem;
+  opacity: .86;
+}
+
+.namorado-v85-card {
+  margin: 10px auto;
+  padding: 14px;
+  border: 2px solid #b9dcff;
+  border-radius: 24px;
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 18px 38px rgba(47,128,237,.08);
+}
+
+.namorado-v85-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 14px;
+  border: 2px solid #cce7ff;
+  border-radius: 999px;
+  background: rgba(247,252,255,.92);
+  color: #2f80ed;
+  font-weight: 900;
+}
+
+.namorado-v85-btn {
+  border: 0;
+  border-radius: 16px;
+  padding: 11px 18px;
+  background: linear-gradient(135deg, #65b7ff, #2f80ed);
+  color: #fff;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(47,128,237,.18);
+}
+
+.namorado-v85-btn.soft {
+  background: #fff;
+  color: #2f80ed;
+  border: 2px solid #b9dcff;
+  box-shadow: none;
+}
+
+.namorado-v85-btn:disabled { opacity: .65; cursor: wait; }
+
+.namorado-v85-empty,
+.namorado-v85-loading-line {
+  padding: 14px;
+  border: 2px dashed #b9dcff;
+  border-radius: 18px;
+  text-align: center;
+  color: #7b5a70;
+  background: rgba(247,252,255,.7);
+}
+
+.namorado-v85-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 2px solid #b9dcff;
+  background: rgba(255,255,255,.8);
+  color: #2f80ed;
+  font-weight: 900;
+  font-size: .78rem;
+}
+
+.namorado-v85-status-grid {
+  display: grid;
+  grid-template-columns: minmax(230px, .95fr) minmax(320px, 1.35fr);
+  gap: 12px;
+}
+
+.namorado-v85-status-main,
+.namorado-v85-status-levels,
+.namorado-v85-status-protocol,
+.namorado-v85-status-history {
+  padding: 14px;
+  border: 2px solid #d5ecff;
+  border-radius: 22px;
+  background: rgba(250,253,255,.86);
+}
+
+.namorado-v85-status-main h3 {
+  margin: 10px 0 6px;
+  color: #2f80ed;
+  font-size: 1.2rem;
+}
+
+.namorado-v85-status-main p,
+.namorado-v85-status-protocol,
+.namorado-v85-status-history {
+  font-size: .88rem;
+  line-height: 1.35;
+}
+
+.namorado-v85-status-levels {
+  grid-row: span 2;
+}
+
+.namorado-v85-levels-inner {
+  margin-top: 10px;
+}
+
+.namorado-v85-levels-inner .level-card,
+.namorado-v85-levels-inner .level-item,
+.namorado-v85-levels-inner .readonly-level {
+  margin: 8px 0 !important;
+  padding: 10px !important;
+  border-color: #b9dcff !important;
+}
+
+.namorado-v85-levels-inner input[type='range'] {
+  max-width: 100%;
+}
+
+.namorado-v85-agenda-layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.05fr) minmax(280px, .95fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.namorado-v85-calendar,
+.namorado-v85-day-details {
+  padding: 14px;
+  border: 2px solid #d5ecff;
+  border-radius: 22px;
+  background: rgba(250,253,255,.88);
+}
+
+.namorado-v85-calendar-head {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+  color: #2f80ed;
+}
+
+.namorado-v85-calendar-head button,
+.namorado-v85-day {
+  border: 2px solid #cce7ff;
+  border-radius: 14px;
+  background: #fff;
+  color: #5a2a44;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.namorado-v85-calendar-head button {
+  height: 38px;
+  color: #2f80ed;
+  font-size: 1.3rem;
+}
+
+.namorado-v85-week,
+.namorado-v85-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.namorado-v85-week span {
+  text-align: center;
+  font-size: .72rem;
+  color: #2f80ed;
+  font-weight: 900;
+}
+
+.namorado-v85-day {
+  min-height: 42px;
+  position: relative;
+}
+
+.namorado-v85-day.is-empty { visibility: hidden; }
+.namorado-v85-day.is-today { background: #eef7ff; }
+.namorado-v85-day.is-selected {
+  background: linear-gradient(135deg, #65b7ff, #2f80ed);
+  color: #fff;
+  border-color: #2f80ed;
+}
+.namorado-v85-day.has-data::after {
+  content: '';
+  position: absolute;
+  right: 7px;
+  bottom: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2f80ed;
+}
+
+.namorado-v85-day-details h3 {
+  margin: 0 0 10px;
+  color: #2f80ed;
+}
+
+.namorado-v85-agenda-item {
+  margin: 8px 0;
+  padding: 10px 12px;
+  border: 2px solid #d5ecff;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.namorado-v85-agenda-item strong,
+.namorado-v85-agenda-item span {
+  display: block;
+}
+
+.namorado-v85-agenda-item strong { color: #2f80ed; margin-bottom: 4px; }
+.namorado-v85-agenda-item.is-rotina strong { color: #ff4fa3; }
+
+.namorado-v85-form {
+  display: grid;
+  gap: 10px;
+}
+
+.namorado-v85-form input,
+.namorado-v85-form textarea,
+.namorado-v85-form select {
+  width: 100%;
+  border: 2px solid #b9dcff;
+  border-radius: 16px;
+  background: #fff;
+  color: #5a2a44;
+  font: inherit;
+  font-weight: 800;
+  padding: 12px 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.namorado-v85-form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.namorado-v85-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.namorado-v85-post-list,
+.namorado-v85-letter-list {
+  display: grid;
+  gap: 10px;
+}
+
+.namorado-v85-post,
+.namorado-v85-letter {
+  position: relative;
+  padding: 14px;
+  border: 2px solid #d5ecff;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #fff, #f6fbff);
+}
+
+.namorado-v85-post h3,
+.namorado-v85-letter h3 {
+  margin: 0 0 6px;
+  color: #2f80ed;
+}
+
+.namorado-v85-post small,
+.namorado-v85-letter small {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #eef7ff;
+  color: #2f80ed;
+  font-weight: 900;
+}
+
+.namorado-v85-post p,
+.namorado-v85-letter p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.namorado-v85-letter-lock {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #eef7ff;
+}
+
+.namorado-v85-letter.is-locked {
+  opacity: .82;
+}
+
+@media (max-width: 980px) {
+  .namorado-v85-status-grid,
+  .namorado-v85-agenda-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .namorado-v85-host {
+    padding: 6px 6px 110px;
+  }
+  .namorado-v85-head,
+  .namorado-v85-card {
+    border-radius: 18px;
+    padding: 10px;
+  }
+  .namorado-v85-row {
+    grid-template-columns: 1fr;
+  }
+  .namorado-v85-day {
+    min-height: 34px;
+    border-radius: 11px;
+  }
+}

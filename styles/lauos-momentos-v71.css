@@ -1,0 +1,813 @@
+/* LauOS v69 - Momentos compactos e românticos */
+
+body.lauos-v69-momentos-active #introHero,
+body.lauos-v69-momentos-active #cuteDashboard,
+body.lauos-v69-momentos-active #countdownArea,
+body.lauos-v69-momentos-active #lauraArea,
+body.lauos-v69-momentos-active #namoradoArea,
+body.lauos-v69-momentos-active #calendarCorner,
+body.lauos-v69-momentos-active #viewMoments,
+body.lauos-v69-momentos-active .photo-moments-card,
+body.lauos-v69-momentos-active #lauosMomentosV67 {
+  display: none !important;
+}
+
+#lauosMomentosV69 {
+  display: none;
+  width: min(980px, calc(100vw - 330px));
+  margin: 12px auto 28px;
+  box-sizing: border-box;
+}
+
+body.lauos-v69-momentos-active #lauosMomentosV69 {
+  display: block !important;
+}
+
+.lauos-v69-shell {
+  border: 2px solid rgba(255, 151, 199, .36);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 18% 4%, rgba(255, 105, 180, .10), transparent 28%),
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,248,252,.94));
+  box-shadow: 0 20px 48px rgba(190, 80, 140, .11);
+  padding: 18px;
+  min-height: 0;
+  overflow: visible;
+}
+
+.lauos-v69-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.lauos-v69-titlebox {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.lauos-v69-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #fff, #ffe7f4);
+  border: 2px solid rgba(255, 151, 199, .44);
+  box-shadow: 0 12px 28px rgba(255, 105, 180, .12);
+  font-size: 22px;
+}
+
+.lauos-v69-head h2 {
+  margin: 0;
+  color: #ff4fa2;
+  font-size: clamp(25px, 2.2vw, 32px);
+  line-height: 1;
+}
+
+.lauos-v69-count,
+.lauos-v69-author,
+.lauos-v69-meta span,
+.lauos-v69-status,
+.lauos-v69-created {
+  border: 2px solid rgba(255, 151, 199, .32);
+  background: rgba(255,255,255,.86);
+  color: #7d4262;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.lauos-v69-composer {
+  background: rgba(255,255,255,.78);
+  border: 2px dashed rgba(255, 151, 199, .34);
+  border-radius: 24px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.lauos-v69-row {
+  display: grid;
+  grid-template-columns: 1fr 150px auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.lauos-v69-input,
+.lauos-v69-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid rgba(255, 151, 199, .38);
+  border-radius: 17px;
+  background: rgba(255,255,255,.92);
+  padding: 11px 13px;
+  color: #61324d;
+  font: inherit;
+  font-weight: 850;
+  outline: none;
+}
+
+.lauos-v69-input:focus,
+.lauos-v69-textarea:focus {
+  border-color: rgba(255, 79, 162, .72);
+  box-shadow: 0 0 0 4px rgba(255, 79, 162, .08);
+}
+
+.lauos-v69-textarea {
+  margin-top: 10px;
+  min-height: 62px;
+  max-height: 112px;
+  resize: vertical;
+}
+
+.lauos-v69-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.lauos-v69-file-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lauos-v69-file-label,
+.lauos-v69-btn,
+.lauos-v69-reaction {
+  border: 2px solid rgba(255, 151, 199, .38);
+  border-radius: 999px;
+  background: rgba(255,255,255,.9);
+  color: #743a5c;
+  font-weight: 950;
+  box-shadow: 0 10px 24px rgba(255, 105, 180, .10);
+  cursor: pointer;
+  transition: transform .14s ease, background .14s ease, box-shadow .14s ease;
+}
+
+.lauos-v69-file-label,
+.lauos-v69-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+.lauos-v69-primary {
+  background: linear-gradient(135deg, #ff7fbd, #ff4fa2);
+  color: #fff;
+  border-color: transparent;
+}
+
+.lauos-v69-light {
+  background: #fff7fb;
+}
+
+.lauos-v69-file-label:hover,
+.lauos-v69-btn:hover,
+.lauos-v69-reaction:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(255, 105, 180, .15);
+}
+
+.lauos-v69-photo-preview {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 18px;
+  background: #fff7fb;
+  border: 2px solid rgba(255, 151, 199, .30);
+  padding: 9px;
+  color: #7d4262;
+  font-weight: 900;
+}
+
+.lauos-v69-photo-preview img {
+  width: 58px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.lauos-v69-feed {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.lauos-v69-post {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 105, 180, .08), transparent 30%),
+    rgba(255,255,255,.95);
+  border: 2px solid rgba(255, 151, 199, .30);
+  box-shadow: 0 16px 34px rgba(95, 45, 73, .08);
+}
+
+.lauos-v69-post::before {
+  content: '♡';
+  position: absolute;
+  top: 9px;
+  left: 14px;
+  z-index: 2;
+  width: 34px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255,255,255,.82);
+  color: #ff4fa2;
+  box-shadow: 0 8px 18px rgba(255,105,180,.12);
+}
+
+.lauos-v69-photo {
+  display: block;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #fff1f8, #fff);
+  cursor: pointer;
+}
+
+.lauos-v69-photo img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 235px;
+  object-fit: cover;
+  display: block;
+}
+
+.lauos-v69-body {
+  padding: 15px;
+}
+
+.lauos-v69-post.no-photo .lauos-v69-body {
+  min-height: 150px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 151, 199, .12) 0 2px, transparent 2px 32px),
+    linear-gradient(135deg, #fff8fc, #fff);
+}
+
+.lauos-v69-letter-mark {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.86);
+  border: 2px solid rgba(255,151,199,.24);
+  box-shadow: 0 12px 26px rgba(255,105,180,.10);
+  font-size: 24px;
+}
+
+.lauos-v69-post h3 {
+  margin: 0;
+  color: #ff4fa2;
+  font-size: 21px;
+  line-height: 1.12;
+}
+
+.lauos-v69-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 9px 0 10px;
+}
+
+.lauos-v69-post p {
+  margin: 0;
+  color: #60334d;
+  font-weight: 830;
+  line-height: 1.42;
+  white-space: pre-wrap;
+}
+
+.lauos-v69-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.lauos-v69-reaction {
+  min-width: 42px;
+  height: 38px;
+  padding: 0 10px;
+  display: inline-grid;
+  place-items: center;
+  font-size: 17px;
+}
+
+.lauos-v69-reaction.is-on {
+  background: linear-gradient(135deg, #ff7fbd, #ff4fa2);
+  color: #fff;
+  border-color: transparent;
+}
+
+.lauos-v69-created {
+  display: inline-block;
+  margin-top: 11px;
+  font-size: 12px;
+  opacity: .82;
+}
+
+.lauos-v69-delete {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  border: 2px solid rgba(255, 151, 199, .28);
+  background: rgba(255,255,255,.92);
+  color: #ff4fa2;
+  font-size: 20px;
+  font-weight: 1000;
+  cursor: pointer;
+}
+
+.lauos-v69-empty {
+  border: 2px dashed rgba(255, 151, 199, .42);
+  background: rgba(255,255,255,.75);
+  border-radius: 24px;
+  padding: 24px;
+  color: #7b4261;
+  font-weight: 900;
+  text-align: center;
+}
+
+.lauos-v69-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(54, 26, 44, .64);
+  backdrop-filter: blur(10px);
+}
+
+.lauos-v69-modal.show { display: flex; }
+
+.lauos-v69-modal-card {
+  width: min(900px, 94vw);
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #fff, #fff4fa);
+  border: 2px solid rgba(255,255,255,.86);
+  box-shadow: 0 28px 80px rgba(0,0,0,.26);
+  padding: 16px;
+}
+
+.lauos-v69-modal-close {
+  float: right;
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  border: 2px solid rgba(255,151,199,.28);
+  background: white;
+  color: #ff4fa2;
+  font-size: 22px;
+  font-weight: 1000;
+  cursor: pointer;
+}
+
+.lauos-v69-modal-img {
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  display: block;
+  border-radius: 22px;
+  background: #fff4fa;
+}
+
+.lauos-v69-modal-info {
+  margin-top: 12px;
+  color: #60334d;
+  font-weight: 850;
+}
+
+.lauos-v69-modal-info strong {
+  display: block;
+  color: #ff4fa2;
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.lauos-v69-modal-info span {
+  display: block;
+  opacity: .82;
+  margin-bottom: 8px;
+}
+
+.lauos-v69-modal-info p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+body.namorado-mode .lauos-v69-reaction.is-on,
+body.namorado-mode .lauos-v69-primary {
+  background: linear-gradient(135deg, #63b7ff, #2f7cff) !important;
+  color: #fff !important;
+}
+
+body.namorado-mode .lauos-v69-shell {
+  border-color: rgba(119, 190, 255, .36);
+  background:
+    radial-gradient(circle at 18% 4%, rgba(99, 183, 255, .12), transparent 28%),
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(244,250,255,.94));
+}
+
+body.namorado-mode .lauos-v69-icon,
+body.namorado-mode .lauos-v69-count,
+body.namorado-mode .lauos-v69-author,
+body.namorado-mode .lauos-v69-meta span,
+body.namorado-mode .lauos-v69-status,
+body.namorado-mode .lauos-v69-created {
+  border-color: rgba(119, 190, 255, .34);
+}
+
+@media (max-width: 980px) {
+  #lauosMomentosV69 {
+    width: calc(100vw - 22px);
+    margin: 10px auto 92px;
+  }
+  .lauos-v69-feed { grid-template-columns: 1fr; }
+  .lauos-v69-row { grid-template-columns: 1fr; }
+}
+
+/* v70 - acabamento final: compacto, romântico e sem blocões */
+#lauosMomentosV69 {
+  width: min(920px, calc(100vw - 330px)) !important;
+  margin-top: 10px !important;
+}
+
+.lauos-v69-shell {
+  padding: 16px !important;
+  border-radius: 28px !important;
+}
+
+.lauos-v69-head {
+  margin-bottom: 12px !important;
+}
+
+.lauos-v69-icon {
+  width: 44px !important;
+  height: 44px !important;
+  font-size: 21px !important;
+}
+
+.lauos-v69-head h2 {
+  font-size: 30px !important;
+}
+
+.lauos-v69-composer {
+  max-width: 760px !important;
+  margin: 0 auto 16px !important;
+  padding: 13px !important;
+  border-radius: 26px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.90), rgba(255,247,252,.86)) !important;
+}
+
+.lauos-v69-row {
+  grid-template-columns: minmax(0,1fr) 142px auto !important;
+  gap: 9px !important;
+}
+
+.lauos-v69-input,
+.lauos-v69-textarea {
+  border-radius: 18px !important;
+  padding: 10px 12px !important;
+}
+
+.lauos-v69-textarea {
+  min-height: 66px !important;
+  max-height: 92px !important;
+}
+
+.lauos-v69-photo-preview {
+  max-width: 390px !important;
+  margin-top: 9px !important;
+  padding: 8px !important;
+}
+
+.lauos-v69-photo-preview img {
+  width: 54px !important;
+  height: 54px !important;
+}
+
+.lauos-v69-status[hidden] { display: none !important; }
+
+.lauos-v69-feed {
+  max-width: 820px !important;
+  margin: 0 auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 14px !important;
+}
+
+.lauos-v69-post {
+  border-radius: 28px !important;
+  overflow: hidden !important;
+  background: linear-gradient(180deg, #fff, #fff7fb) !important;
+  border: 2px solid rgba(255, 151, 199, .30) !important;
+  box-shadow: 0 16px 38px rgba(142, 65, 106, .10) !important;
+}
+
+.lauos-v69-post::before {
+  content: '💌' !important;
+  width: 40px !important;
+  height: 34px !important;
+  top: 12px !important;
+  left: 12px !important;
+}
+
+.lauos-v69-photo img {
+  aspect-ratio: 1 / 1 !important;
+  max-height: 285px !important;
+  object-fit: cover !important;
+}
+
+.lauos-v69-body {
+  padding: 14px 15px 15px !important;
+}
+
+.lauos-v69-post.no-photo .lauos-v69-body {
+  min-height: 0 !important;
+  padding-top: 46px !important;
+  background:
+    radial-gradient(circle at 85% 12%, rgba(255,105,180,.10), transparent 25%),
+    repeating-linear-gradient(90deg, rgba(255, 151, 199, .11) 0 2px, transparent 2px 34px),
+    linear-gradient(135deg, #fff8fc, #fff) !important;
+}
+
+.lauos-v69-letter-mark {
+  display: none !important;
+}
+
+.lauos-v69-post h3 {
+  font-size: 20px !important;
+  line-height: 1.18 !important;
+  margin-bottom: 8px !important;
+}
+
+.lauos-v69-meta {
+  margin: 7px 0 9px !important;
+}
+
+.lauos-v69-meta span,
+.lauos-v69-created,
+.lauos-v69-count,
+.lauos-v69-author,
+.lauos-v69-status {
+  padding: 6px 10px !important;
+  font-size: 13px !important;
+}
+
+.lauos-v69-post p {
+  font-size: 15px !important;
+  line-height: 1.42 !important;
+}
+
+.lauos-v69-reactions {
+  gap: 6px !important;
+  margin-top: 10px !important;
+}
+
+.lauos-v69-reaction {
+  min-width: 38px !important;
+  height: 34px !important;
+  font-size: 15px !important;
+  border-radius: 14px !important;
+}
+
+.lauos-v69-delete {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 14px !important;
+}
+
+.lauos-v69-modal-card {
+  width: min(820px, 94vw) !important;
+  display: grid !important;
+  grid-template-columns: minmax(280px, 1fr) minmax(230px, .75fr) !important;
+  gap: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.lauos-v69-modal-close {
+  position: absolute !important;
+  right: 16px !important;
+  top: 16px !important;
+  z-index: 2 !important;
+}
+
+.lauos-v69-modal-img {
+  height: min(70vh, 560px) !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  object-fit: contain !important;
+  background: #fff4fa !important;
+}
+
+.lauos-v69-modal-info {
+  margin: 0 !important;
+  padding: 52px 22px 22px !important;
+  border-left: 2px solid rgba(255,151,199,.18) !important;
+}
+
+@media (max-width: 980px) {
+  #lauosMomentosV69 {
+    width: calc(100vw - 22px) !important;
+    margin-bottom: 92px !important;
+  }
+  .lauos-v69-row { grid-template-columns: 1fr !important; }
+  .lauos-v69-feed { grid-template-columns: 1fr !important; }
+  .lauos-v69-modal-card { grid-template-columns: 1fr !important; }
+  .lauos-v69-modal-img { height: auto !important; max-height: 58vh !important; }
+  .lauos-v69-modal-info { border-left: 0 !important; border-top: 2px solid rgba(255,151,199,.18) !important; padding-top: 18px !important; }
+}
+
+/* v71 - Momentos em post horizontal compacto, sem cortar foto */
+body.lauos-v69-momentos-active #lauosMomentosV69 {
+  width: min(900px, calc(100vw - 330px)) !important;
+}
+
+.lauos-v69-shell {
+  padding: 14px !important;
+}
+
+.lauos-v69-head {
+  margin-bottom: 10px !important;
+}
+
+.lauos-v69-composer {
+  max-width: 760px !important;
+  padding: 12px !important;
+  margin-bottom: 14px !important;
+}
+
+.lauos-v69-textarea {
+  min-height: 54px !important;
+  max-height: 78px !important;
+}
+
+.lauos-v69-feed {
+  grid-template-columns: 1fr !important;
+  max-width: 760px !important;
+  gap: 13px !important;
+}
+
+.lauos-v69-post {
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+}
+
+.lauos-v69-post.has-photo {
+  display: grid !important;
+  grid-template-columns: minmax(230px, 42%) minmax(0, 1fr) !important;
+  min-height: 198px !important;
+  cursor: pointer !important;
+}
+
+.lauos-v69-post.has-photo .lauos-v69-photo {
+  height: 100% !important;
+  min-height: 198px !important;
+  border-right: 2px solid rgba(255,151,199,.18) !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 151, 199, .14), transparent 42%),
+    linear-gradient(135deg, #fff8fc, #fff) !important;
+}
+
+.lauos-v69-post.has-photo .lauos-v69-photo img {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 198px !important;
+  max-height: 238px !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  background: #fff8fc !important;
+}
+
+.lauos-v69-post.has-photo .lauos-v69-body {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 18px 18px 16px !important;
+}
+
+.lauos-v69-post.no-photo {
+  max-width: 620px !important;
+}
+
+.lauos-v69-post.no-photo .lauos-v69-body {
+  min-height: 132px !important;
+  padding: 44px 18px 16px !important;
+}
+
+.lauos-v69-post h3 {
+  font-size: 20px !important;
+  margin-bottom: 8px !important;
+}
+
+.lauos-v69-post p {
+  font-size: 15px !important;
+  max-height: 58px !important;
+  overflow: hidden !important;
+}
+
+.lauos-v69-meta {
+  margin: 6px 0 8px !important;
+}
+
+.lauos-v69-reactions {
+  gap: 6px !important;
+  margin-top: 9px !important;
+}
+
+.lauos-v69-created {
+  width: fit-content !important;
+  margin-top: 8px !important;
+}
+
+.lauos-v69-modal-card {
+  width: min(920px, 94vw) !important;
+  max-height: 88vh !important;
+  display: grid !important;
+  grid-template-columns: minmax(320px, 1.25fr) minmax(260px, .75fr) !important;
+  background: #fff7fb !important;
+}
+
+.lauos-v69-modal-img {
+  width: 100% !important;
+  height: min(72vh, 620px) !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,151,199,.14), transparent 45%),
+    #fff !important;
+}
+
+.lauos-v69-modal-info {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 58px 24px 24px !important;
+}
+
+.lauos-v69-modal-info strong {
+  font-size: 24px !important;
+}
+
+body.namorado-mode .lauos-v69-post.has-photo .lauos-v69-photo {
+  border-right-color: rgba(119,190,255,.22) !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(99,183,255,.14), transparent 42%),
+    linear-gradient(135deg, #f4faff, #fff) !important;
+}
+
+@media (max-width: 980px) {
+  body.lauos-v69-momentos-active #lauosMomentosV69 {
+    width: calc(100vw - 22px) !important;
+  }
+  .lauos-v69-post.has-photo {
+    grid-template-columns: 1fr !important;
+  }
+  .lauos-v69-post.has-photo .lauos-v69-photo {
+    border-right: 0 !important;
+    border-bottom: 2px solid rgba(255,151,199,.18) !important;
+    min-height: 0 !important;
+  }
+  .lauos-v69-post.has-photo .lauos-v69-photo img {
+    height: auto !important;
+    max-height: 330px !important;
+  }
+  .lauos-v69-modal-card {
+    grid-template-columns: 1fr !important;
+  }
+  .lauos-v69-modal-img {
+    height: auto !important;
+    max-height: 58vh !important;
+  }
+  .lauos-v69-modal-info {
+    padding: 18px !important;
+  }
+}

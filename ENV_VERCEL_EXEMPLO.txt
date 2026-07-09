@@ -1,0 +1,17 @@
+# LauOS v54 - variáveis de ambiente para colocar no Vercel
+# Vercel > Projeto > Settings > Environment Variables
+
+LAUOS_SUPABASE_URL=https://SEU-PROJETO.supabase.co
+LAUOS_SUPABASE_ANON_KEY=SUA_ANON_KEY_DO_SUPABASE
+
+# Usuários atuais do Supabase Auth
+# A tela do app só pede a senha.
+# A API escolhe o e-mail de acordo com a área clicada.
+
+LAUOS_LAU_EMAIL=lau@lauos.com
+LAUOS_NAMORADO_EMAIL=lipe@lauos.com
+
+# Não use mais:
+# LAUOS_LAU_LOGINS
+# LAUOS_NAMORADO_LOGINS
+# LAUOS_LOGIN_CONFIG_JSON

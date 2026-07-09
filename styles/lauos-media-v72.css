@@ -1,0 +1,435 @@
+/* LauOS v72 - Fotos + Baú juntos, Chat removido da navegação */
+
+/* Esconde áreas antigas quando o módulo Fotos assume */
+body.lauos-v72-media-active #introHero,
+body.lauos-v72-media-active #cuteDashboard,
+body.lauos-v72-media-active #countdownArea,
+body.lauos-v72-media-active #lauraArea,
+body.lauos-v72-media-active #namoradoArea,
+body.lauos-v72-media-active #lauMobilePhotoViewer,
+body.lauos-v72-media-active .photo-moments-card,
+body.lauos-v72-media-active #memoryCorner,
+body.lauos-v72-media-active #boyfriendBauPanel,
+body.lauos-v72-media-active #viewBau,
+body.lauos-v72-media-active #lauraChatArea,
+body.lauos-v72-media-active #namoradoChatArea {
+  display: none !important;
+}
+
+/* Mata visualmente os botões de navegação que não existem mais */
+.lauos-v72-nav-hidden {
+  display: none !important;
+}
+
+#lauosMediaV72 {
+  display: none;
+  width: min(1080px, calc(100vw - 330px));
+  margin: 14px auto 30px;
+  box-sizing: border-box;
+}
+
+body.lauos-v72-media-active #lauosMediaV72 {
+  display: block !important;
+}
+
+.lauos-v72-shell {
+  border: 2px solid rgba(255, 151, 199, .34);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,248,252,.92));
+  box-shadow: 0 18px 44px rgba(232, 92, 160, .10);
+  padding: 20px;
+  min-height: 520px;
+  overflow: hidden;
+}
+
+body.namorado-mode .lauos-v72-shell {
+  border-color: rgba(99, 183, 255, .38);
+  box-shadow: 0 18px 44px rgba(47, 124, 255, .10);
+}
+
+.lauos-v72-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.lauos-v72-titlebox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lauos-v72-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  background: #fff;
+  border: 2px solid rgba(255, 151, 199, .35);
+  box-shadow: 0 10px 24px rgba(255, 105, 180, .11);
+  font-size: 23px;
+}
+
+body.namorado-mode .lauos-v72-icon {
+  border-color: rgba(99, 183, 255, .45);
+}
+
+.lauos-v72-head h2 {
+  margin: 0;
+  color: #ff4fa2;
+  font-size: clamp(24px, 2.4vw, 32px);
+  line-height: 1.05;
+}
+
+body.namorado-mode .lauos-v72-head h2 {
+  color: #2f7cff;
+}
+
+.lauos-v72-badge {
+  border: 2px solid rgba(255, 151, 199, .32);
+  background: rgba(255, 255, 255, .86);
+  color: #7b4261;
+  border-radius: 999px;
+  padding: 9px 15px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+body.namorado-mode .lauos-v72-badge {
+  border-color: rgba(99, 183, 255, .42);
+  color: #2c66be;
+}
+
+.lauos-v72-uploader {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  padding: 12px;
+  border: 2px dashed rgba(255, 151, 199, .32);
+  border-radius: 22px;
+  background: rgba(255,255,255,.72);
+}
+
+body.namorado-mode .lauos-v72-uploader {
+  border-color: rgba(99, 183, 255, .34);
+}
+
+.lauos-v72-uploader input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lauos-v72-file-label,
+.lauos-v72-btn {
+  border: 2px solid rgba(255, 151, 199, .36);
+  border-radius: 999px;
+  background: rgba(255,255,255,.92);
+  color: #743a5c;
+  font-weight: 900;
+  box-shadow: 0 9px 22px rgba(255, 105, 180, .09);
+  cursor: pointer;
+  transition: transform .14s ease, background .14s ease;
+  padding: 11px 16px;
+  font-size: 15px;
+  text-align: center;
+}
+
+.lauos-v72-btn:hover,
+.lauos-v72-file-label:hover {
+  transform: translateY(-2px);
+  background: #fff4fa;
+}
+
+.lauos-v72-primary {
+  background: linear-gradient(135deg, #ff79b8, #ff4fa2);
+  color: white;
+  border-color: transparent;
+}
+
+body.namorado-mode .lauos-v72-primary {
+  background: linear-gradient(135deg, #63b7ff, #2f7cff);
+}
+
+body.namorado-mode .lauos-v72-file-label,
+body.namorado-mode .lauos-v72-btn {
+  border-color: rgba(99, 183, 255, .42);
+}
+
+.lauos-v72-status {
+  min-width: 190px;
+  text-align: center;
+  color: #7b4261;
+  font-weight: 850;
+  font-size: 14px;
+}
+
+body.namorado-mode .lauos-v72-status {
+  color: #2c66be;
+}
+
+.lauos-v72-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+  gap: 15px;
+  align-items: start;
+}
+
+.lauos-v72-card {
+  position: relative;
+  border-radius: 22px;
+  background: rgba(255,255,255,.94);
+  border: 2px solid rgba(255, 151, 199, .23);
+  box-shadow: 0 12px 28px rgba(95, 45, 73, .075);
+  padding: 9px;
+  cursor: pointer;
+  transition: transform .17s ease, box-shadow .17s ease;
+  overflow: hidden;
+}
+
+body.namorado-mode .lauos-v72-card {
+  border-color: rgba(99, 183, 255, .27);
+}
+
+.lauos-v72-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 34px rgba(95, 45, 73, .12);
+}
+
+.lauos-v72-card img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+  border-radius: 17px;
+  background: #fff1f8;
+}
+
+.lauos-v72-card-meta {
+  display: grid;
+  gap: 5px;
+  padding: 8px 5px 4px;
+  color: #6b3655;
+  font-weight: 850;
+  text-align: center;
+}
+
+.lauos-v72-caption {
+  color: #ff4fa2;
+  font-size: 14px;
+  line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.namorado-mode .lauos-v72-caption {
+  color: #2f7cff;
+}
+
+.lauos-v72-date {
+  font-size: 12px;
+  opacity: .78;
+}
+
+.lauos-v72-reactions-small {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 12px;
+  color: #ff4fa2;
+}
+
+body.namorado-mode .lauos-v72-reactions-small {
+  color: #2f7cff;
+}
+
+.lauos-v72-delete {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.88);
+  background: rgba(255,255,255,.95);
+  color: #ff4fa2;
+  font-weight: 1000;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+  z-index: 3;
+}
+
+body.namorado-mode .lauos-v72-delete {
+  color: #2f7cff;
+}
+
+.lauos-v72-empty {
+  border: 2px dashed rgba(255, 151, 199, .35);
+  background: rgba(255,255,255,.78);
+  border-radius: 23px;
+  padding: 24px;
+  color: #7b4261;
+  font-weight: 900;
+  text-align: center;
+}
+
+body.namorado-mode .lauos-v72-empty {
+  border-color: rgba(99, 183, 255, .36);
+  color: #2c66be;
+}
+
+.lauos-v72-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(54, 26, 44, .63);
+  backdrop-filter: blur(10px);
+}
+
+.lauos-v72-modal.show { display: flex; }
+
+.lauos-v72-modal-card {
+  width: min(940px, 94vw);
+  max-height: 88vh;
+  overflow: auto;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #fff, #fff5fa);
+  border: 2px solid rgba(255,255,255,.86);
+  box-shadow: 0 28px 80px rgba(0,0,0,.26);
+}
+
+.lauos-v72-modal-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr);
+}
+
+.lauos-v72-modal-photo {
+  min-height: 340px;
+  background: #fff4fa;
+  display: grid;
+  place-items: center;
+}
+
+.lauos-v72-modal-photo img {
+  max-width: 100%;
+  max-height: 76vh;
+  object-fit: contain;
+  display: block;
+}
+
+.lauos-v72-modal-side {
+  position: relative;
+  padding: 22px;
+  border-left: 2px solid rgba(255, 151, 199, .2);
+}
+
+.lauos-v72-close {
+  position: sticky;
+  top: 0;
+  margin-left: auto;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  border: 2px solid rgba(255, 151, 199, .28);
+  background: white;
+  color: #ff4fa2;
+  font-size: 22px;
+  font-weight: 1000;
+  cursor: pointer;
+}
+
+body.namorado-mode .lauos-v72-close {
+  border-color: rgba(99, 183, 255, .36);
+  color: #2f7cff;
+}
+
+.lauos-v72-modal-side h3 {
+  margin: 8px 0 6px;
+  color: #ff4fa2;
+  font-size: 23px;
+}
+
+body.namorado-mode .lauos-v72-modal-side h3 {
+  color: #2f7cff;
+}
+
+.lauos-v72-modal-side p {
+  color: #7b4261;
+  font-weight: 850;
+}
+
+.lauos-v72-reaction-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.lauos-v72-reaction {
+  min-width: 42px;
+  height: 38px;
+  border-radius: 15px;
+  border: 2px solid rgba(255, 151, 199, .35);
+  background: rgba(255,255,255,.88);
+  color: #743a5c;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lauos-v72-reaction.is-on {
+  background: linear-gradient(135deg, #ff79b8, #ff4fa2);
+  color: #fff;
+  border-color: transparent;
+}
+
+body.namorado-mode .lauos-v72-reaction {
+  border-color: rgba(99, 183, 255, .42);
+}
+
+body.namorado-mode .lauos-v72-reaction.is-on {
+  background: linear-gradient(135deg, #63b7ff, #2f7cff);
+}
+
+.lauos-v72-caption-box {
+  width: 100%;
+  min-height: 82px;
+  resize: vertical;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 151, 199, .38);
+  background: rgba(255,255,255,.88);
+  padding: 12px;
+  color: #61324d;
+  font: inherit;
+  font-weight: 800;
+  outline: none;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  #lauosMediaV72 { width: calc(100vw - 22px); margin: 12px auto 90px; }
+  .lauos-v72-shell { padding: 15px; border-radius: 24px; min-height: auto; }
+  .lauos-v72-head { align-items: flex-start; flex-direction: column; }
+  .lauos-v72-uploader { grid-template-columns: 1fr; }
+  .lauos-v72-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .lauos-v72-modal-body { grid-template-columns: 1fr; }
+  .lauos-v72-modal-photo { min-height: 260px; }
+  .lauos-v72-modal-side { border-left: 0; border-top: 2px solid rgba(255, 151, 199, .2); }
+}
+
+@media (max-width: 520px) {
+  .lauos-v72-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lauos-v72-badge { width: 100%; text-align: center; }
+}

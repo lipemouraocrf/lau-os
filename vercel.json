@@ -1,0 +1,33 @@
+{
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json; charset=utf-8"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!api/|icons/|favicon.ico|manifest.json|lauos-core-guard.js|lauos-v52-base.js|lauos-v53-auth.js|patch.js|ENV_VERCEL_EXEMPLO.txt).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

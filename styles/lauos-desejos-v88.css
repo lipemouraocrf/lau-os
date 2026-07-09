@@ -1,0 +1,189 @@
+/* LauOS v88 - Desejos da Lau */
+.lauos-desejos-v88-host {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.lauos-desejos-v88,
+.lauos-desejos-v88 * {
+  box-sizing: border-box;
+}
+
+.lauos-desejos-v88 {
+  width: 100%;
+  border: 2px solid rgba(255, 126, 190, .45);
+  border-radius: 28px;
+  padding: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(255,245,251,.92));
+  box-shadow: 0 18px 55px rgba(255, 105, 180, .12);
+  color: #66324f;
+}
+
+.lauos-desejos-v88-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.lauos-desejos-v88-head h2 {
+  margin: 0 0 4px;
+  color: #ff4fa3;
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+}
+
+.lauos-desejos-v88-head p {
+  margin: 0;
+  color: #7b4a65;
+  font-size: .95rem;
+}
+
+.lauos-desejos-v88-head span {
+  white-space: nowrap;
+  border: 2px solid rgba(255, 126, 190, .35);
+  color: #b33a7a;
+  background: #fff;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 900;
+}
+
+.lauos-desejos-v88-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.lauos-desejos-v88-form input {
+  min-width: 0;
+  border: 2px solid rgba(255, 126, 190, .4);
+  border-radius: 18px;
+  padding: 13px 16px;
+  background: rgba(255,255,255,.88);
+  color: #65314f;
+  font: inherit;
+  outline: none;
+}
+
+.lauos-desejos-v88-form input:focus {
+  border-color: #ff58aa;
+  box-shadow: 0 0 0 4px rgba(255, 88, 170, .12);
+}
+
+.lauos-desejos-v88-form button,
+.lauos-desejo-v88-check,
+.lauos-desejo-v88-delete {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.lauos-desejos-v88-form button {
+  border-radius: 18px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #ff7bc0, #ff4fa3);
+  color: white;
+  font-weight: 900;
+  box-shadow: 0 12px 30px rgba(255, 79, 163, .18);
+}
+
+.lauos-desejos-v88-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.lauos-desejos-v88-grid section {
+  border: 2px dashed rgba(255, 126, 190, .35);
+  border-radius: 22px;
+  padding: 14px;
+  background: rgba(255,255,255,.58);
+  min-height: 180px;
+}
+
+.lauos-desejos-v88-grid h3 {
+  margin: 0 0 12px;
+  color: #c24082;
+  font-size: 1rem;
+}
+
+.lauos-desejos-v88-list {
+  display: grid;
+  gap: 10px;
+}
+
+.lauos-desejo-v88-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid rgba(255, 126, 190, .28);
+  border-radius: 18px;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 0 10px 25px rgba(255, 105, 180, .08);
+}
+
+.lauos-desejo-v88-item.is-done {
+  opacity: .72;
+}
+
+.lauos-desejo-v88-item.is-done strong {
+  text-decoration: line-through;
+}
+
+.lauos-desejo-v88-check {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  background: #fff1f8;
+}
+
+.lauos-desejo-v88-text strong {
+  display: block;
+  color: #693651;
+  line-height: 1.35;
+}
+
+.lauos-desejo-v88-text small {
+  display: block;
+  margin-top: 3px;
+  color: #a56c8d;
+  font-size: .78rem;
+}
+
+.lauos-desejo-v88-delete {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #fff0f7;
+  color: #ff4fa3;
+  font-weight: 900;
+}
+
+.lauos-desejos-v88-empty,
+.lauos-desejos-v88-loading {
+  border: 2px dashed rgba(255, 126, 190, .32);
+  border-radius: 18px;
+  padding: 18px;
+  text-align: center;
+  color: #9d5c7f;
+  background: rgba(255,255,255,.6);
+}
+
+@media (max-width: 900px) {
+  .lauos-desejos-v88 {
+    padding: 16px;
+    border-radius: 22px;
+  }
+  .lauos-desejos-v88-head,
+  .lauos-desejos-v88-form,
+  .lauos-desejos-v88-grid {
+    grid-template-columns: 1fr;
+  }
+  .lauos-desejos-v88-head {
+    display: grid;
+  }
+}

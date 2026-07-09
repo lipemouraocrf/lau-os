@@ -1,10 +1,11 @@
 {
   "name": "laura-os",
-  "version": "1.0.0",
-  "description": "",
-  "main": "criar-usuarios.js",
+  "version": "1.0.55",
+  "description": "LauOS - app romântico com blog duplo, galeria, reações, cartas, planos e notificações",
+  "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "check": "node --check patch.js && node --check lauos-core-guard.js && node --check lauos-v52-base.js && node --check lauos-v53-auth.js && node --check lauos-v55-romance.js && node --check sw.js && node --check api/lauos-login.js && node --check server-local.js",
+    "test": "npm run check"
   },
   "repository": {
     "type": "git",

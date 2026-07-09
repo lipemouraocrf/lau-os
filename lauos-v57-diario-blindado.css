@@ -1,0 +1,142 @@
+/* LauOS v57 - Cofre do Diário */
+.v57-diary-safe-panel {
+  margin: 16px 0 20px;
+  padding: 16px;
+  border: 2px dashed rgba(255, 105, 180, .42);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,240,248,.92));
+  box-shadow: 0 14px 36px rgba(255, 105, 180, .12);
+}
+.v57-diary-safe-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.v57-diary-safe-title {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #ff4fa3;
+}
+.v57-diary-safe-subtitle {
+  margin-top: 4px;
+  font-size: .84rem;
+  color: #7a4662;
+  opacity: .92;
+  line-height: 1.35;
+}
+.v57-diary-safe-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f4fff8;
+  border: 1px solid rgba(40, 190, 110, .28);
+  color: #16894d;
+  font-weight: 900;
+  font-size: .78rem;
+}
+.v57-diary-safe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.v57-diary-safe-actions button,
+.v57-diary-safe-label {
+  appearance: none;
+  border: 0;
+  border-radius: 18px;
+  padding: 12px 15px;
+  font-family: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff79bd, #ff4fa3);
+  color: white;
+  box-shadow: 0 10px 24px rgba(255, 79, 163, .22);
+  transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+.v57-diary-safe-actions button:hover,
+.v57-diary-safe-label:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(255, 79, 163, .30);
+}
+.v57-diary-safe-actions button.secondary,
+.v57-diary-safe-label.secondary {
+  background: #fff;
+  color: #b44579;
+  border: 2px solid rgba(255, 105, 180, .28);
+  box-shadow: none;
+}
+.v57-diary-safe-status {
+  margin-top: 12px;
+  font-size: .88rem;
+  color: #6f3a56;
+  line-height: 1.4;
+}
+.v57-diary-safe-status strong {
+  color: #ff4fa3;
+}
+.v57-diary-danger-note {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 248, 225, .8);
+  border: 1px solid rgba(238, 172, 38, .35);
+  color: #7b5520;
+  font-size: .84rem;
+  line-height: 1.45;
+}
+.v57-diary-hidden-file { display: none !important; }
+.v57-diary-empty-restart {
+  margin-top: 14px;
+  padding: 15px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(255, 105, 180, .23);
+  color: #6d3654;
+  line-height: 1.45;
+}
+.v57-diary-empty-restart b { color: #ff4fa3; }
+body.mobile-app-ready .v57-diary-safe-panel {
+  padding: 14px;
+  border-radius: 20px;
+}
+body.mobile-app-ready .v57-diary-safe-actions button,
+body.mobile-app-ready .v57-diary-safe-label {
+  flex: 1 1 100%;
+  text-align: center;
+}
+
+
+/* LauOS v58 - recadinho de recomeço */
+.v58-diary-restart-note {
+  margin: 14px 0 16px;
+  padding: 14px 16px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(255,239,248,.94));
+  border: 2px solid rgba(255, 105, 180, .26);
+  box-shadow: 0 12px 30px rgba(255, 105, 180, .11);
+  color: #6f3a56;
+  line-height: 1.45;
+}
+.v58-diary-note-label {
+  color: #ff4fa3;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.v58-diary-note-text {
+  font-size: .95rem;
+}
+.v58-diary-history-note {
+  border: 2px solid rgba(255, 105, 180, .22) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(255,242,249,.94)) !important;
+}
+.v58-diary-history-note strong { color: #ff4fa3; }
+body.mobile-app-ready .v58-diary-restart-note {
+  padding: 13px;
+  border-radius: 18px;
+}
