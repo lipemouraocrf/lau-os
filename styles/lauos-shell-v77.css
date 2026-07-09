@@ -202,3 +202,24 @@ body.lauos-v77-ready .lauos-v77-nav-inner::-webkit-scrollbar {
   body.lauos-v77-ready .lauos-v77-tab-icon { font-size: 15px !important; }
   body.lauos-v77-ready .lauos-v77-tab-label { font-size: 7px !important; }
 }
+
+/* v154 - proteção extra: ao entrar no LauTime, nada rosa/azul do LauOS fica aparecendo na lateral */
+body.lauos-watchtime-active,
+body.lauos-watchtime-fullscreen-active,
+body.lauos-watchtime-active .app,
+body.lauos-watchtime-fullscreen-active .app{
+  background:#000!important;
+  background-image:none!important;
+}
+@media (min-width:761px){
+  body.lauos-watchtime-active .lauos-v77-nav,
+  body.lauos-watchtime-fullscreen-active .lauos-v77-nav{
+    left:0!important;
+    top:0!important;
+    bottom:0!important;
+    transform:none!important;
+    border-radius:0!important;
+    background:#030303!important;
+    border-right:1px solid rgba(255,255,255,.10)!important;
+  }
+}
