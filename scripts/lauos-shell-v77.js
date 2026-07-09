@@ -412,7 +412,8 @@
         try {
           const nav = $('lauosV77Nav');
           const inner = nav?.querySelector?.('.lauos-v77-nav-inner');
-          activeBtn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+          const isMobile = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
+          activeBtn.scrollIntoView({ block: 'nearest', inline: isMobile ? 'center' : 'nearest' });
           if (page === defaultPage()) {
             if (nav) nav.scrollTop = 0;
             if (inner) inner.scrollTop = 0;
@@ -460,6 +461,20 @@
     display($('missPanel'), false);
   }
 
+  // v156: corta vazamentos de tela no mobile.
+  // O painel/status do namorado é criado sob demanda dentro da área da Lau;
+  // se não escondermos sempre que troca de aba, ele reaparece em Cartas, Agenda,
+  // Momentos, Músicas etc. Foi isso que deixou tudo parecendo possuído.
+  function hideCrossPageLeaks(nextPage = currentPage, usuario = user()) {
+    const isLauSeeingNamorado = usuario === 'Lau' && nextPage === 'namorado';
+    [$('namoradoV86ForLau'), $('namoradoV86ForLauLoading'), $('boyStatusLauView')].forEach((el) => {
+      if (el && !isLauSeeingNamorado) display(el, false);
+    });
+
+    const notify = $('v55NotifyCard') || document.querySelector('.notification-banner');
+    if (notify && usuario === 'Lau' && nextPage !== 'hoje') display(notify, false);
+  }
+
   function ensureExtraPanels() {
     // A v55 cria Cartas/Planos sob demanda. Se ainda não existem, chama o legado uma vez.
     try {
@@ -488,6 +503,7 @@
     display($('countdownArea'), false);
     hideModuleRoots();
     hideCommonNoise();
+    hideCrossPageLeaks(currentPage, usuario);
     ensureExtraPanels();
   }
 
@@ -502,6 +518,8 @@
       area.querySelector('.save-mood-btn'),
       $('lauCorner'),
       $('boyStatusLauView'),
+      $('namoradoV86ForLau'),
+      $('namoradoV86ForLauLoading'),
       $('lauosDesejosV88Host')
     ].forEach((el) => display(el, false));
   }
@@ -510,6 +528,7 @@
     const area = $('lauraArea');
     if (!area) return;
     hideLauContent();
+    display($('v55NotifyCard'), true);
     display(area.querySelector('.role-header'), true);
     display($('moodOptions'), true, 'grid');
     display(area.querySelector('.levels-grid'), true, 'grid');
@@ -822,6 +841,7 @@
     localStorage.setItem('lauos_v77_page', normalized);
     clearPageClasses();
     document.body.classList.add('lauos-v77-page-' + normalized);
+    hideCrossPageLeaks(normalized, user());
     ensureNav();
     markActive(normalized);
     showPage(normalized);

@@ -85,9 +85,8 @@
     if (typeof carregarTudoSupabase === 'function') await carregarTudoSupabase();
     if (typeof iniciarRealtimeChat === 'function') iniciarRealtimeChat();
 
-    if (typeof showMessage === 'function') {
-      showMessage(usuario === 'Lau' ? 'Área da Lau aberta 💖' : 'Área do namorado aberta 💙');
-    }
+    // v156: não joga toast/mensagem de entrada dentro da tela no mobile.
+    // Isso estava virando um bloco solto tipo “Área da Lau aberta” no meio das abas.
   }
 
   async function entrarSeguro(tipo) {

@@ -1178,3 +1178,167 @@ body.namorado-mode.lauos-v77-page-blog #viewBlog #blogNamoradoEditor {
     font-size: 8px !important;
   }
 }
+
+/* v156 - revisão mobile real: sem vazamento de status, sem mensagem solta e sem form estourado */
+@media (max-width: 760px) {
+  /* conteúdo precisa respirar acima da barra do navegador + dock do LauOS */
+  body.lauos-v77-ready .app,
+  body.mobile-app-ready.lauos-v77-ready .app,
+  body.desktop-app-ready.lauos-v77-ready .app {
+    padding-bottom: calc(168px + env(safe-area-inset-bottom)) !important;
+  }
+
+  body.lauos-v77-ready #lauraArea,
+  body.lauos-v77-ready #namoradoArea,
+  body.lauos-v77-ready .role-area,
+  body.lauos-v77-ready .lau-corner,
+  body.lauos-v77-ready .corner-panel,
+  body.lauos-v77-ready .namorado-corner-view {
+    padding-bottom: calc(156px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* no navegador do iPhone a barra inferior cobre fixed bottom; levanta o dock */
+  body.lauos-v77-ready .lauos-v77-nav,
+  body.mobile-app-ready .lauos-v77-nav {
+    bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+    left: 12px !important;
+    right: 12px !important;
+    max-width: calc(100vw - 24px) !important;
+    height: 70px !important;
+    max-height: 70px !important;
+    border-radius: 24px !important;
+    padding: 7px !important;
+  }
+
+  body.lauos-v77-ready .lauos-v77-tab,
+  body.mobile-app-ready .lauos-v77-tab {
+    flex: 0 0 66px !important;
+    width: 66px !important;
+    min-width: 66px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+  }
+
+  /* notificação só faz sentido na home; nas outras abas ela poluía tudo */
+  body.lauos-v77-ready:not(.lauos-v77-page-hoje) #v55NotifyCard,
+  body.lauos-v77-ready:not(.lauos-v77-page-hoje) .notification-banner,
+  body.lauos-v77-ready:not(.lauos-v77-page-hoje) #notificationsPanel {
+    display: none !important;
+  }
+
+  body.lauos-v77-page-hoje #v55NotifyCard,
+  body.lauos-v77-page-hoje .notification-banner {
+    margin: 0 0 12px !important;
+    border-radius: 18px !important;
+  }
+
+  /* status/blog do namorado nunca pode aparecer fora da aba Namorado */
+  body.lauos-v77-ready:not(.lauos-v77-page-namorado) #namoradoV86ForLau,
+  body.lauos-v77-ready:not(.lauos-v77-page-namorado) #namoradoV86ForLauLoading,
+  body.lauos-v77-ready:not(.lauos-v77-page-namorado) #boyStatusLauView,
+  body.lauos-v77-ready:not(.lauos-v77-page-namorado) .namorado-v86-host[data-lau-view="1"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* remove mensagens soltas de login/sucesso que ficavam no fluxo da página */
+  body.lauos-v77-ready .toast,
+  body.lauos-v77-ready .message,
+  body.lauos-v77-ready .floating-message,
+  body.lauos-v77-ready #messageBox,
+  body.lauos-v77-ready #toast,
+  body.lauos-v77-ready .success-message {
+    max-width: calc(100vw - 24px) !important;
+    left: 12px !important;
+    right: 12px !important;
+  }
+
+  /* formulários das abas rosa: sem input atravessando borda */
+  body.lauos-v77-ready .corner-panel form,
+  body.lauos-v77-ready .corner-panel .form,
+  body.lauos-v77-ready .v101-form,
+  body.lauos-v77-ready .v101-card,
+  body.lauos-v77-ready .v101-row,
+  body.lauos-v77-ready .v74-plan-form,
+  body.lauos-v77-ready .v74-form,
+  body.lauos-v77-ready .music-form,
+  body.lauos-v77-ready .moment-form,
+  body.lauos-v77-ready .agenda-form {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    overflow: hidden !important;
+  }
+
+  body.lauos-v77-ready input,
+  body.lauos-v77-ready select,
+  body.lauos-v77-ready textarea,
+  body.lauos-v77-ready .corner-panel input,
+  body.lauos-v77-ready .corner-panel select,
+  body.lauos-v77-ready .corner-panel textarea,
+  body.lauos-v77-ready .v101-form input,
+  body.lauos-v77-ready .v101-form select,
+  body.lauos-v77-ready .v101-form textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    font-size: 16px !important;
+  }
+
+  body.lauos-v77-ready .corner-panel button,
+  body.lauos-v77-ready .v101-form button,
+  body.lauos-v77-ready .save-mood-btn,
+  body.lauos-v77-ready .pink-btn,
+  body.lauos-v77-ready .primary-btn {
+    max-width: 100% !important;
+    white-space: normal !important;
+    line-height: 1.15 !important;
+  }
+
+  /* cartões/listas de música e embeds não podem vazar lateralmente */
+  body.lauos-v77-ready iframe,
+  body.lauos-v77-ready .spotify-card,
+  body.lauos-v77-ready .music-card,
+  body.lauos-v77-ready .music-list,
+  body.lauos-v77-ready [class*="spotify"],
+  body.lauos-v77-ready [class*="Music"],
+  body.lauos-v77-ready [class*="music"] {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  body.lauos-v77-ready iframe[src*="spotify"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    border-radius: 18px !important;
+  }
+
+  /* fotos/momentos: evita cards gigantes escapando no iPhone */
+  body.lauos-v77-ready .lauos-v72-section,
+  body.lauos-v77-ready .lauos-momentos-v69,
+  body.lauos-v77-ready .photo-card,
+  body.lauos-v77-ready .moment-card,
+  body.lauos-v77-ready .lauos-v69-moment-card,
+  body.lauos-v77-ready .lauos-v72-photo-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+/* PWA instalada: pode ficar mais baixa porque não tem barra do navegador por cima */
+@media (max-width: 760px) and (display-mode: standalone) {
+  body.lauos-v77-ready .lauos-v77-nav,
+  body.mobile-app-ready .lauos-v77-nav {
+    bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+  }
+  body.lauos-v77-ready .app,
+  body.mobile-app-ready.lauos-v77-ready .app {
+    padding-bottom: calc(104px + env(safe-area-inset-bottom)) !important;
+  }
+}
