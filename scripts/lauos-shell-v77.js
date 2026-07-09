@@ -397,9 +397,29 @@
   }
 
   function markActive(page) {
+    let activeBtn = null;
     qsa('#lauosV77Nav [data-v77-page]').forEach((btn) => {
-      btn.classList.toggle('is-active', btn.dataset.v77Page === page);
+      const active = btn.dataset.v77Page === page;
+      btn.classList.toggle('is-active', active);
+      btn.toggleAttribute('aria-current', active);
+      if (active) activeBtn = btn;
     });
+
+    // v153: ao sair do LauTime, o menu ficava rolado no item LauTime.
+    // Sempre recentraliza/mostra o item ativo para não parecer que a lateral foi cortada.
+    if (activeBtn) {
+      requestAnimationFrame(() => {
+        try {
+          const nav = $('lauosV77Nav');
+          const inner = nav?.querySelector?.('.lauos-v77-nav-inner');
+          activeBtn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+          if (page === defaultPage()) {
+            if (nav) nav.scrollTop = 0;
+            if (inner) inner.scrollTop = 0;
+          }
+        } catch {}
+      });
+    }
   }
 
   function defaultPage() {
@@ -430,7 +450,7 @@
     display($('lauosMediaV72'), false);
     display($('lauosMomentosV69'), false);
     display($('lauosWatchTimeV1'), false);
-    document.body.classList.remove('lauos-v72-media-active', 'lauos-v66-media-active', 'lauos-planos-page-active', 'lauos-watchtime-active');
+    document.body.classList.remove('lauos-v72-media-active', 'lauos-v66-media-active', 'lauos-planos-page-active', 'lauos-watchtime-active', 'lauos-watchtime-v120-active', 'lauos-watchtime-fullscreen-active');
   }
 
   function hideCommonNoise() {

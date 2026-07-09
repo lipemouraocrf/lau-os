@@ -2554,8 +2554,30 @@
     schedulePosterHydration();
   }
 
+  function deactivateLauTimeShell() {
+    try {
+      document.body.classList.remove('lauos-watchtime-active', 'lauos-watchtime-v120-active', 'lauos-watchtime-fullscreen-active');
+      if (state.root) {
+        state.root.style.setProperty('display', 'none', 'important');
+        state.root.classList.add('hidden');
+      }
+      const nav = document.getElementById('lauosV77Nav');
+      const inner = nav?.querySelector?.('.lauos-v77-nav-inner');
+      if (nav) nav.scrollTop = 0;
+      if (inner) inner.scrollTop = 0;
+    } catch {}
+  }
+
   function returnToLauOS() {
     state.moreOpen = false;
+    deactivateLauTimeShell();
+
+    // v153: usa o roteador real do LauOS. Clicar num botão escondido deixava classe/scroll sujo.
+    if (window.LauOSV77 && typeof window.LauOSV77.go === 'function') {
+      window.LauOSV77.go('hoje');
+      return;
+    }
+
     const candidates = Array.from(document.querySelectorAll('button, a, [role="button"], [tabindex]'));
     const root = state.root;
     const target = candidates.find((el) => {
@@ -2758,5 +2780,5 @@
     syncActiveClasses();
   }
 
-  window.LauOSWatchTimeV1 = { show, render, version: 148, cloudPull, cloudSaveNow, importLauBackupPayload };
+  window.LauOSWatchTimeV1 = { show, render, version: 153, cloudPull, cloudSaveNow, importLauBackupPayload, deactivate: deactivateLauTimeShell };
 })();
