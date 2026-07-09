@@ -251,15 +251,10 @@
     const area = $('lauraArea');
     if (area) {
       hideLauContent();
-      let loading = $('namoradoV86ForLauLoading');
-      if (!loading) {
-        loading = document.createElement('div');
-        loading.id = 'namoradoV86ForLauLoading';
-        loading.className = 'namorado-v86-loading';
-        loading.innerHTML = 'Carregando status e blog do namorado... 💙';
-        area.appendChild(loading);
-      }
-      display(loading, true);
+      // v158: sem loading textual no mobile/aba Namorado.
+      // A tela pequena já tem pouco espaço e essa mensagem ficava persistente.
+      const loading = $('namoradoV86ForLauLoading');
+      if (loading) display(loading, false);
     }
     return true;
   }

@@ -1477,3 +1477,36 @@ body.namorado-mode.lauos-v77-page-blog #viewBlog #blogNamoradoEditor {
     padding-bottom: calc(10px + env(safe-area-inset-bottom)) !important;
   }
 }
+
+/* v158 - limpeza mobile: sem mensagens soltas e sem loading do namorado ocupando tela */
+@media (max-width: 760px) {
+  body.lauos-v77-ready #messageBox,
+  body.lauos-v77-ready .message-box,
+  body.lauos-v77-ready .footer {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.lauos-v77-ready #namoradoV86ForLauLoading,
+  body.lauos-v77-ready .namorado-v86-loading {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.lauos-v77-ready #lauraArea,
+  body.lauos-v77-ready #namoradoArea {
+    overflow-x: hidden !important;
+  }
+}

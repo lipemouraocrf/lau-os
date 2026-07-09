@@ -4398,3 +4398,180 @@ body.lauos-watchtime-fullscreen-active .lauos-decoration{
     border-radius: 0 !important;
   }
 }
+
+/* v158 - polimento mobile LauTime: barra inferior sem corte e séries mais encaixadas */
+@media (max-width: 760px) {
+  body.lauos-watchtime-active,
+  body.lauos-watchtime-fullscreen-active {
+    overscroll-behavior: none !important;
+  }
+
+  .wtv1-app {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .wt-topbar {
+    min-height: calc(66px + env(safe-area-inset-top)) !important;
+    padding: calc(10px + env(safe-area-inset-top)) 14px 10px !important;
+    border-bottom: 1px solid rgba(255,255,255,.12) !important;
+  }
+
+  .wt-brand .wt-logo {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    border-radius: 12px !important;
+  }
+
+  .wt-brand b {
+    font-size: 1rem !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .wt-scroll {
+    padding: 16px 10px calc(104px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .wt-page-series-v141,
+  .wt-page-movies-v143,
+  .wt-page-explore,
+  .wt-page-profile,
+  .wt-couple-page-v144,
+  .wt-couple-page-v132 {
+    padding: 0 8px 22px !important;
+  }
+
+  .wt-screen-header,
+  .wt-series-top-v141,
+  .wt-movies-top-v143 {
+    padding: 12px 0 10px !important;
+    margin: 0 !important;
+  }
+
+  .wt-screen-header h2,
+  .wt-series-top-v141 h2,
+  .wt-movies-top-v143 h2 {
+    font-size: clamp(2rem, 10vw, 2.45rem) !important;
+    line-height: .95 !important;
+    letter-spacing: -0.05em !important;
+  }
+
+  .wt-screen-header p,
+  .wt-series-top-v141 span,
+  .wt-movies-top-v143 span {
+    font-size: .95rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .wt-series-controls-v141,
+  .wt-movies-controls-v143,
+  .wt-couple-controls-v144 {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  .wt-series-search-v141,
+  .wt-movie-search-v143,
+  .wt-couple-search-v144 {
+    height: 54px !important;
+    border-radius: 18px !important;
+    padding: 0 12px !important;
+    margin: 10px 0 12px !important;
+    background: #101010 !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+  }
+
+  .wt-series-search-v141 input,
+  .wt-movie-search-v143 input,
+  .wt-couple-search-v144 input {
+    font-size: .95rem !important;
+  }
+
+  .wt-tabline-v141,
+  .wt-movie-tabline-v143,
+  .wt-couple-tabline-v144 {
+    width: calc(100vw - 36px) !important;
+    max-width: calc(100vw - 36px) !important;
+    margin: 0 0 12px !important;
+    padding: 0 2px 4px !important;
+    gap: 8px !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+
+  .wt-tabline-v141 button,
+  .wt-movie-tabline-v143 button,
+  .wt-couple-tabline-v144 button {
+    min-height: 44px !important;
+    height: 44px !important;
+    border-radius: 16px !important;
+    padding: 0 14px !important;
+    font-size: .88rem !important;
+  }
+
+  .wt-series-list-v141,
+  .wt-movie-grid-v143,
+  .wt-couple-items-v144 {
+    padding-bottom: 20px !important;
+  }
+
+  .wt-empty-v141,
+  .wt-empty-v143,
+  .wt-couple-empty-v144,
+  .wt-series-v141 .wt-empty {
+    min-height: 260px !important;
+    padding: 36px 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .wt-bottom-nav {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: calc(86px + env(safe-area-inset-bottom)) !important;
+    min-height: calc(86px + env(safe-area-inset-bottom)) !important;
+    max-height: calc(86px + env(safe-area-inset-bottom)) !important;
+    padding: 7px 0 calc(9px + env(safe-area-inset-bottom)) !important;
+    border-top: 1px solid rgba(255,255,255,.14) !important;
+    background: rgba(0,0,0,.98) !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    z-index: 60 !important;
+  }
+
+  .wt-bottom-nav button {
+    height: 70px !important;
+    min-height: 70px !important;
+    max-height: 70px !important;
+    padding: 6px 0 4px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    overflow: visible !important;
+  }
+
+  .wt-bottom-nav button span {
+    display: block !important;
+    font-size: 1.5rem !important;
+    line-height: 1 !important;
+  }
+
+  .wt-bottom-nav button small {
+    display: block !important;
+    font-size: .72rem !important;
+    line-height: 1.05 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    max-width: 78px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+}
