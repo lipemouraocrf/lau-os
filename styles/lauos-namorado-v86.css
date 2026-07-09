@@ -1134,3 +1134,109 @@ body.namorado-mode .namorado-v86-letter-envelope.is-opening .namorado-v86-envelo
     padding: 12px !important;
   }
 }
+
+/* v155 - Namorado/Lau no mobile sem cortar */
+@media (max-width: 760px) {
+  body.lauos-v77-ready #namoradoArea,
+  body.lauos-v77-ready #lauraArea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  body.namorado-mode #namoradoArea #namoradoV86Host,
+  #namoradoV86ForLau,
+  .namorado-v86-host {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  .namorado-v86-page-head {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: 6px !important;
+    padding: 0 !important;
+    margin: 0 0 10px !important;
+  }
+
+  .namorado-v86-page-head h2 {
+    font-size: 1.45rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .namorado-v86-card,
+  .namorado-v86-status,
+  .namorado-v86-post,
+  .namorado-v86-letter,
+  .namorado-v86-mini,
+  .namorado-v86-agenda-item,
+  .namorado-v86-calendar,
+  .namorado-v86-day-panel,
+  .namorado-v86-protocol {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-radius: 18px !important;
+    padding: 12px !important;
+    overflow-x: hidden !important;
+  }
+
+  .namorado-v86-status-head,
+  .namorado-v86-calendar-head,
+  .namorado-v86-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: 8px !important;
+  }
+
+  .namorado-v86-mood-grid,
+  .namorado-v86-levels,
+  .namorado-v86-levels-edit,
+  .namorado-v86-agenda-grid,
+  .namorado-v86-form,
+  .namorado-v86-posts,
+  .namorado-v86-list,
+  .namorado-v86-letters {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .namorado-v86-mood-grid button,
+  .namorado-v86-btn,
+  .namorado-v86-form button {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .namorado-v86-week,
+  .namorado-v86-days {
+    gap: 4px !important;
+  }
+
+  .namorado-v86-day {
+    min-height: 36px !important;
+    border-radius: 10px !important;
+    font-size: .78rem !important;
+  }
+
+  .namorado-v86-form input,
+  .namorado-v86-form textarea,
+  .namorado-v86-form select,
+  .namorado-v86-status-editor textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+}
