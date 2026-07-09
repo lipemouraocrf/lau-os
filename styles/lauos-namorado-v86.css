@@ -1,0 +1,1136 @@
+/* LauOS v86 - lado do namorado limpo */
+body.namorado-mode #namoradoArea #namoradoV86Host,
+#namoradoV86ForLau {
+  width: min(1080px, 92vw);
+  margin: 18px auto;
+  display: block;
+}
+
+.namorado-v86-host * { box-sizing: border-box; }
+.namorado-v86-host {
+  --v86-blue: #2d8cff;
+  --v86-blue2: #79bdff;
+  --v86-pink: #ff5bb0;
+  --v86-ink: #5a2545;
+  --v86-soft: rgba(255,255,255,.72);
+  color: var(--v86-ink);
+}
+body.namorado-mode .namorado-v86-host { --v86-ink: #21436a; }
+
+.namorado-v86-page-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 0 4px;
+}
+.namorado-v86-page-head h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  color: var(--v86-blue);
+}
+.namorado-v86-page-head.pink h2 { color: var(--v86-pink); }
+.namorado-v86-page-head span {
+  font-weight: 800;
+  opacity: .78;
+  font-size: .92rem;
+}
+
+.namorado-v86-card {
+  background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(255,247,252,.86));
+  border: 2px solid rgba(255, 174, 214, .8);
+  border-radius: 24px;
+  padding: 18px;
+  margin: 12px 0;
+  box-shadow: 0 18px 48px rgba(255, 104, 180, .12);
+}
+body.namorado-mode .namorado-v86-card {
+  background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(240,248,255,.9));
+  border-color: rgba(123, 190, 255, .75);
+  box-shadow: 0 18px 48px rgba(45, 140, 255, .12);
+}
+.namorado-v86-card-title {
+  font-size: 1.05rem;
+  font-weight: 950;
+  color: var(--v86-pink);
+  margin-bottom: 12px;
+}
+body.namorado-mode .namorado-v86-card-title { color: var(--v86-blue); }
+
+.namorado-v86-status,
+.namorado-v86-post,
+.namorado-v86-letter,
+.namorado-v86-mini,
+.namorado-v86-agenda-item {
+  background: rgba(255,255,255,.82);
+  border: 2px solid rgba(255, 190, 222, .68);
+  border-radius: 22px;
+  padding: 16px;
+  margin: 10px 0;
+}
+body.namorado-mode .namorado-v86-status,
+body.namorado-mode .namorado-v86-post,
+body.namorado-mode .namorado-v86-letter,
+body.namorado-mode .namorado-v86-mini,
+body.namorado-mode .namorado-v86-agenda-item {
+  border-color: rgba(144, 202, 255, .7);
+}
+.namorado-v86-status-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.namorado-v86-status h2,
+.namorado-v86-post h3,
+.namorado-v86-letter h3 {
+  margin: 10px 0 8px;
+  color: var(--v86-pink);
+}
+body.namorado-mode .namorado-v86-status h2,
+body.namorado-mode .namorado-v86-post h3,
+body.namorado-mode .namorado-v86-letter h3 { color: var(--v86-blue); }
+.namorado-v86-status p,
+.namorado-v86-post p,
+.namorado-v86-letter p { line-height: 1.55; margin: 8px 0; }
+
+.namorado-v86-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(255, 236, 247, .95);
+  color: var(--v86-pink);
+  font-weight: 950;
+  border: 2px solid rgba(255, 190, 222, .75);
+}
+.namorado-v86-pill.blue,
+body.namorado-mode .namorado-v86-pill {
+  background: rgba(232, 244, 255, .95);
+  color: var(--v86-blue);
+  border-color: rgba(144, 202, 255, .8);
+}
+.namorado-v86-pill.pink { color: var(--v86-pink); }
+
+.namorado-v86-levels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.namorado-v86-level {
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255, 246, 251, .8);
+}
+.namorado-v86-level > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 900;
+  margin-bottom: 7px;
+}
+.namorado-v86-bar {
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(90,37,69,.15);
+  overflow: hidden;
+}
+.namorado-v86-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff82c4, #ff4ca3);
+}
+.namorado-v86-levels.blue .namorado-v86-bar i,
+body.namorado-mode .namorado-v86-bar i { background: linear-gradient(90deg, #83c3ff, #2d8cff); }
+
+.namorado-v86-protocol {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 246, 251, .86);
+  border: 1px dashed rgba(255, 150, 205, .8);
+}
+body.namorado-mode .namorado-v86-protocol { background: rgba(237, 247, 255, .9); border-color: rgba(96, 169, 255, .7); }
+
+.namorado-v86-form { display: grid; gap: 12px; }
+.namorado-v86-form input,
+.namorado-v86-form textarea,
+.namorado-v86-form select,
+.namorado-v86-status-editor textarea {
+  width: 100%;
+  border: 2px solid rgba(255, 174, 214, .8);
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.86);
+  font: inherit;
+  color: inherit;
+  outline: none;
+}
+body.namorado-mode .namorado-v86-form input,
+body.namorado-mode .namorado-v86-form textarea,
+body.namorado-mode .namorado-v86-form select,
+body.namorado-mode .namorado-v86-status-editor textarea { border-color: rgba(126, 191, 255, .8); }
+.namorado-v86-form textarea,
+.namorado-v86-status-editor textarea { min-height: 92px; resize: vertical; }
+.namorado-v86-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.namorado-v86-btn,
+.namorado-v86-mood-grid button {
+  border: 0;
+  border-radius: 18px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #ff82c4, #ff4ca3);
+  color: white;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(255, 76, 163, .18);
+}
+.namorado-v86-btn.blue,
+body.namorado-mode .namorado-v86-btn,
+body.namorado-mode .namorado-v86-mood-grid button {
+  background: linear-gradient(135deg, #79bdff, #2d8cff);
+  box-shadow: 0 14px 30px rgba(45, 140, 255, .18);
+}
+
+.namorado-v86-mood-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.namorado-v86-mood-grid button { background: rgba(255,255,255,.8); color: var(--v86-blue); border: 2px solid rgba(126,191,255,.8); box-shadow: none; }
+.namorado-v86-mood-grid button.selected { background: linear-gradient(135deg, #79bdff, #2d8cff); color: white; }
+.namorado-v86-levels-edit {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+.namorado-v86-levels-edit label {
+  background: rgba(255,255,255,.82);
+  border: 2px solid rgba(126,191,255,.55);
+  border-radius: 18px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+.namorado-v86-levels-edit label > span { font-weight: 950; }
+.namorado-v86-levels-edit label > strong { color: var(--v86-blue); }
+
+.namorado-v86-agenda-grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.15fr) minmax(280px, .85fr);
+  gap: 14px;
+}
+.namorado-v86-calendar,
+.namorado-v86-day-panel {
+  background: rgba(255,255,255,.82);
+  border: 2px solid rgba(144,202,255,.7);
+  border-radius: 22px;
+  padding: 14px;
+}
+.namorado-v86-calendar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.namorado-v86-calendar-head button {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 14px;
+  color: white;
+  background: var(--v86-blue);
+  font-weight: 950;
+  cursor: pointer;
+}
+.namorado-v86-week,
+.namorado-v86-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+.namorado-v86-week span {
+  text-align: center;
+  font-weight: 950;
+  opacity: .72;
+}
+.namorado-v86-day {
+  min-height: 42px;
+  border: 1px solid rgba(126,191,255,.45);
+  border-radius: 13px;
+  background: rgba(245,250,255,.92);
+  color: inherit;
+  font: inherit;
+  font-weight: 950;
+  cursor: pointer;
+  position: relative;
+}
+.namorado-v86-day.empty { opacity: 0; cursor: default; }
+.namorado-v86-day.today { border-color: var(--v86-blue); }
+.namorado-v86-day.selected { background: var(--v86-blue); color: white; }
+.namorado-v86-day.has-data::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--v86-blue);
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+}
+.namorado-v86-day.selected.has-data::after { background: white; }
+.namorado-v86-day-panel h3 { margin: 0 0 10px; color: var(--v86-blue); }
+.namorado-v86-agenda-item { display: grid; gap: 5px; }
+.namorado-v86-agenda-item strong { color: var(--v86-blue); }
+
+.namorado-v86-posts,
+.namorado-v86-list,
+.namorado-v86-letters { display: grid; gap: 10px; }
+.namorado-v86-mini strong { display: block; font-size: 1.05rem; }
+.namorado-v86-mini small,
+.namorado-v86-post small,
+.namorado-v86-letter small { display: block; opacity: .78; font-weight: 850; margin-top: 4px; }
+.namorado-v86-mini.done { opacity: .7; text-decoration: line-through; }
+.namorado-v86-letter { position: relative; }
+.namorado-v86-delete {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(255, 83, 165, .12);
+  color: var(--v86-pink);
+  font-weight: 950;
+  cursor: pointer;
+}
+body.namorado-mode .namorado-v86-delete { background: rgba(45,140,255,.12); color: var(--v86-blue); }
+
+.namorado-v86-post { position: relative; }
+.namorado-v86-post.has-delete { padding-right: 60px; }
+
+.namorado-v86-empty,
+.namorado-v86-loading {
+  background: rgba(255,255,255,.74);
+  border: 2px dashed rgba(255, 174, 214, .75);
+  border-radius: 18px;
+  padding: 18px;
+  font-weight: 900;
+  text-align: center;
+}
+body.namorado-mode .namorado-v86-empty,
+body.namorado-mode .namorado-v86-loading { border-color: rgba(126,191,255,.8); }
+.namorado-v86-empty.big { padding: 34px; }
+
+@media (max-width: 900px) {
+  body.namorado-mode #namoradoArea #namoradoV86Host,
+  #namoradoV86ForLau { width: 94vw; margin: 12px auto; }
+  .namorado-v86-agenda-grid,
+  .namorado-v86-levels,
+  .namorado-v86-levels-edit,
+  .namorado-v86-row { grid-template-columns: 1fr; }
+  .namorado-v86-mood-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .namorado-v86-page-head { align-items: flex-start; flex-direction: column; }
+}
+
+/* LauOS v87 - agenda marcada e músicas limpas */
+.namorado-v86-day span {
+  position: relative;
+  z-index: 2;
+}
+.namorado-v86-day.has-data {
+  background: linear-gradient(145deg, #ffffff, rgba(224, 242, 255, .98));
+  border-color: var(--v86-blue);
+  box-shadow: 0 10px 24px rgba(45, 140, 255, .18);
+}
+.namorado-v86-day.has-data::before {
+  content: '✦';
+  position: absolute;
+  top: -7px;
+  right: -5px;
+  width: 19px;
+  height: 19px;
+  display: grid;
+  place-items: center;
+  border-radius: 99px;
+  background: #fff;
+  color: var(--v86-blue);
+  border: 1px solid rgba(45,140,255,.45);
+  font-size: .72rem;
+  box-shadow: 0 8px 18px rgba(45,140,255,.18);
+}
+.namorado-v86-day.has-data b {
+  position: absolute;
+  right: 5px;
+  bottom: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 5px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 99px;
+  background: var(--v86-blue);
+  color: #fff;
+  font-size: .68rem;
+  line-height: 1;
+}
+.namorado-v86-day.has-data::after { display: none; }
+.namorado-v86-day.selected.has-data {
+  background: var(--v86-blue);
+  color: #fff;
+  border-color: var(--v86-blue);
+}
+.namorado-v86-day.selected.has-data b {
+  background: #fff;
+  color: var(--v86-blue);
+}
+.namorado-v86-day.selected.has-data::before {
+  color: var(--v86-blue);
+}
+.namorado-v86-agenda-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: .86rem;
+  font-weight: 850;
+  opacity: .78;
+}
+.namorado-v86-agenda-legend i {
+  width: 14px;
+  height: 14px;
+  border-radius: 99px;
+  background: var(--v86-blue);
+  box-shadow: 0 0 0 4px rgba(45,140,255,.12);
+}
+.namorado-v86-music-list {
+  display: grid;
+  gap: 10px;
+}
+.namorado-v86-music-card {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border: 2px solid rgba(144, 202, 255, .7);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fff, rgba(240, 248, 255, .92));
+  box-shadow: 0 12px 28px rgba(45, 140, 255, .10);
+}
+.namorado-v86-music-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--v86-blue2), var(--v86-blue));
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(45, 140, 255, .18);
+}
+.namorado-v86-music-info strong {
+  display: block;
+  color: var(--v86-blue);
+  font-size: 1.02rem;
+}
+.namorado-v86-music-info small {
+  display: block;
+  margin-top: 2px;
+  opacity: .72;
+  font-weight: 850;
+}
+.namorado-v86-open-link {
+  text-decoration: none;
+  border: 0;
+  border-radius: 15px;
+  padding: 10px 14px;
+  background: var(--v86-blue);
+  color: #fff;
+  font-weight: 950;
+  box-shadow: 0 12px 26px rgba(45, 140, 255, .18);
+}
+.namorado-v86-open-link:hover { filter: brightness(1.03); transform: translateY(-1px); }
+@media (max-width: 720px) {
+  .namorado-v86-music-card { grid-template-columns: 36px 1fr; }
+  .namorado-v86-open-link { grid-column: 1 / -1; text-align: center; }
+}
+
+
+/* v95 - Cartas com envelope animado */
+.namorado-v86-letter-envelope {
+  overflow: hidden;
+}
+.namorado-v86-letter-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.namorado-v86-letter-to {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: rgba(255, 243, 249, .96);
+  color: var(--v86-pink);
+  border: 2px solid rgba(255, 190, 222, .75);
+  font-size: .8rem;
+  font-weight: 900;
+}
+body.namorado-mode .namorado-v86-letter-to {
+  background: rgba(235, 246, 255, .96);
+  color: var(--v86-blue);
+  border-color: rgba(144, 202, 255, .8);
+}
+.namorado-v86-envelope-scene { margin-top: 10px; }
+.namorado-v86-envelope-toggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: grid;
+  gap: 12px;
+  text-align: center;
+}
+.namorado-v86-envelope-toggle:disabled { cursor: not-allowed; opacity: .94; }
+.namorado-v86-envelope-shell {
+  position: relative;
+  width: min(420px, 100%);
+  height: 170px;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+.namorado-v86-envelope-back,
+.namorado-v86-envelope-front,
+.namorado-v86-envelope-flap,
+.namorado-v86-envelope-paper-preview {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(360px, calc(100% - 8px));
+  border-radius: 22px;
+}
+.namorado-v86-envelope-back {
+  bottom: 0;
+  height: 126px;
+  background: linear-gradient(180deg, #fff9fc, #ffeaf4);
+  border: 2px solid #ffd5e8;
+  box-shadow: 0 18px 36px rgba(255, 95, 170, .12);
+}
+body.namorado-mode .namorado-v86-envelope-back {
+  background: linear-gradient(180deg, #f7fbff, #eaf5ff);
+  border-color: #cfe5ff;
+  box-shadow: 0 18px 36px rgba(45, 140, 255, .12);
+}
+.namorado-v86-envelope-paper-preview {
+  bottom: 52px;
+  height: 88px;
+  width: min(320px, calc(100% - 44px));
+  background: linear-gradient(180deg, #fffefb, #fff4fa);
+  border: 2px solid rgba(255, 214, 233, .95);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.82);
+  transition: transform .65s ease, bottom .65s ease;
+}
+body.namorado-mode .namorado-v86-envelope-paper-preview {
+  background: linear-gradient(180deg, #fffefb, #f7fbff);
+  border-color: #d8ebff;
+}
+.namorado-v86-envelope-paper-preview::before {
+  content: '';
+  position: absolute;
+  inset: 14px 16px auto 16px;
+  height: 42px;
+  background: repeating-linear-gradient(180deg, rgba(255, 120, 180, .18) 0 2px, transparent 2px 13px);
+  opacity: .68;
+}
+body.namorado-mode .namorado-v86-envelope-paper-preview::before {
+  background: repeating-linear-gradient(180deg, rgba(45, 140, 255, .18) 0 2px, transparent 2px 13px);
+}
+.namorado-v86-envelope-front {
+  bottom: 0;
+  height: 120px;
+  background: linear-gradient(180deg, #ffd9ea, #ffc1dd);
+  clip-path: polygon(0 18%, 50% 75%, 100% 18%, 100% 100%, 0 100%);
+}
+body.namorado-mode .namorado-v86-envelope-front {
+  background: linear-gradient(180deg, #d4ecff, #a8d6ff);
+}
+.namorado-v86-envelope-flap {
+  top: 20px;
+  height: 96px;
+  background: linear-gradient(180deg, #ffe7f2, #ffcae0);
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  transform-origin: top center;
+  transition: transform .65s ease;
+  z-index: 4;
+}
+body.namorado-mode .namorado-v86-envelope-flap {
+  background: linear-gradient(180deg, #e4f3ff, #b8dcff);
+}
+.namorado-v86-envelope-seal {
+  position: absolute;
+  left: 50%;
+  top: 82px;
+  transform: translateX(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 2px solid #ffd6e7;
+  box-shadow: 0 10px 22px rgba(255, 95, 170, .18);
+  z-index: 5;
+  font-size: 1.15rem;
+}
+body.namorado-mode .namorado-v86-envelope-seal {
+  border-color: #d6e9ff;
+  box-shadow: 0 10px 22px rgba(47, 128, 237, .18);
+}
+.namorado-v86-envelope-hint {
+  font-size: .92rem;
+  font-weight: 900;
+  color: #9b4d73;
+}
+body.namorado-mode .namorado-v86-envelope-hint { color: #2d6cac; }
+.namorado-v86-letter-paper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-16px) scale(.98);
+  transition: max-height .75s ease, opacity .45s ease, transform .75s ease, margin-top .75s ease, padding .75s ease;
+  background: linear-gradient(180deg, #fffefb, #fff8fc 72%);
+  border: 2px solid #ffd9ea;
+  border-radius: 22px;
+  box-shadow: 0 18px 34px rgba(255, 95, 170, .12);
+  margin-top: 0;
+  padding: 0 18px;
+}
+body.namorado-mode .namorado-v86-letter-paper {
+  background: linear-gradient(180deg, #fffefb, #f7fbff 72%);
+  border-color: #d7e9ff;
+  box-shadow: 0 18px 34px rgba(47, 128, 237, .12);
+}
+.namorado-v86-letter-paper::before {
+  content: '';
+  display: block;
+  height: 14px;
+  margin: 12px 0 6px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 12px 7px, rgba(255,120,180,.28) 0 3px, transparent 4px) left top/42px 14px repeat-x;
+  opacity: .75;
+}
+body.namorado-mode .namorado-v86-letter-paper::before {
+  background: radial-gradient(circle at 12px 7px, rgba(45,140,255,.28) 0 3px, transparent 4px) left top/42px 14px repeat-x;
+}
+.namorado-v86-letter-paper-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.namorado-v86-letter-paper-head strong {
+  font-size: 1.05rem;
+  color: var(--v86-pink);
+}
+body.namorado-mode .namorado-v86-letter-paper-head strong { color: var(--v86-blue); }
+.namorado-v86-letter-paper-head small { font-weight: 850; opacity: .74; }
+.namorado-v86-letter-paper-body {
+  white-space: pre-wrap;
+  line-height: 1.9;
+  font-weight: 760;
+  color: #5c2745;
+  padding-bottom: 18px;
+  background-image: repeating-linear-gradient(180deg, transparent 0 28px, rgba(255, 169, 207, .22) 28px 29px);
+}
+body.namorado-mode .namorado-v86-letter-paper-body {
+  color: #244c79;
+  background-image: repeating-linear-gradient(180deg, transparent 0 28px, rgba(121, 189, 255, .22) 28px 29px);
+}
+.namorado-v86-letter-envelope.is-open .namorado-v86-envelope-flap {
+  transform: translateX(-50%) rotateX(180deg);
+}
+.namorado-v86-letter-envelope.is-open .namorado-v86-envelope-paper-preview {
+  bottom: 98px;
+  transform: translateX(-50%) scale(1.02);
+}
+.namorado-v86-letter-envelope.is-open .namorado-v86-letter-paper {
+  max-height: 720px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  margin-top: 14px;
+  padding: 0 18px 14px;
+}
+.namorado-v86-letter-envelope.locked .namorado-v86-envelope-shell { filter: saturate(.88) grayscale(.03); }
+@media (max-width: 640px) {
+  .namorado-v86-letter-meta,
+  .namorado-v86-letter-paper-head { flex-direction: column; align-items: flex-start; }
+  .namorado-v86-envelope-shell { height: 156px; }
+}
+
+
+/* v96 - envelope premium + carta em modal */
+.namorado-v86-envelope-toggle {
+  width: 100%;
+  border: 0;
+  background: linear-gradient(180deg, rgba(248,252,255,.99), rgba(236,246,255,.99));
+  border: 1px solid rgba(205,228,255,.95);
+  border-radius: 26px;
+  padding: 18px 18px 16px;
+  cursor: pointer;
+  display: grid;
+  gap: 8px;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 16px 34px rgba(47, 128, 237, .08);
+}
+body:not(.namorado-mode) .namorado-v86-envelope-toggle {
+  background: linear-gradient(180deg, rgba(255,248,252,.98), rgba(255,238,246,.98));
+  border-color: rgba(255,214,232,.9);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 16px 34px rgba(255, 96, 170, .08);
+}
+.namorado-v86-envelope-stage { position: relative; width: min(430px, 100%); margin: 0 auto; }
+.namorado-v86-envelope-glow { position: absolute; inset: 18px 28px 2px; border-radius: 999px; background: radial-gradient(circle, rgba(125, 190, 255, .34), transparent 70%); filter: blur(10px); opacity: .82; }
+body:not(.namorado-mode) .namorado-v86-envelope-glow { background: radial-gradient(circle, rgba(255, 170, 210, .35), transparent 70%); }
+.namorado-v86-envelope-shell { position: relative; width: min(340px, 100%); height: 190px; margin: 0 auto; perspective: 1200px; }
+.namorado-v86-envelope-back,
+.namorado-v86-envelope-front,
+.namorado-v86-envelope-flap,
+.namorado-v86-envelope-paper-preview { position: absolute; left: 50%; transform: translateX(-50%); }
+.namorado-v86-envelope-back {
+  bottom: 12px; width: 338px; max-width: 100%; height: 128px;
+  border-radius: 0 0 24px 24px;
+  background: linear-gradient(180deg, #fffefe, #eaf5ff 82%);
+  border: 1px solid #d5e8ff;
+  box-shadow: 0 22px 36px rgba(47, 128, 237, .12);
+}
+body:not(.namorado-mode) .namorado-v86-envelope-back { background: linear-gradient(180deg, #fffdfd, #ffe8f3 82%); border-color: #ffd7e9; box-shadow: 0 22px 36px rgba(255, 105, 180, .12); }
+.namorado-v86-envelope-paper-preview {
+  bottom: 64px; width: 292px; max-width: calc(100% - 44px); height: 102px;
+  border-radius: 18px 18px 10px 10px;
+  background: linear-gradient(180deg, #fffefb, #f7fbff);
+  border: 1px solid #ddeefe;
+  box-shadow: 0 8px 18px rgba(0,0,0,.05);
+  transition: transform .55s ease, bottom .55s ease;
+  overflow: hidden;
+}
+body:not(.namorado-mode) .namorado-v86-envelope-paper-preview { background: linear-gradient(180deg, #fffefb, #fff8fc); border-color: #f7dce8; }
+.namorado-v86-envelope-paper-preview::before {
+  content: ''; position: absolute; inset: 0; opacity: .35;
+  background-image:
+    linear-gradient(0deg, rgba(255,255,255,.52), rgba(255,255,255,.52)),
+    repeating-linear-gradient(180deg, rgba(121, 189, 255, .22) 0 1px, transparent 1px 16px),
+    repeating-linear-gradient(90deg, rgba(220, 238, 255, .35) 0 1px, transparent 1px 18px);
+}
+body:not(.namorado-mode) .namorado-v86-envelope-paper-preview::before {
+  background-image:
+    linear-gradient(0deg, rgba(255,255,255,.52), rgba(255,255,255,.52)),
+    repeating-linear-gradient(180deg, rgba(255, 169, 207, .28) 0 1px, transparent 1px 16px),
+    repeating-linear-gradient(90deg, rgba(255, 227, 238, .35) 0 1px, transparent 1px 18px);
+}
+.namorado-v86-envelope-front {
+  bottom: 12px; width: 338px; max-width: 100%; height: 128px;
+  background: linear-gradient(180deg, #d8eeff, #aad7ff);
+  clip-path: polygon(0 0, 50% 64%, 100% 0, 100% 100%, 0 100%);
+  border-radius: 0 0 24px 24px;
+}
+body:not(.namorado-mode) .namorado-v86-envelope-front { background: linear-gradient(180deg, #ffdce9, #ffc0db); }
+.namorado-v86-envelope-flap {
+  top: 22px; width: 338px; max-width: 100%; height: 114px;
+  background: linear-gradient(180deg, #edf7ff, #c9e5ff);
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  transform: translateX(-50%) rotateX(0deg);
+  transform-origin: top center; transition: transform .65s cubic-bezier(.22,.8,.24,1); z-index: 3;
+}
+body:not(.namorado-mode) .namorado-v86-envelope-flap { background: linear-gradient(180deg, #fff1f7, #ffd3e6); }
+.namorado-v86-envelope-seal {
+  position: absolute; left: 50%; top: 92px; transform: translateX(-50%);
+  width: 58px; height: 58px; border-radius: 999px; display: grid; place-items: center;
+  background: radial-gradient(circle at 35% 35%, #8fcaff, #348df5 68%); color: #fff;
+  box-shadow: 0 10px 18px rgba(52, 141, 245, .28), inset 0 2px 4px rgba(255,255,255,.4);
+  z-index: 5; border: 4px solid rgba(255,255,255,.9);
+}
+body:not(.namorado-mode) .namorado-v86-envelope-seal { background: radial-gradient(circle at 35% 35%, #ff91c3, #ff4ea1 68%); box-shadow: 0 10px 18px rgba(255, 78, 161, .3), inset 0 2px 4px rgba(255,255,255,.4); }
+.namorado-v86-envelope-hint { font-size: .94rem; font-weight: 900; color: #2d6cac; }
+body:not(.namorado-mode) .namorado-v86-envelope-hint { color: #bc4d84; }
+.namorado-v86-envelope-preview-text { font-size: .84rem; line-height: 1.45; color: #547293; max-width: 420px; margin: 0 auto; }
+body:not(.namorado-mode) .namorado-v86-envelope-preview-text { color: #8a6276; }
+.namorado-v86-letter-envelope.is-opening .namorado-v86-envelope-flap { transform: translateX(-50%) rotateX(180deg); }
+.namorado-v86-letter-envelope.is-opening .namorado-v86-envelope-paper-preview { bottom: 114px; transform: translateX(-50%) scale(1.03); }
+.namorado-v86-letter-modal {
+  position: fixed; inset: 0; background: rgba(20, 47, 78, .34); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center; z-index: 1200; padding: 18px;
+}
+body:not(.namorado-mode) .namorado-v86-letter-modal { background: rgba(55, 19, 44, .35); }
+.namorado-v86-letter-modal.show { display: flex; animation: v86FadeIn .25s ease; }
+.namorado-v86-letter-modal-dialog {
+  width: min(760px, 100%); max-height: calc(100vh - 36px); overflow: auto;
+  border-radius: 28px; padding: 22px; position: relative;
+  background: linear-gradient(180deg, #fbfdff, #eef7ff);
+  box-shadow: 0 28px 70px rgba(20, 60, 95, .22);
+}
+body:not(.namorado-mode) .namorado-v86-letter-modal-dialog { background: linear-gradient(180deg, #fff9fc, #fff0f7); box-shadow: 0 28px 70px rgba(85, 23, 60, .24); }
+.namorado-v86-letter-modal-paper { border-radius: 24px; padding: 18px; background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.92)); }
+.namorado-v86-letter-modal-paper-inner {
+  position: relative; border-radius: 20px; padding: 28px 24px 22px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.92), rgba(248,252,255,.98)),
+    repeating-linear-gradient(180deg, rgba(121, 189, 255, .16) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, rgba(220, 238, 255, .22) 0 1px, transparent 1px 26px);
+  border: 1px solid rgba(212, 230, 255, .95);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 16px 28px rgba(47, 128, 237, .10);
+}
+body:not(.namorado-mode) .namorado-v86-letter-modal-paper-inner {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,250,253,.96)),
+    repeating-linear-gradient(180deg, rgba(255, 173, 210, .18) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, rgba(255, 223, 237, .22) 0 1px, transparent 1px 26px);
+  border-color: rgba(255, 210, 228, .95);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 16px 28px rgba(255, 110, 178, .10);
+}
+.namorado-v86-letter-modal-head { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; }
+.namorado-v86-letter-modal-stamp {
+  width: 56px; height: 56px; display: grid; place-items: center; border-radius: 16px;
+  background: linear-gradient(180deg, #8cc8ff, #2f80ed); color: #fff; box-shadow: 0 10px 18px rgba(47, 128, 237, .22); font-size: 1.3rem;
+}
+body:not(.namorado-mode) .namorado-v86-letter-modal-stamp { background: linear-gradient(180deg, #ff8dbf, #ff5ca5); box-shadow: 0 10px 18px rgba(255, 92, 165, .22); }
+.namorado-v86-letter-modal-head strong { display: block; font-size: 1.25rem; color: var(--v86-blue); margin-bottom: 4px; }
+body:not(.namorado-mode) .namorado-v86-letter-modal-head strong { color: var(--v86-pink); }
+.namorado-v86-letter-modal-head small { font-weight: 850; color: #5b7699; }
+body:not(.namorado-mode) .namorado-v86-letter-modal-head small { color: #8e6880; }
+.namorado-v86-letter-modal-body { min-height: 220px; line-height: 2; font-size: 1rem; color: #284f7a; }
+body:not(.namorado-mode) .namorado-v86-letter-modal-body { color: #5e2a48; }
+.namorado-v86-letter-modal-sign { margin-top: 18px; text-align: right; font-weight: 900; color: var(--v86-blue); }
+body:not(.namorado-mode) .namorado-v86-letter-modal-sign { color: var(--v86-pink); }
+body.v86-modal-open { overflow: hidden; }
+@keyframes v86FadeIn { from { opacity: 0; transform: scale(.98); } to { opacity: 1; transform: scale(1); } }
+@media (max-width: 640px) {
+  .namorado-v86-letter-meta, .namorado-v86-letter-paper-head, .namorado-v86-letter-modal-head { flex-direction: column; align-items: flex-start; }
+  .namorado-v86-envelope-shell, .namorado-v86-envelope-back, .namorado-v86-envelope-front, .namorado-v86-envelope-flap { width: min(290px, 100%); }
+  .namorado-v86-envelope-paper-preview { width: min(250px, calc(100% - 34px)); }
+  .namorado-v86-letter-modal-dialog { padding: 16px; }
+}
+
+
+/* v104 - CARTAS NAMORADO: envelope e folha refeitos de verdade */
+.namorado-v86-letter-envelope{border-radius:30px;border-color:rgba(188,219,255,.96);background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(242,248,255,.82));box-shadow:0 18px 42px rgba(47,128,237,.10)}
+.namorado-v86-envelope-toggle{position:relative;overflow:hidden;border-radius:30px;padding:24px 22px 20px;background:radial-gradient(circle at 12% 12%,rgba(255,255,255,.95),transparent 24%),radial-gradient(circle at 88% 18%,rgba(255,255,255,.72),transparent 18%),linear-gradient(180deg,#fff 0%,#f7fbff 46%,#edf6ff 100%);border:1px solid rgba(202,226,255,.98);box-shadow:inset 0 1px 0 rgba(255,255,255,.98),0 24px 44px rgba(68,133,214,.16);transition:transform .25s ease,box-shadow .25s ease}.namorado-v86-envelope-toggle:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.98),0 28px 52px rgba(68,133,214,.19)}.namorado-v86-envelope-toggle:before,.namorado-v86-envelope-toggle:after{position:absolute;pointer-events:none;color:rgba(86,160,243,.22);font-weight:900}.namorado-v86-envelope-toggle:before{content:'✦';left:24px;top:22px}.namorado-v86-envelope-toggle:after{content:'❤';right:24px;bottom:20px;transform:rotate(-14deg)}
+.namorado-v86-envelope-stage{width:min(405px,100%);height:248px;padding-top:2px}.namorado-v86-envelope-stage:before,.namorado-v86-envelope-stage:after{content:'✧';position:absolute;top:20px;color:rgba(88,162,246,.45);font-size:1.05rem;animation:v86Spark 3.2s ease-in-out infinite}.namorado-v86-envelope-stage:before{left:26px}.namorado-v86-envelope-stage:after{right:26px;animation-delay:.9s}.namorado-v86-envelope-glow{inset:26px 16px 2px;background:radial-gradient(circle,rgba(126,190,255,.42),transparent 72%);filter:blur(18px);opacity:1}
+.namorado-v86-envelope-back,.namorado-v86-envelope-front,.namorado-v86-envelope-flap{width:min(382px,100%)}.namorado-v86-envelope-back{bottom:18px;height:152px;border-radius:0 0 36px 36px;background:linear-gradient(180deg,#fff 0%,#f2f9ff 48%,#e5f2ff 100%);border:1px solid #cde4ff;box-shadow:0 28px 48px rgba(79,147,227,.16),inset 0 1px 0 rgba(255,255,255,.95);overflow:hidden}.namorado-v86-envelope-back:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.34),transparent 42%),repeating-linear-gradient(135deg,rgba(255,255,255,.15) 0 10px,rgba(255,255,255,0) 10px 20px);opacity:.78}.namorado-v86-envelope-back:after{content:'';position:absolute;left:22px;right:22px;top:16px;height:16px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0))}
+.namorado-v86-envelope-paper-preview{bottom:98px;width:min(318px,calc(100% - 46px));height:138px;border-radius:18px 18px 10px 10px;background:radial-gradient(circle at 16% 12%,rgba(199,228,255,.48),transparent 16%),linear-gradient(180deg,#fffefc 0%,#fbfdff 100%);border:1px solid rgba(214,226,238,.98);box-shadow:0 18px 30px rgba(50,80,117,.11);transition:bottom .72s cubic-bezier(.22,.86,.24,1),transform .72s cubic-bezier(.22,.86,.24,1),box-shadow .72s cubic-bezier(.22,.86,.24,1)}.namorado-v86-envelope-paper-preview:before{content:'';position:absolute;inset:0;opacity:.95;background:linear-gradient(90deg,rgba(102,171,241,.30) 0 2px,transparent 2px 100%),repeating-linear-gradient(180deg,rgba(170,186,202,.24) 0 1px,transparent 1px 18px),linear-gradient(0deg,rgba(255,255,255,.22),rgba(255,255,255,.22));background-size:42px 100%,100% 18px,100% 100%;background-position:28px 0,0 16px,0 0}.namorado-v86-envelope-paper-preview:after{content:'meu amor';position:absolute;left:50%;bottom:16px;transform:translateX(-50%);font-family:"Segoe Print","Bradley Hand",cursive;font-size:1rem;letter-spacing:.03em;color:rgba(63,122,190,.74);white-space:nowrap}
+.namorado-v86-envelope-front{bottom:18px;height:152px;border-radius:0 0 36px 36px;background:linear-gradient(180deg,#d9eeff 0%,#abd7ff 100%);clip-path:polygon(0 0,50% 72%,100% 0,100% 100%,0 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.55)}.namorado-v86-envelope-front:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.24),transparent 42%,rgba(255,255,255,.10) 70%,transparent 100%)}.namorado-v86-envelope-front:after{content:'';position:absolute;left:26px;right:26px;bottom:13px;height:15px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0))}
+.namorado-v86-envelope-flap{top:18px;height:132px;background:linear-gradient(180deg,#f8fbff 0%,#d6ebff 100%);clip-path:polygon(0 100%,50% 0,100% 100%);box-shadow:0 12px 22px rgba(122,181,240,.18);z-index:4}.namorado-v86-envelope-flap:before{content:'';position:absolute;left:46px;right:46px;top:20px;height:18px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0))}
+.namorado-v86-envelope-seal{top:106px;width:70px;height:70px;border-radius:999px;background:radial-gradient(circle at 34% 28%,#aed8ff,#348df5 72%);border:5px solid rgba(255,255,255,.94);box-shadow:0 16px 28px rgba(52,141,245,.30),inset 0 3px 6px rgba(255,255,255,.42);font-size:1.2rem}.namorado-v86-envelope-seal:before{content:'';position:absolute;inset:9px;border-radius:999px;border:1px solid rgba(255,255,255,.38)}
+.namorado-v86-letter-envelope.is-opening .namorado-v86-envelope-flap{transform:translateX(-50%) rotateX(176deg) translateY(-4px)}.namorado-v86-letter-envelope.is-opening .namorado-v86-envelope-paper-preview{bottom:152px;transform:translateX(-50%) translateY(-10px) scale(1.05);box-shadow:0 22px 34px rgba(50,80,117,.13)}.namorado-v86-envelope-hint{font-size:1rem;color:#2d6cac}.namorado-v86-envelope-preview-text{font-size:.9rem;line-height:1.5;color:#547293}
+.namorado-v86-letter-modal{backdrop-filter:blur(10px);background:rgba(20,47,78,.32)}.namorado-v86-letter-modal-dialog{width:min(980px,100%);border-radius:40px;padding:22px;background:radial-gradient(circle at top left,rgba(255,255,255,.92),transparent 26%),linear-gradient(180deg,rgba(252,254,255,.99),rgba(238,247,255,.99));box-shadow:0 38px 90px rgba(20,60,95,.22)}.namorado-v86-letter-modal-paper{padding:26px;border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.92))}.namorado-v86-letter-modal-paper-inner{position:relative;min-height:610px;border-radius:14px;padding:44px 46px 36px;background:linear-gradient(180deg,rgba(255,255,252,.98),rgba(247,251,255,.98));border:1px solid rgba(214,226,238,.95);box-shadow:inset 0 1px 0 rgba(255,255,255,.98),inset 0 0 0 1px rgba(255,255,255,.35),0 24px 50px rgba(90,135,180,.12);overflow:hidden}.namorado-v86-letter-modal-paper-inner:before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,rgba(96,164,238,.24) 0 2px,transparent 2px 100%),repeating-linear-gradient(180deg,rgba(159,178,196,.24) 0 1px,transparent 1px 34px),radial-gradient(circle at 14% 14%,rgba(255,255,255,.56),transparent 18%),radial-gradient(circle at 82% 86%,rgba(206,228,248,.18),transparent 20%);background-size:56px 100%,100% 34px,100% 100%,100% 100%;background-position:46px 0,0 106px,0 0,0 0;pointer-events:none}.namorado-v86-letter-modal-paper-inner:after{content:'';position:absolute;right:0;top:0;width:64px;height:64px;background:linear-gradient(135deg,rgba(206,222,238,.16) 0%,rgba(220,232,244,.88) 55%,rgba(255,255,255,0) 56%);box-shadow:-8px 8px 14px rgba(0,0,0,.04)}.namorado-v86-letter-modal-head,.namorado-v86-letter-modal-body,.namorado-v86-letter-modal-sign{position:relative;z-index:1}.namorado-v86-letter-modal-stamp{width:64px;height:64px;border-radius:20px;background:linear-gradient(180deg,#8cc8ff,#2f80ed)}.namorado-v86-letter-modal-head strong{font-size:1.7rem;color:#2b6aa6}.namorado-v86-letter-modal-body{min-height:340px;padding:18px 22px 28px 70px;font-family:"Segoe Print","Bradley Hand","Snell Roundhand","Lucida Handwriting",cursive;font-size:1.28rem;line-height:2.25;color:#2d5279;text-shadow:0 1px 0 rgba(255,255,255,.35);white-space:normal;position:relative}.namorado-v86-letter-modal-body:before{content:'';position:absolute;left:44px;top:0;bottom:6px;width:2px;background:linear-gradient(180deg,rgba(96,164,238,0),rgba(96,164,238,.42) 10%,rgba(96,164,238,.42) 90%,rgba(96,164,238,0))}.namorado-v86-letter-modal-sign{font-family:"Segoe Print","Bradley Hand","Snell Roundhand","Lucida Handwriting",cursive;font-size:1.3rem;font-weight:700;color:#2f80ed;margin-top:28px}
+@keyframes v86Spark{0%,100%{transform:translateY(0) scale(1);opacity:.55}50%{transform:translateY(-7px) scale(1.08);opacity:.95}}
+@media(max-width:700px){.namorado-v86-envelope-shell,.namorado-v86-envelope-back,.namorado-v86-envelope-front,.namorado-v86-envelope-flap{width:min(318px,100%)}.namorado-v86-envelope-shell{height:218px}.namorado-v86-envelope-paper-preview{width:min(270px,calc(100% - 36px));height:124px}.namorado-v86-letter-modal-dialog{padding:14px;border-radius:28px}.namorado-v86-letter-modal-paper{padding:12px}.namorado-v86-letter-modal-paper-inner{min-height:470px;padding:28px 18px 24px}.namorado-v86-letter-modal-body{padding:16px 10px 16px 42px;font-size:1.08rem;line-height:2.05}.namorado-v86-letter-modal-body:before{left:22px}}
+
+/* v113 - ajuste real do envelope azul: sem folha atrás e centralizado */
+body.namorado-mode .namorado-v86-envelope-toggle {
+  min-height: 320px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  overflow: hidden !important;
+}
+body.namorado-mode .namorado-v86-envelope-stage {
+  width: 100% !important;
+  height: 190px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+body.namorado-mode .namorado-v86-envelope-shell {
+  position: relative !important;
+  width: min(350px, 100%) !important;
+  height: 172px !important;
+  margin: 0 auto !important;
+  flex: 0 0 auto !important;
+  transform: none !important;
+}
+body.namorado-mode .namorado-v86-envelope-back,
+body.namorado-mode .namorado-v86-envelope-front,
+body.namorado-mode .namorado-v86-envelope-flap,
+body.namorado-mode .namorado-v86-envelope-paper-preview {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+body.namorado-mode .namorado-v86-envelope-back,
+body.namorado-mode .namorado-v86-envelope-front {
+  width: min(340px, 100%) !important;
+  height: 126px !important;
+  bottom: 8px !important;
+}
+body.namorado-mode .namorado-v86-letter-envelope:not(.is-opening) .namorado-v86-envelope-paper-preview {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+body.namorado-mode .namorado-v86-letter-envelope:not(.is-opening) .namorado-v86-envelope-flap {
+  width: min(340px, 100%) !important;
+  top: 48px !important;
+  height: 86px !important;
+  z-index: 8 !important;
+  clip-path: polygon(0 0, 100% 0, 50% 100%) !important;
+  transform: translateX(-50%) rotateX(0deg) !important;
+  transform-origin: top center !important;
+  border-radius: 0 0 8px 8px !important;
+}
+body.namorado-mode .namorado-v86-letter-envelope:not(.is-opening) .namorado-v86-envelope-front {
+  z-index: 5 !important;
+}
+body.namorado-mode .namorado-v86-letter-envelope:not(.is-opening) .namorado-v86-envelope-back {
+  z-index: 1 !important;
+}
+body.namorado-mode .namorado-v86-letter-envelope:not(.is-opening) .namorado-v86-envelope-seal {
+  top: 104px !important;
+  z-index: 10 !important;
+}
+body.namorado-mode .namorado-v86-letter-envelope.is-opening .namorado-v86-envelope-paper-preview {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: min(292px, calc(100% - 58px)) !important;
+  height: 108px !important;
+  bottom: 104px !important;
+  transform: translateX(-50%) scale(1.02) !important;
+  z-index: 3 !important;
+}
+body.namorado-mode .namorado-v86-letter-envelope.is-opening .namorado-v86-envelope-flap {
+  top: 24px !important;
+  height: 104px !important;
+  transform: translateX(-50%) rotateX(180deg) translateY(-2px) !important;
+  z-index: 8 !important;
+}
+@media (max-width: 640px) {
+  body.namorado-mode .namorado-v86-envelope-toggle { min-height: 285px !important; }
+  body.namorado-mode .namorado-v86-envelope-stage { height: 170px !important; }
+  body.namorado-mode .namorado-v86-envelope-shell { width: min(300px, 100%) !important; height: 154px !important; }
+  body.namorado-mode .namorado-v86-envelope-back,
+  body.namorado-mode .namorado-v86-envelope-front { width: min(290px, 100%) !important; height: 112px !important; }
+  body.namorado-mode .namorado-v86-letter-envelope:not(.is-opening) .namorado-v86-envelope-flap { width: min(290px, 100%) !important; top: 45px !important; height: 75px !important; }
+  body.namorado-mode .namorado-v86-letter-envelope:not(.is-opening) .namorado-v86-envelope-seal { top: 94px !important; }
+}
+
+/* LauOS v151 - Namorado mobile revisado para não cortar e ficar parecido com web */
+@media (max-width: 760px) {
+  body.namorado-mode #namoradoArea #namoradoV86Host,
+  #namoradoV86ForLau {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  .namorado-v86-host,
+  .namorado-v86-host * {
+    max-width: 100% !important;
+  }
+
+  .namorado-v86-page-head {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    padding: 0 2px !important;
+    margin: 0 0 12px !important;
+  }
+
+  .namorado-v86-page-head h2 {
+    font-size: 1.55rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .namorado-v86-page-head span {
+    font-size: .88rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .namorado-v86-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 10px 0 !important;
+    padding: 14px !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 28px rgba(45, 140, 255, .08) !important;
+  }
+
+  .namorado-v86-card-title {
+    font-size: 1rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  .namorado-v86-status,
+  .namorado-v86-post,
+  .namorado-v86-letter,
+  .namorado-v86-mini,
+  .namorado-v86-agenda-item,
+  .namorado-v86-calendar,
+  .namorado-v86-day-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 13px !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  .namorado-v86-status-head {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .namorado-v86-pill {
+    width: fit-content !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    line-height: 1.15 !important;
+    padding: 8px 11px !important;
+  }
+
+  .namorado-v86-status h2,
+  .namorado-v86-post h3,
+  .namorado-v86-letter h3 {
+    font-size: 1.35rem !important;
+    line-height: 1.05 !important;
+    margin: 8px 0 6px !important;
+  }
+
+  .namorado-v86-status p,
+  .namorado-v86-post p,
+  .namorado-v86-letter p,
+  .namorado-v86-protocol {
+    font-size: .94rem !important;
+    line-height: 1.42 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .namorado-v86-levels,
+  .namorado-v86-levels-edit,
+  .namorado-v86-row,
+  .namorado-v86-agenda-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .namorado-v86-mood-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .namorado-v86-mood-grid button,
+  .namorado-v86-btn,
+  .namorado-v86-form button {
+    min-height: 44px !important;
+    padding: 10px 11px !important;
+    border-radius: 15px !important;
+    font-size: .86rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .namorado-v86-levels-edit label {
+    padding: 12px !important;
+    border-radius: 17px !important;
+  }
+
+  .namorado-v86-form input,
+  .namorado-v86-form textarea,
+  .namorado-v86-form select,
+  .namorado-v86-status-editor textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 16px !important;
+    border-radius: 16px !important;
+  }
+
+  .namorado-v86-calendar-head {
+    flex-wrap: wrap !important;
+    align-items: center !important;
+  }
+
+  .namorado-v86-week,
+  .namorado-v86-days {
+    gap: 4px !important;
+  }
+
+  .namorado-v86-day {
+    min-height: 36px !important;
+    height: auto !important;
+    padding: 4px !important;
+    border-radius: 10px !important;
+    font-size: .76rem !important;
+  }
+
+  .namorado-v86-music-card {
+    grid-template-columns: 38px 1fr !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+
+  .namorado-v86-open-link {
+    grid-column: 1 / -1 !important;
+    text-align: center !important;
+  }
+
+  .namorado-v86-delete {
+    top: 10px !important;
+    right: 10px !important;
+  }
+
+  .namorado-v86-post.has-delete,
+  .namorado-v86-letter {
+    padding-right: 50px !important;
+  }
+
+  .namorado-v86-empty.big,
+  .namorado-v86-empty,
+  .namorado-v86-loading {
+    width: 100% !important;
+    padding: 20px 14px !important;
+    border-radius: 18px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .namorado-v86-mood-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .namorado-v86-card,
+  .namorado-v86-status,
+  .namorado-v86-post,
+  .namorado-v86-letter,
+  .namorado-v86-mini,
+  .namorado-v86-calendar,
+  .namorado-v86-day-panel {
+    padding: 12px !important;
+  }
+}

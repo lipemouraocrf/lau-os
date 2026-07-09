@@ -1,0 +1,157 @@
+/* LauOS v77 - shell/navegação estável
+   Um único roteador controla abas. Sem Baú/Chat separados. */
+
+body.lauos-v77-ready {
+  --v77-nav-w: 106px;
+}
+
+#desktopTabbar,
+#mobileTabbar {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.lauos-v77-nav {
+  position: fixed;
+  z-index: 9000;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(255, 170, 205, 0.42);
+  box-shadow: 0 18px 45px rgba(165, 56, 105, 0.14);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.lauos-v77-nav-inner {
+  display: flex;
+  gap: 8px;
+}
+
+.lauos-v77-tab {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #8a4261;
+  cursor: pointer;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: inherit;
+  transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lauos-v77-tab:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 226, 238, 0.72);
+}
+
+.lauos-v77-tab.is-active {
+  background: linear-gradient(135deg, #ff8fbf, #ffbad4);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(231, 83, 146, 0.28);
+}
+
+body.namorado-mode .lauos-v77-tab.is-active {
+  background: linear-gradient(135deg, #82aaff, #aac5ff);
+  box-shadow: 0 10px 22px rgba(77, 119, 219, 0.24);
+}
+
+.lauos-v77-tab-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.lauos-v77-tab-label {
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+@media (min-width: 761px) {
+  body.lauos-v77-ready .app {
+    padding-left: var(--v77-nav-w);
+  }
+
+  .lauos-v77-nav {
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 78px;
+    padding: 10px 8px;
+    border-radius: 28px;
+  }
+
+  .lauos-v77-nav-inner {
+    flex-direction: column;
+  }
+
+  .lauos-v77-tab {
+    height: 58px;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 760px) {
+  body.lauos-v77-ready .app {
+    padding-bottom: 84px;
+  }
+
+  .lauos-v77-nav {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    padding: 8px;
+    border-radius: 24px;
+  }
+
+  .lauos-v77-nav-inner {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .lauos-v77-nav-inner::-webkit-scrollbar { display: none; }
+
+  .lauos-v77-tab {
+    min-width: 64px;
+    height: 54px;
+    flex-direction: column;
+    flex: 0 0 auto;
+  }
+}
+
+body.lauos-v77-page-fotos #lauraArea,
+body.lauos-v77-page-fotos #namoradoArea,
+body.lauos-v77-page-momentos #lauraArea,
+body.lauos-v77-page-momentos #namoradoArea {
+  display: none !important;
+}
+
+body:not(.lauos-v77-page-fotos) #lauosMediaV72,
+body:not(.lauos-v77-page-momentos) #lauosMomentosV69 {
+  display: none !important;
+}
+
+body.lauos-v77-ready .chat-card,
+body.lauos-v77-ready .laura-chat-card {
+  display: none !important;
+}
+
+body.lauos-v77-ready .countdown-area:not(.v74-countdown-docked) {
+  display: none !important;
+}
+
+body.lauos-v77-ready #memoryCorner,
+body.lauos-v77-ready #lauMobilePhotoViewer,
+body.lauos-v77-ready .namorado-memory-card {
+  display: none !important;
+}
+
+body.lauos-v77-ready .corner-header p,
+body.lauos-v77-ready .corner-panel > p,
+body.lauos-v77-ready .desktop-nav-hint {
+  display: none !important;
+}
